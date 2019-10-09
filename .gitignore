@@ -1,0 +1,4 @@
+/node_modules/
+/Mahjong-JP/*.js
+/Mahjong-JP/*.js.map
+*.log

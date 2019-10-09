@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    cursor: default;
+    user-select: none;
+}
+
+body {
+    overflow: hidden;
+}
+
+#background {
+    position: absolute;
+    top: -2vh;
+    left: -2vw;
+    width: 104vw;
+    height: 104vh;
+    background-image: url(./bkg.jpg);
+    background-size: cover;
+}
+
+#mainCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#cssRenderOverlay {
+    pointer-events: none;
+}
+
+#logs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#logs img {
+    height: 1em;
+    width: 1em;
+}
+
+#logs > * {
+    padding: 0.1em 0.5em;
+    overflow: hidden;
+    background-image: linear-gradient(to right, skyblue, transparent 50%);
+    color: white;
+    vertical-align: middle;
+}
+
+#logs > .primary {
+    background-image: linear-gradient(
+        to right,
+        rgb(235, 135, 135),
+        transparent 50%
+    );
+}
+
+#logs > .error {
+    background-image: linear-gradient(to right, red, transparent 50%);
+}
+
+#logs > * > span {
+    color: yellow;
+    margin: 0 0.2em;
+}
+
+.shout-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    transform-origin: 0 0;
+}
+
+.shout {
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    padding: 1em;
+    background-image: radial-gradient(
+        ellipse farthest-side,
+        rgba(255, 255, 255, 0.5),
+        transparent
+    );
+    color: white;
+    text-shadow: black 0 1px, black 1px 0, black -1px 0, black 0 -1px,
+        black 0 0 1em;
+}
+
+.player {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.player > * {
+    display: inline-block;
+}
+
+.player .info {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.player .info:hover {
+    opacity: 0.1;
+}
+
+.player .info .avatar {
+    display: inline-block;
+    height: 3em;
+    width: 3em;
+    background-color: white;
+}
+
+.player .info .name {
+    margin: 0 0.5em;
+    display: inline-block;
+    color: black;
+}
+
+.player .info .position {
+    font-size: 1.5em;
+    margin: 0 0.25em;
+    text-align: center;
+}
+
+.actions {
+    text-align: center;
+}
+
+.actions .action {
+    padding: 0.3em 1em;
+    margin: 0.8em 0.5em;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: none;
+    outline: 0;
+}
+
+.actions .action:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transition: background-color 0.2s;
+}
+
+.center-info {
+    height: 160px;
+    width: 160px;
+    font-size: 1.2em;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+}
+
+.center-info > * {
+    transform-origin: top center;
+    transform: scaleY(2);
+    margin-bottom: 2em;
+    color: darkgreen;
+}
+
+.center-info hr {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid darkgreen;
+}
+
+.center-info .round-wind::after {
+    content: "风局";
+    color: black;
+    margin-left: 0.1em;
+}
+
+.center-info .tile-left::before {
+    content: "剩余牌数：";
+    color: black;
+}

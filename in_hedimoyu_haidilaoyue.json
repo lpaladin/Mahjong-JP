@@ -1,0 +1,5826 @@
+{
+    "log": [
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "0 0 1",
+                    "1": "0 1 1",
+                    "2": "0 2 1",
+                    "3": "0 3 1"
+                },
+                "display": {
+                    "action": "INIT",
+                    "quan": 1,
+                    "srand": 1559630183
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "keep_running": false,
+                "memory": 512,
+                "time": 220,
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "keep_running": false,
+                "memory": 446,
+                "time": 42,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "2": {
+                "keep_running": false,
+                "memory": 421,
+                "time": 3,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "3": {
+                "keep_running": true,
+                "memory": 479,
+                "time": 354,
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "1 W7 T6 W6 W6 T5 B3 W8 B5 T4 B2 T5 Z2 Z6",
+                    "1": "1 W4 W7 T1 Z2 B4 B8 W6 T4 T1 B5 T1 T7 B4",
+                    "2": "1 W2 B5 Z3 T8 W4 T0 W1 B7 W8 B8 Z2 Z5 T9",
+                    "3": "1 B3 B7 W4 B9 T6 B1 T3 Z3 T4 T8 W3 T3 T5"
+                },
+                "display": {
+                    "action": "DEAL",
+                    "tileCnt": 70
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "keep_running": false,
+                "memory": 235,
+                "time": 150,
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "keep_running": false,
+                "memory": 168,
+                "time": 23,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "2": {
+                "keep_running": false,
+                "memory": 143,
+                "time": 3,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "3": {
+                "keep_running": true,
+                "memory": 479,
+                "time": 0,
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z4",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z4",
+                    "tileCnt": 69
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "keep_running": false,
+                "memory": 235,
+                "time": 126,
+                "verdict": "OK",
+                "response": "PLAY Z4"
+            },
+            "1": {
+                "keep_running": false,
+                "memory": 168,
+                "time": 21,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "2": {
+                "keep_running": false,
+                "memory": 143,
+                "time": 2,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "3": {
+                "keep_running": true,
+                "memory": 479,
+                "time": 0,
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "keep_running": false,
+            "memory": 143,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z4",
+                    "1": "3 0 PLAY Z4",
+                    "2": "3 0 PLAY Z4",
+                    "3": "3 0 PLAY Z4"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z4",
+                    "tileCnt": 79
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "keep_running": false,
+                "memory": 235,
+                "time": 133,
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "keep_running": false,
+                "memory": 258,
+                "time": 641,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "2": {
+                "keep_running": false,
+                "memory": 143,
+                "time": 17,
+                "verdict": "OK",
+                "raw": "PASS",
+                "debug": "",
+                "response": "PASS"
+            },
+            "3": {
+                "keep_running": true,
+                "memory": 479,
+                "time": 1,
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 Z1",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "Z1",
+                    "tileCnt": 68
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY B8",
+                "response": "PLAY B8"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY B8",
+					"1": "3 1 PLAY B8",
+					"2": "3 1 PLAY B8",
+					"3": "3 1 PLAY B8"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "B8",
+					"tileCnt": 68
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B4",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B4",
+                    "tileCnt": 67
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z2",
+                "response": "PLAY Z2"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z2",
+                    "1": "3 2 PLAY Z2",
+                    "2": "3 2 PLAY Z2",
+                    "3": "3 2 PLAY Z2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z2",
+                    "tileCnt": 67
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 B1"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "B1",
+                    "tileCnt": 66
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z3",
+                "response": "PLAY Z3"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY Z3",
+                    "1": "3 3 PLAY Z3",
+                    "2": "3 3 PLAY Z3",
+                    "3": "3 3 PLAY Z3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "Z3",
+                    "tileCnt": 66
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z7",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z7",
+                    "tileCnt": 65
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z2"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z2",
+                    "1": "3 0 PLAY Z2",
+                    "2": "3 0 PLAY Z2",
+                    "3": "3 0 PLAY Z2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z2",
+                    "tileCnt": 65
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 Z5",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "Z5",
+                    "tileCnt": 64
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z2",
+                "response": "PLAY Z2"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z2",
+					"1": "3 1 PLAY Z2",
+					"2": "3 1 PLAY Z2",
+					"3": "3 1 PLAY Z2"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z2",
+					"tileCnt": 64
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 W5",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "W5",
+                    "tileCnt": 63
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY W1",
+                "response": "PLAY W1"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY W1",
+                    "1": "3 2 PLAY W1",
+                    "2": "3 2 PLAY W1",
+                    "3": "3 2 PLAY W1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "W1",
+                    "tileCnt": 63
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 B6"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "B6",
+                    "tileCnt": 62
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY B9",
+                "response": "PLAY B9"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY B9",
+                    "1": "3 3 PLAY B9",
+                    "2": "3 3 PLAY B9",
+                    "3": "3 3 PLAY B9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "B9",
+                    "tileCnt": 62
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 W5",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "W5",
+                    "tileCnt": 61
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z6"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z6",
+                    "1": "3 0 PLAY Z6",
+                    "2": "3 0 PLAY Z6",
+                    "3": "3 0 PLAY Z6"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z6",
+                    "tileCnt": 61
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B6",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B6",
+                    "tileCnt": 60
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z1",
+					"1": "3 1 PLAY Z1",
+					"2": "3 1 PLAY Z1",
+					"3": "3 1 PLAY Z1"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z1",
+					"tileCnt": 60
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B3",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B3",
+                    "tileCnt": 59
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY W8",
+                "response": "PLAY W8"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY W8",
+                    "1": "3 2 PLAY W8",
+                    "2": "3 2 PLAY W8",
+                    "3": "3 2 PLAY W8"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "W8",
+                    "tileCnt": 59
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 T7"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "T7",
+                    "tileCnt": 58
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY B3",
+                "response": "PLAY B3"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY B3",
+                    "1": "3 3 PLAY B3",
+                    "2": "3 3 PLAY B3",
+                    "3": "3 3 PLAY B3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "B3",
+                    "tileCnt": 58
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 T9",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "T9",
+                    "tileCnt": 57
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY T9"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY T9",
+                    "1": "3 0 PLAY T9",
+                    "2": "3 0 PLAY T9",
+                    "3": "3 0 PLAY T9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "T9",
+                    "tileCnt": 57
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B6",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B6",
+                    "tileCnt": 56
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z1",
+					"1": "3 1 PLAY Z1",
+					"2": "3 1 PLAY Z1",
+					"3": "3 1 PLAY Z1"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z1",
+					"tileCnt": 56
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 Z2",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "Z2",
+                    "tileCnt": 55
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z2",
+                "response": "PLAY Z2"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z2",
+                    "1": "3 2 PLAY Z2",
+                    "2": "3 2 PLAY Z2",
+                    "3": "3 2 PLAY Z2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z2",
+                    "tileCnt": 55
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 Z1"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "Z1",
+                    "tileCnt": 54
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY Z1",
+                    "1": "3 3 PLAY Z1",
+                    "2": "3 3 PLAY Z1",
+                    "3": "3 3 PLAY Z1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "Z1",
+                    "tileCnt": 54
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 B9",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "B9",
+                    "tileCnt": 53
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY B9"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY B9",
+                    "1": "3 0 PLAY B9",
+                    "2": "3 0 PLAY B9",
+                    "3": "3 0 PLAY B9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "B9",
+                    "tileCnt": 53
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 T8",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "T8",
+                    "tileCnt": 52
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z5",
+                "response": "PLAY Z5"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z5",
+					"1": "3 1 PLAY Z5",
+					"2": "3 1 PLAY Z5",
+					"3": "3 1 PLAY Z5"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z5",
+					"tileCnt": 52
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 Z4",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "Z4",
+                    "tileCnt": 51
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z4",
+                "response": "PLAY Z4"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z4",
+                    "1": "3 2 PLAY Z4",
+                    "2": "3 2 PLAY Z4",
+                    "3": "3 2 PLAY Z4"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z4",
+                    "tileCnt": 51
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 B2"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "B2",
+                    "tileCnt": 50
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY B2",
+                "response": "PLAY B2"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY B2",
+                    "1": "3 3 PLAY B2",
+                    "2": "3 3 PLAY B2",
+                    "3": "3 3 PLAY B2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "B2",
+                    "tileCnt": 50
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 T2",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "T2",
+                    "tileCnt": 49
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY T2"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY T2",
+                    "1": "3 0 PLAY T2",
+                    "2": "3 0 PLAY T2",
+                    "3": "3 0 PLAY T2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "T2",
+                    "tileCnt": 49
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 W3",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "W3",
+                    "tileCnt": 48
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY T4",
+                "response": "PLAY T4"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY T4",
+					"1": "3 1 PLAY T4",
+					"2": "3 1 PLAY T4",
+					"3": "3 1 PLAY T4"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "T4",
+					"tileCnt": 48
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 T3",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "T3",
+                    "tileCnt": 47
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z3",
+                "response": "PLAY Z3"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z3",
+                    "1": "3 2 PLAY Z3",
+                    "2": "3 2 PLAY Z3",
+                    "3": "3 2 PLAY Z3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z3",
+                    "tileCnt": 47
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W7"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W7",
+                    "tileCnt": 46
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W7",
+                "response": "PLAY W7"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W7",
+                    "1": "3 3 PLAY W7",
+                    "2": "3 3 PLAY W7",
+                    "3": "3 3 PLAY W7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W7",
+                    "tileCnt": 46
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "CHI W7 W6 W8 Z7"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 CHI W7 W6 W8 Z7",
+                    "1": "3 0 CHI W7 W6 W8 Z7",
+                    "2": "3 0 CHI W7 W6 W8 Z7",
+                    "3": "3 0 CHI W7 W6 W8 Z7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z7",
+                    "tileCHI" : "W7 W6 W8",
+                    "tileCnt": 46
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B3",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B3",
+                    "tileCnt": 45
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY T1",
+                "response": "PLAY T1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY T1",
+					"1": "3 1 PLAY T1",
+					"2": "3 1 PLAY T1",
+					"3": "3 1 PLAY T1"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "T1",
+					"tileCnt": 45
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B9",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B9",
+                    "tileCnt": 44
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z5",
+                "response": "PLAY Z5"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z5",
+                    "1": "3 2 PLAY Z5",
+                    "2": "3 2 PLAY Z5",
+                    "3": "3 2 PLAY Z5"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z5",
+                    "tileCnt": 44
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W6"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W6",
+                    "tileCnt": 43
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W6",
+                "response": "PLAY W6"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W6",
+                    "1": "3 3 PLAY W6",
+                    "2": "3 3 PLAY W6",
+                    "3": "3 3 PLAY W6"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W6",
+                    "tileCnt": 43
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 B2",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "B2",
+                    "tileCnt": 42
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY B3"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY B3",
+                    "1": "3 0 PLAY B3",
+                    "2": "3 0 PLAY B3",
+                    "3": "3 0 PLAY B3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "B3",
+                    "tileCnt": 42
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 Z7",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "Z7",
+                    "tileCnt": 41
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z7",
+                "response": "PLAY Z7"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z7",
+					"1": "3 1 PLAY Z7",
+					"2": "3 1 PLAY Z7",
+					"3": "3 1 PLAY Z7"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z7",
+					"tileCnt": 41
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 T2",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "T2",
+                    "tileCnt": 40
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY W2",
+                "response": "PLAY W2"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY W2",
+                    "1": "3 2 PLAY W2",
+                    "2": "3 2 PLAY W2",
+                    "3": "3 2 PLAY W2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "W2",
+                    "tileCnt": 40
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 B0"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "B0",
+                    "tileCnt": 39
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "LIZHI T3",
+                "response": "LIZHI T3"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 LIZHI T3",
+                    "1": "3 3 LIZHI T3",
+                    "2": "3 3 LIZHI T3",
+                    "3": "3 3 LIZHI T3"
+                },
+                "display": {
+                    "action": "LIZHI",
+                    "player": 3,
+                    "tile": "T3",
+                    "tileCnt": 39
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "CHI T3 T4 T5 B5"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 CHI T3 T4 T5 B5",
+                    "1": "3 0 CHI T3 T4 T5 B5",
+                    "2": "3 0 CHI T3 T4 T5 B5",
+                    "3": "3 0 CHI T3 T4 T5 B5"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "B5",
+                    "tileCHI" : "T3 T4 T5",
+                    "tileCnt": 39
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "response": "CHI B5 B3 B4 T1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 CHI B5 B3 B4 T1",
+                    "1": "3 1 CHI B5 B3 B4 T1",
+                    "2": "3 1 CHI B5 B3 B4 T1",
+                    "3": "3 1 CHI B5 B3 B4 T1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "T1",
+                    "tileCHI" : "B5 B3 B4",
+                    "tileCnt": 39
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 Z1",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "Z1",
+                    "tileCnt": 38
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z1",
+                    "1": "3 2 PLAY Z1",
+                    "2": "3 2 PLAY Z1",
+                    "3": "3 2 PLAY Z1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z1",
+                    "tileCnt": 38
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 Z6"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "Z6",
+                    "tileCnt": 37
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY Z6",
+                    "1": "3 3 PLAY Z6",
+                    "2": "3 3 PLAY Z6",
+                    "3": "3 3 PLAY Z6"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "Z6",
+                    "tileCnt": 37
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 W3",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "W3",
+                    "tileCnt": 36
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY W3"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY W3",
+                    "1": "3 0 PLAY W3",
+                    "2": "3 0 PLAY W3",
+                    "3": "3 0 PLAY W3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "W3",
+                    "tileCnt": 36
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 T4",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "T4",
+                    "tileCnt": 35
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY T1",
+                "response": "PLAY T1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY T1",
+					"1": "3 1 PLAY T1",
+					"2": "3 1 PLAY T1",
+					"3": "3 1 PLAY T1"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "T1",
+					"tileCnt": 35
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B7",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B7",
+                    "tileCnt": 34
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY B7",
+                "response": "PLAY B7"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY B7",
+                    "1": "3 2 PLAY B7",
+                    "2": "3 2 PLAY B7",
+                    "3": "3 2 PLAY B7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "B7",
+                    "tileCnt": 34
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 B4"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "B4",
+                    "tileCnt": 33
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY B4",
+                    "1": "3 3 PLAY B4",
+                    "2": "3 3 PLAY B4",
+                    "3": "3 3 PLAY B4"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "B4",
+                    "tileCnt": 33
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z5",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z5",
+                    "tileCnt": 32
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z5"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z5",
+                    "1": "3 0 PLAY Z5",
+                    "2": "3 0 PLAY Z5",
+                    "3": "3 0 PLAY Z5"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z5",
+                    "tileCnt": 32
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B6",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B6",
+                    "tileCnt": 31
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY B6",
+                "response": "PLAY B6"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY B6",
+					"1": "3 1 PLAY B6",
+					"2": "3 1 PLAY B6",
+					"3": "3 1 PLAY B6"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "B6",
+					"tileCnt": 31
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 Z7",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "Z7",
+                    "tileCnt": 30
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z7",
+                "response": "PLAY Z7"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z7",
+                    "1": "3 2 PLAY Z7",
+                    "2": "3 2 PLAY Z7",
+                    "3": "3 2 PLAY Z7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z7",
+                    "tileCnt": 30
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 T2"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "T2",
+                    "tileCnt": 29
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z1",
+                "response": "PLAY Z1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY T2",
+                    "1": "3 3 PLAY T2",
+                    "2": "3 3 PLAY T2",
+                    "3": "3 3 PLAY T2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "T2",
+                    "tileCnt": 29
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 W4",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "W4",
+                    "tileCnt": 28
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY W4"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY W7",
+                    "1": "3 0 PLAY W7",
+                    "2": "3 0 PLAY W7",
+                    "3": "3 0 PLAY W7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "W7",
+                    "tileCnt": 28
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 Z3",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "Z3",
+                    "tileCnt": 27
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z3",
+                "response": "PLAY Z3"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z3",
+					"1": "3 1 PLAY Z3",
+					"2": "3 1 PLAY Z3",
+					"3": "3 1 PLAY Z3"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z3",
+					"tileCnt": 27
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 W2",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "W2",
+                    "tileCnt": 26
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY W2",
+                "response": "PLAY T2"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY T2",
+                    "1": "3 2 PLAY T2",
+                    "2": "3 2 PLAY T2",
+                    "3": "3 2 PLAY T2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "T2",
+                    "tileCnt": 26
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 T9"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "T9",
+                    "tileCnt": 25
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY T9",
+                "response": "PLAY T9"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY T9",
+                    "1": "3 3 PLAY T9",
+                    "2": "3 3 PLAY T9",
+                    "3": "3 3 PLAY T9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "T9",
+                    "tileCnt": 25
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 T1",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "T1",
+                    "tileCnt": 24
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY T1"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY T1",
+                    "1": "3 0 PLAY T1",
+                    "2": "3 0 PLAY T1",
+                    "3": "3 0 PLAY T1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "T1",
+                    "tileCnt": 24
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 Z4",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "Z4",
+                    "tileCnt": 23
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY Z4",
+                "response": "PLAY Z4"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY Z4",
+					"1": "3 1 PLAY Z4",
+					"2": "3 1 PLAY Z4",
+					"3": "3 1 PLAY Z4"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "Z4",
+					"tileCnt": 23
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 T2",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "T2",
+                    "tileCnt": 22
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY T2",
+                "response": "PLAY T2"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY T2",
+                    "1": "3 2 PLAY T2",
+                    "2": "3 2 PLAY T2",
+                    "3": "3 2 PLAY T2"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "T2",
+                    "tileCnt": 22
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W1"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W1",
+                    "tileCnt": 21
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W1",
+                "response": "PLAY W1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W1",
+                    "1": "3 3 PLAY W1",
+                    "2": "3 3 PLAY W1",
+                    "3": "3 3 PLAY W1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W1",
+                    "tileCnt": 21
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 W7",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "W7",
+                    "tileCnt": 20
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY W7"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY W7",
+                    "1": "3 0 PLAY W7",
+                    "2": "3 0 PLAY W7",
+                    "3": "3 0 PLAY W7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "W7",
+                    "tileCnt": 20
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B2",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B2",
+                    "tileCnt": 19
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY B2",
+                "response": "PLAY B2"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY B2",
+					"1": "3 1 PLAY B2",
+					"2": "3 1 PLAY B2",
+					"3": "3 1 PLAY B2"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "B2",
+					"tileCnt": 19
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 T6",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "T6",
+                    "tileCnt": 18
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY T3",
+                "response": "PLAY T3"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY T3",
+                    "1": "3 2 PLAY T3",
+                    "2": "3 2 PLAY T3",
+                    "3": "3 2 PLAY T3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "T3",
+                    "tileCnt": 18
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W1"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W1",
+                    "tileCnt": 17
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W1",
+                "response": "PLAY W1"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W1",
+                    "1": "3 3 PLAY W1",
+                    "2": "3 3 PLAY W1",
+                    "3": "3 3 PLAY W1"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W1",
+                    "tileCnt": 17
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z6",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z6",
+                    "tileCnt": 16
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z6"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z6",
+                    "1": "3 0 PLAY Z6",
+                    "2": "3 0 PLAY Z6",
+                    "3": "3 0 PLAY Z6"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z6",
+                    "tileCnt": 16
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 T9",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "T9",
+                    "tileCnt": 15
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY W7",
+                "response": "PLAY W7"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY W7",
+					"1": "3 1 PLAY W7",
+					"2": "3 1 PLAY W7",
+					"3": "3 1 PLAY W7"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "B2",
+					"tileCnt": 15
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B9",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B9",
+                    "tileCnt": 14
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY B9",
+                "response": "PLAY B9"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY B9",
+                    "1": "3 2 PLAY B9",
+                    "2": "3 2 PLAY B9",
+                    "3": "3 2 PLAY B9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "B9",
+                    "tileCnt": 14
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W0"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W0",
+                    "tileCnt": 13
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W0",
+                "response": "PLAY W0"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W0",
+                    "1": "3 3 PLAY W0",
+                    "2": "3 3 PLAY W0",
+                    "3": "3 3 PLAY W0"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W0",
+                    "tileCnt": 13
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z6",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z6",
+                    "tileCnt": 12
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY W5"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY W5",
+                    "1": "3 0 PLAY W5",
+                    "2": "3 0 PLAY W5",
+                    "3": "3 0 PLAY W5"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "W5",
+                    "tileCnt": 12
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "HU"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B1",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B1",
+                    "tileCnt": 11
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY B1",
+                "response": "PLAY B1"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY B1",
+					"1": "3 1 PLAY B1",
+					"2": "3 1 PLAY B1",
+					"3": "3 1 PLAY B1"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "B1",
+					"tileCnt": 11
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 Z5",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "Z5",
+                    "tileCnt": 10
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY Z5",
+                "response": "PLAY Z5"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY Z5",
+                    "1": "3 2 PLAY Z5",
+                    "2": "3 2 PLAY Z5",
+                    "3": "3 2 PLAY Z5"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "Z5",
+                    "tileCnt": 10
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 Z7"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "Z7",
+                    "tileCnt": 9
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY Z7",
+                "response": "PLAY Z7"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY Z7",
+                    "1": "3 3 PLAY Z7",
+                    "2": "3 3 PLAY Z7",
+                    "3": "3 3 PLAY Z7"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "Z7",
+                    "tileCnt": 9
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 W5",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "W5",
+                    "tileCnt": 8
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z6"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z6",
+                    "1": "3 0 PLAY Z6",
+                    "2": "3 0 PLAY Z6",
+                    "3": "3 0 PLAY Z6"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z6",
+                    "tileCnt": 8
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 W8",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "W8",
+                    "tileCnt": 7
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY T4",
+                "response": "PLAY T4"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY T4",
+					"1": "3 1 PLAY T4",
+					"2": "3 1 PLAY T4",
+					"3": "3 1 PLAY T4"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "T4",
+					"tileCnt": 7
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "CHI T4 T0 T6 W2",
+                "response": "CHI T4 T0 T6 W2"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 CHI T4 T0 T6 W2",
+                    "1": "3 2 CHI T4 T0 T6 W2",
+                    "2": "3 2 CHI T4 T0 T6 W2",
+                    "3": "3 2 CHI T4 T0 T6 W2"
+                },
+                "display": {
+                    "action": "CHI",
+                    "player": 0,
+                    "tile": "W2",
+                    "tileCHI" : "T4 T0 T6",
+                    "tileCnt": 7
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "HU"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W9"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W9",
+                    "tileCnt": 6
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W9",
+                "response": "PLAY W9"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W9",
+                    "1": "3 3 PLAY W9",
+                    "2": "3 3 PLAY W9",
+                    "3": "3 3 PLAY W9"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W9",
+                    "tileCnt": 6
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 B8",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "B8",
+                    "tileCnt": 5
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY B8"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY B8",
+                    "1": "3 0 PLAY B8",
+                    "2": "3 0 PLAY B8",
+                    "3": "3 0 PLAY B8"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "B8",
+                    "tileCnt": 5
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 W2",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "W2",
+                    "tileCnt": 4
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY W6",
+                "response": "PLAY W6"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY W6",
+					"1": "3 1 PLAY W6",
+					"2": "3 1 PLAY W6",
+					"3": "3 1 PLAY W6"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "W6",
+					"tileCnt": 4
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "CHI W6 W4 W5 T9",
+                "response": "CHI W6 W4 W5 T9"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 CHI W6 W4 W5 T9",
+                    "1": "3 2 CHI W6 W4 W5 T9",
+                    "2": "3 2 CHI W6 W4 W5 T9",
+                    "3": "3 2 CHI W6 W4 W5 T9"
+                },
+                "display": {
+                    "action": "CHI",
+                    "player": 0,
+                    "tile": "T9",
+                    "tileCHI" : "W6 W4 W5",
+                    "tileCnt": 7
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 DRAW",
+                    "1": "3 3 DRAW",
+                    "2": "3 3 DRAW",
+                    "3": "2 W3"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 3,
+                    "tile": "W3",
+                    "tileCnt": 3
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "raw": "PLAY W3",
+                "response": "PLAY W3"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 3 PLAY W3",
+                    "1": "3 3 PLAY W3",
+                    "2": "3 3 PLAY W3",
+                    "3": "3 3 PLAY W3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 3,
+                    "tile": "W3",
+                    "tileCnt": 3
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "keep_running": false,
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "2 Z3",
+                    "1": "3 0 DRAW",
+                    "2": "3 0 DRAW",
+                    "3": "3 0 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 0,
+                    "tile": "Z3",
+                    "tileCnt": 2
+                }
+            },
+            "time": 2,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PLAY Z3"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 0 PLAY Z3",
+                    "1": "3 0 PLAY Z3",
+                    "2": "3 0 PLAY Z3",
+                    "3": "3 0 PLAY Z3"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 0,
+                    "tile": "Z3",
+                    "tileCnt": 2
+                }
+            },
+            "time": 1,
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 1 DRAW",
+                    "1": "2 B7",
+                    "2": "3 1 DRAW",
+                    "3": "3 1 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 1,
+                    "tile": "B7",
+                    "tileCnt": 1
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PLAY W8",
+                "response": "PLAY W8"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+			"output": {
+				"command": "request",
+				"content": {
+					"0": "3 1 PLAY W8",
+					"1": "3 1 PLAY W8",
+					"2": "3 1 PLAY W8",
+					"3": "3 1 PLAY W8"
+				},
+				"display": {
+					"action": "PLAY",
+					"player": 1,
+					"tile": "W8",
+					"tileCnt": 1
+				}
+			},
+			"verdict": "OK"
+		},
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 DRAW",
+                    "1": "3 2 DRAW",
+                    "2": "2 B4",
+                    "3": "3 2 DRAW"
+                },
+                "display": {
+                    "action": "DRAW",
+                    "player": 2,
+                    "tile": "B4",
+                    "tileCnt": 0
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PLAY B4",
+                "response": "PLAY B4"
+            },
+            
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        },
+        {
+            "output": {
+                "command": "request",
+                "content": {
+                    "0": "3 2 PLAY B4",
+                    "1": "3 2 PLAY B4",
+                    "2": "3 2 PLAY B4",
+                    "3": "3 2 PLAY B4"
+                },
+                "display": {
+                    "action": "PLAY",
+                    "player": 2,
+                    "tile": "B4",
+                    "tileCnt": 0
+                }
+            },
+            "verdict": "OK"
+        },
+        {
+            "0": {
+                "verdict": "OK",
+                "response": "PASS"
+            },
+            "1": {
+                "verdict": "OK",
+                "raw": "HU",
+                "response": "HU"
+            },
+            "2": {
+                "verdict": "OK",
+                "raw": "PASS",
+                "response": "PASS"
+            },
+            "3": {
+                "verdict": "OK",
+                "response": "PASS"
+            }
+        }
+
+    ],
+    "initdata": {
+        "game": {
+            "tiles": "W9 B8 W1 B1 B4 B7 Z3 W3 W2 B8 W9 W8 W5 Z7 Z5 B1 Z6 W0 B9 T9 Z6 W1 T6 B2 W7 W1 T2 Z4 T1 T9 W2 Z3 W4 T2 Z7 B6 Z5 B4 B7 T4 W3 Z6 Z1 B0 T2 Z7 B2 W6 B9 B3 W7 T3 W3 T2 B2 Z4 T8 B9 Z1 Z2 Z1 T9 T7 B3 B6 W5 B6 W5 Z5 Z7 B1 B4 Z1 Z4 T5 T3 W3 T8 T4 Z3 T3 B1 T6 B9 W4 B7 B3 T9 Z5 Z2 B8 W8 B7 W1 T0 W4 T8 Z3 B5 W2 B4 T7 T1 B5 T1 T4 W6 B8 B4 Z2 T1 W7 W4 Z6 Z2 T5 B2 T4 B5 W8 B3 T5 W6 W6 T6 W7 T6 T8 B6 W9 W9 W8 W2 Z4 T7 T7"
+        },
+        "quan": 0,
+        "srand": 1559630183
+    }
+}

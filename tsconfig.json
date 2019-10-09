@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "target": "es6",
+        "outFile": "./Mahjong-JP/app.js",
+        "sourceMap": true
+    }
+}

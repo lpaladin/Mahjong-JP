@@ -35,13 +35,14 @@ class Game implements Tickable {
     public readonly uiScene = new THREE.Scene();
     private readonly uiRenderer = new THREEx.CSS3DRenderer();
 
-    private readonly composer = new POSTPROCESSING.EffectComposer(
-        this.renderer
-    );
+    private readonly composer = new POSTPROCESSING.EffectComposer(this.renderer);
+    public readonly doraIndicators = new DoraIndicators();
     public readonly players = [0, 1, 2, 3].map(i => new Player(i));
     public readonly centerScreen = new CenterScreen();
+    public readonly gameResultView = new GameResultView();
     public readonly mouseCoord = new THREE.Vector2();
     public readonly raycaster = new THREE.Raycaster();
+    public pause = false;
     private w = 0;
     private h = 0;
     private cameraPositionBase = new THREE.Vector3();
@@ -70,11 +71,7 @@ class Game implements Tickable {
         }
         this._viewPoint = to;
         this.cameraKeepFocusing = this.cameraUncontrolled = true;
-        this.cameraPositionBase.set(
-            Util.DIR_X[to] * 70,
-            35,
-            Util.DIR_Z[to] * 70
-        );
+        this.cameraPositionBase.set(Util.DIR_X[to] * 70, 35, Util.DIR_Z[to] * 70);
         this.centerScreen.viewPoint = to;
         TweenMax.to(this.camera.position, 0.3, {
             ...Util.ToPlain(this.cameraPositionBase),
@@ -83,25 +80,17 @@ class Game implements Tickable {
                 this.cameraKeepFocusing = this.cameraUncontrolled = false;
             }
         });
+        this.doraIndicators.updateAllDoras();
     }
 
     private setupPostProcessing() {
         Assets.InitializeEffects(this.scene, this.camera);
-        const renderPass = new POSTPROCESSING.RenderPass(
-            this.scene,
-            this.camera
-        );
+        const renderPass = new POSTPROCESSING.RenderPass(this.scene, this.camera);
         renderPass.renderToScreen = false;
         this.composer.addPass(renderPass);
 
-        const effectPass = new POSTPROCESSING.EffectPass(
-            this.camera,
-            Assets.outlineEffect
-        );
-        const smaaPass = new POSTPROCESSING.EffectPass(
-            this.camera,
-            Assets.smaaEffect
-        );
+        const effectPass = new POSTPROCESSING.EffectPass(this.camera, Assets.outlineEffect);
+        const smaaPass = new POSTPROCESSING.EffectPass(this.camera, Assets.smaaEffect);
         smaaPass.renderToScreen = true;
         this.composer.addPass(effectPass);
         this.composer.addPass(smaaPass);
@@ -117,16 +106,13 @@ class Game implements Tickable {
 
         window.addEventListener("resize", () => this.initRenderer());
         window.addEventListener("mousemove", e =>
-            this.mouseCoord.set(
-                (e.clientX / this.w) * 2 - 1,
-                -(e.clientY / this.h) * 2 + 1
-            )
+            this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1)
         );
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
                 if (!this.mouseRightButtonDown) {
                     this.mouseRightButtonDown = true;
-                    for (const p of this.players) p.board.openDeck = true;
+                    // for (const p of this.players) p.board.openDeck = true;
                 }
             }
         });
@@ -138,9 +124,10 @@ class Game implements Tickable {
             if (e.button == 2) {
                 if (this.mouseRightButtonDown) {
                     this.mouseRightButtonDown = false;
-                    for (const p of this.players) p.board.openDeck = false;
-                    const activeTile = this.playerMe.board.hoveredTile;
-                    activeTile && this.focusAndWave(activeTile);
+                    this.doraIndicators.reveal(Util.RandInArray(Mahjong.TileIDs));
+                    // for (const p of this.players) p.board.openDeck = false;
+                    // const activeTile = this.playerMe.board.hoveredTile;
+                    // activeTile && this.focusAndWave(activeTile);
                     // this.viewPoint = (this.viewPoint + 1) % 4;
                 }
             }
@@ -158,8 +145,7 @@ class Game implements Tickable {
         for (const p of this.players) {
             this.scene.add(p.board);
         }
-        this.centerScreen.position.y -=
-            (Tile.HEIGHT - CenterScreen.THICKNESS) / 2;
+        this.centerScreen.position.y -= (Tile.HEIGHT - CenterScreen.THICKNESS) / 2;
         this.scene.add(this.centerScreen);
         this.uiScene.add(this.centerScreen.textCSSObj);
         this.centerScreen.roundWind = 0;
@@ -188,11 +174,19 @@ class Game implements Tickable {
         this.light.shadow.camera.bottom = -PlayerArea.HEIGHT * 2;
         this.scene.add(this.light);
 
-        const tl = new TimelineMax();
-        this.players.forEach(p => tl.add(p.board.deck.sort()));
-
         this.initRenderer();
         //new THREE['OrbitControls'](this.camera, UI.mainCanvas);
+
+        setTimeout(() => {
+            for (const p of this.players) {
+                p.board.deck.init(new Array(13).fill(0).map(() => Util.RandInArray(Mahjong.TileIDs)));
+            }
+
+            const tl = new TimelineMax();
+            this.players.forEach(p => tl.add(p.board.deck.sort()));
+
+            game.nextPlayer();
+        }, 1);
 
         Util.Log`初始化完成`;
     }
@@ -205,31 +199,17 @@ class Game implements Tickable {
         }
         const player = this.currPlayer;
         const tl = new TimelineMax();
-        tl.call((r, n) => Util.PrimaryLog`当前是第${r}巡，${n}的回合`, [
-            this.round,
-            this.players[this.currPlayerID].info
-        ]);
-        if (setTo == -1)
-            tl.add(
-                player.board.deck.drawTile(Util.RandInArray(Mahjong.TileIDs))
-            );
+        tl.call((r, n) => Util.PrimaryLog`当前是第${r + 1}巡，${n}的回合`, [this.round, this.players[this.currPlayerID].info]);
+        if (setTo == -1) tl.add(player.board.deck.drawTile(Util.RandInArray(Mahjong.TileIDs)));
         if (this.currPlayerID == infoProvider.getPlayerID()) {
             player.interactable = true;
-            if (setTo == -1)
-                player.ui.setActionButtons(
-                    Mahjong.testAvailableActions(player)
-                );
+            if (setTo == -1) player.ui.setActionButtons(Mahjong.testAvailableActions(player));
         } else {
             const newTile = Util.RandInArray(player.board.deck.handTiles);
             tl.add(player.playTile(newTile), "+=1");
-            const myActions = Mahjong.testAvailableActions(
-                this.playerMe,
-                newTile.tileID,
-                this.currPlayerID
-            );
+            const myActions = Mahjong.testAvailableActions(this.playerMe, newTile.tileID, this.currPlayerID);
             myActions.push({ type: "PASS", from: this.currPlayerID });
-            if (myActions.length > 1)
-                this.playerMe.ui.setActionButtons(myActions);
+            if (myActions.length > 1) this.playerMe.ui.setActionButtons(myActions);
             else tl.add(this.playerMe.doAction(myActions[0]));
         }
         return tl;
@@ -285,44 +265,42 @@ class Game implements Tickable {
         const tl = new TimelineMax();
 
         this.cameraUncontrolled = true;
-        const sw = new POSTPROCESSING.ShockWaveEffect(
-            this.camera,
-            targetAbsolutePos,
-            {
-                maxRadius: 10,
-                waveSize: 1,
-                amplitude: 0.25
-            }
-        );
+        const sw = new POSTPROCESSING.ShockWaveEffect(this.camera, targetAbsolutePos, {
+            maxRadius: 10,
+            waveSize: 1,
+            speed: 4,
+            amplitude: 0.25
+        });
         const swPass = new POSTPROCESSING.EffectPass(this.camera, sw);
         this.composer.addPass(swPass, 2);
         this.initRenderer();
 
-        tl.fromTo(
-            subTL,
-            2,
-            { progress: 0 },
-            { progress: 1, ease: Power4.easeOut, immediateRender: false }
-        );
+        tl.fromTo(subTL, 1.3, { progress: 0 }, { progress: 1, ease: Power4.easeOut, immediateRender: false });
         tl.call(
             () => {
                 sw.explode();
             },
             null,
             null,
-            0.8
+            0.3
         );
-        tl.fromTo(
-            subTL,
-            0.4,
-            { progress: 1 },
-            { progress: 0, ease: Power4.easeIn, immediateRender: false }
-        );
+        tl.fromTo(subTL, 0.8, { progress: 1 }, { progress: 0, ease: Power4.easeIn, immediateRender: false });
         tl.call(() => {
             this.cameraUncontrolled = false;
             this.composer.removePass(swPass);
         });
         return; // DO NOT return tl
+    }
+
+    public gameFinish(results: GameResult[]) {
+        const tl = new TimelineMax();
+        if (results.every(r => r.type === "DRAW")) {
+            tl.call(() => Util.PrimaryLog`本局游戏结束，流局`);
+        } else {
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.huer.info)}胡了`);
+        }
+        tl.add(game.gameResultView.setResult(results));
+        return tl;
     }
 
     public cameraShake(amp: number, iter: number, time: number) {
@@ -352,14 +330,16 @@ class Game implements Tickable {
     }
 
     public onTick() {
+        if (this.pause) {
+            return;
+        }
         if (!this.cameraUncontrolled) {
             this.camera.position.copy(this.cameraPosition);
         }
         if (this.cameraKeepFocusing) {
             this.camera.lookAt(Util.ZERO3);
         }
-        UI.background.style.transform = `translate(${-2 *
-            this.mouseCoord.x}vw, ${2 * this.mouseCoord.y}vh)`;
+        UI.background.style.transform = `translate(${-2 * this.mouseCoord.x}vw, ${2 * this.mouseCoord.y}vh)`;
         this.composer.render(this.clock.getDelta());
         this.uiRenderer.render(this.uiScene, this.camera);
         const activePlayer = this.players.find(x => x.interactable);
@@ -396,5 +376,4 @@ let tickableManager: TickableManager;
 Loader.onFinish(() => {
     tickableManager = new TickableManager();
     game = new Game();
-    game.nextPlayer();
 });

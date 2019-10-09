@@ -10,11 +10,11 @@ class Tile extends THREE.Mesh implements Tickable {
         [id in Mahjong.TileID]: THREE.Texture;
     } = {} as any;
 
-    public static readonly buckets: {
-        [rank: number]: Set<Tile>;
+    private static readonly buckets: {
+        [tileID in Mahjong.TileID]: Set<Tile>;
     } = Mahjong.TileIDs.reduce(
         (prev, curr) => {
-            prev[Mahjong.tileInfo[curr].relativeRank] = new Set();
+            prev[Mahjong.getLiteralID(curr)] = new Set();
             return prev;
         },
         {} as typeof Tile.buckets
@@ -29,15 +29,13 @@ class Tile extends THREE.Mesh implements Tickable {
             return;
         }
         if (Tile._highlightingTileID)
-            for (const x of Tile.buckets[
-                Mahjong.tileInfo[Tile._highlightingTileID].relativeRank
-            ]) {
-                x.outlined = false;
+            for (const x of Tile.buckets[Mahjong.getLiteralID(Tile._highlightingTileID)]) {
+                x.highlighted = false;
             }
         Tile._highlightingTileID = to;
         if (to)
-            for (const x of Tile.buckets[Mahjong.tileInfo[to].relativeRank]) {
-                x.outlined = x.isVisibleToPlayer(infoProvider.getPlayerID());
+            for (const x of Tile.buckets[Mahjong.getLiteralID(to)]) {
+                x.highlighted = x.isVisibleToPlayer(game.viewPoint);
             }
     }
 
@@ -57,6 +55,30 @@ class Tile extends THREE.Mesh implements Tickable {
             Assets.outlineEffect.selection.delete(this);
         }
         this._outlined = to;
+    }
+
+    public updateDora() {
+        this.outlined =
+            (this.tileID[1] === "0" || game.doraIndicators.currentTileIDs.some(id => Mahjong.getNextID(id) === this.tileID)) &&
+            this.isVisibleToPlayer(game.viewPoint);
+    }
+
+    public static updateDoras(tileID: Mahjong.TileID) {
+        for (const tile of Tile.buckets[tileID]) {
+            tile.updateDora();
+        }
+    }
+
+    private _highlighted = false;
+    public get highlighted() {
+        return this._highlighted;
+    }
+    public set highlighted(to: boolean) {
+        if (this._highlighted === to) {
+            return;
+        }
+        (this.material as THREE.MeshLambertMaterial).emissive = new THREE.Color(to ? Colors.Highlight : 0);
+        this._highlighted = to;
     }
 
     private _close = false;
@@ -87,14 +109,11 @@ class Tile extends THREE.Mesh implements Tickable {
             });
         }
         this._open = to;
+        this.updateDora();
     }
 
     public isVisibleToPlayer(playerID = -1) {
-        return (
-            this.open ||
-            (playerID !== -1 &&
-                this.parent === game.players[playerID].board.deck)
-        );
+        return this.open || (playerID !== -1 && this.parent === game.players[playerID].board.deck);
     }
 
     private _shaking = false;
@@ -105,18 +124,10 @@ class Tile extends THREE.Mesh implements Tickable {
         if (this._shaking != to) {
             this._shaking = to;
             if (!to) {
-                this.position.set(
-                    this.basePosition.x,
-                    this.basePosition.y,
-                    this.basePosition.z
-                );
+                this.position.set(this.basePosition.x, this.basePosition.y, this.basePosition.z);
                 tickableManager.delete(this);
             } else {
-                this.basePosition.set(
-                    this.position.x,
-                    this.position.y,
-                    this.position.z
-                );
+                this.basePosition.set(this.position.x, this.position.y, this.position.z);
                 tickableManager.add(this);
             }
         }
@@ -154,10 +165,7 @@ class Tile extends THREE.Mesh implements Tickable {
 
     private basePosition = new THREE.Vector3();
 
-    public constructor(
-        public readonly tileID: Mahjong.TileID,
-        public idx: number
-    ) {
+    public constructor(public readonly tileID: Mahjong.TileID, public idx: number) {
         super(
             Assets.GetRoundEdgedTileGeometry(),
             new THREE.MeshLambertMaterial({
@@ -168,7 +176,8 @@ class Tile extends THREE.Mesh implements Tickable {
             // 	wireframe: true
             // })
         );
-        Tile.buckets[Mahjong.tileInfo[this.tileID].relativeRank].add(this);
+        Tile.buckets[Mahjong.getLiteralID(this.tileID)].add(this);
+        this.updateDora();
         this.visible = false;
         this.castShadow = true;
     }

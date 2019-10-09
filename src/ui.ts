@@ -1,16 +1,19 @@
 const UI = {
+    game: null as HTMLDivElement,
     cssRenderOverlay: null as HTMLDivElement,
     mainCanvas: null as HTMLCanvasElement,
     background: null as HTMLDivElement,
-    logs: null as HTMLDivElement
+    logs: null as HTMLDivElement,
+    doraIndicators: null as HTMLDivElement,
+    gameResultBackground: null as HTMLDivElement
 };
 
 for (const id of Object.keys(UI)) UI[id] = document.getElementById(id);
 
 class CenterInfo {
-    public static readonly CONTAINER_CLASSNAME = "center-info";
-    public static readonly ROUNDWIND_CLASSNAME = "round-wind";
-    public static readonly TILELEFT_CLASSNAME = "tile-left";
+    private static readonly CONTAINER_CLASSNAME = "center-info";
+    private static readonly ROUNDWIND_CLASSNAME = "round-wind";
+    private static readonly TILELEFT_CLASSNAME = "tile-left";
     public readonly container: HTMLDivElement;
     private _roundWind: HTMLDivElement;
     private _tileLeft: HTMLDivElement;
@@ -45,8 +48,8 @@ class CenterInfo {
 class PlayerShout {
     public static readonly ANCHOR_BEGIN_POSZ = Tile.HEIGHT;
     public static readonly ANCHOR_END_POSZ = -Tile.HEIGHT;
-    public static readonly SHOUT_CONTAINER_CLASSNAME = "shout-container";
-    public static readonly SHOUT_CLASSNAME = "shout";
+    private static readonly SHOUT_CONTAINER_CLASSNAME = "shout-container";
+    private static readonly SHOUT_CLASSNAME = "shout";
     private container: HTMLDivElement;
     private content: HTMLDivElement;
     constructor(public readonly player: Player) {
@@ -55,18 +58,14 @@ class PlayerShout {
         this.content = document.createElement("div");
         this.content.className = PlayerShout.SHOUT_CLASSNAME;
         this.container.appendChild(this.content);
-        document.body.appendChild(this.container);
+        UI.game.appendChild(this.container);
     }
 
     public shout(content: string) {
         const absolutePos = new THREE.Vector3();
-        absolutePos.setFromMatrixPosition(
-            this.player.board.shoutBeginAnchor.matrixWorld
-        );
+        absolutePos.setFromMatrixPosition(this.player.board.shoutBeginAnchor.matrixWorld);
         const beginPos = game.projectTo2D(absolutePos);
-        absolutePos.setFromMatrixPosition(
-            this.player.board.shoutEndAnchor.matrixWorld
-        );
+        absolutePos.setFromMatrixPosition(this.player.board.shoutEndAnchor.matrixWorld);
         const endPos = game.projectTo2D(absolutePos);
         const oneThirdPos = {
             x: (endPos.x - beginPos.x) / 3 + beginPos.x,
@@ -77,18 +76,8 @@ class PlayerShout {
             y: ((endPos.y - beginPos.y) * 2) / 3 + beginPos.y
         };
         const tl = new TimelineMax();
-        tl.add(
-            Util.BiDirectionConstantSet(this.content, "textContent", content),
-            0
-        );
-        tl.add(
-            Util.BiDirectionConstantSet(
-                this.container.style,
-                "display",
-                "block"
-            ),
-            0
-        );
+        tl.add(Util.BiDirectionConstantSet(this.content, "textContent", content), 0);
+        tl.add(Util.BiDirectionConstantSet(this.container.style, "display", "block"), 0);
         tl.fromTo(
             this.container,
             0.1,
@@ -113,22 +102,16 @@ class PlayerShout {
             opacity: 0,
             ...endPos
         });
-        tl.add(
-            Util.BiDirectionConstantSet(this.container.style, "display", "none")
-        );
+        tl.add(Util.BiDirectionConstantSet(this.container.style, "display", "none"));
         return tl;
     }
 }
 
 class PlayerUI implements Tickable {
     public static readonly PLAYERUI_ANCHOR_POSY = Tile.HEIGHT * 2;
-    public static readonly CONTAINER_CLASSNAME = "player";
-    public static readonly PLAYERINFO_CLASSNAME = "info";
-    public static readonly AVATAR_CLASSNAME = "avatar";
-    public static readonly POSITION_CLASSNAME = "position";
-    public static readonly NAME_CLASSNAME = "name";
-    public static readonly ACTIONBAR_CLASSNAME = "actions";
-    public static readonly ACTIONBUTTON_CLASSNAME = "action";
+    private static readonly CONTAINER_CLASSNAME = "player";
+    private static readonly ACTIONBAR_CLASSNAME = "actions";
+    private static readonly ACTIONBUTTON_CLASSNAME = "action";
     private container: HTMLDivElement;
     private actionBar: HTMLDivElement;
     private actionButtons: HTMLButtonElement[] = [];
@@ -137,19 +120,17 @@ class PlayerUI implements Tickable {
         this.container = document.createElement("div");
         this.container.className = `${PlayerUI.CONTAINER_CLASSNAME} ${PlayerUI.CONTAINER_CLASSNAME}-${player.playerID}`;
         this.container.innerHTML = `
-			<div class="${PlayerUI.PLAYERINFO_CLASSNAME}">
-				<div class="${PlayerUI.POSITION_CLASSNAME}">
+			<div class="info">
+				<div class="position">
 					${Util.POSITIONS[player.playerID]}
 				</div>
-				<img class="${PlayerUI.AVATAR_CLASSNAME}" src="${player.info.imgid}" />
-				<div class="${PlayerUI.NAME_CLASSNAME}">${player.info.name}</div>
+				<img class="avatar" src="${player.info.imgid}" />
+				<div class="name">${player.info.name}</div>
 			</div><div class="${PlayerUI.ACTIONBAR_CLASSNAME}"></div>
 		`;
-        this.actionBar = this.container.querySelector(
-            "." + PlayerUI.ACTIONBAR_CLASSNAME
-        );
+        this.actionBar = this.container.querySelector("." + PlayerUI.ACTIONBAR_CLASSNAME);
 
-        document.body.appendChild(this.container);
+        UI.game.appendChild(this.container);
 
         tickableManager.add(this);
     }
@@ -177,12 +158,7 @@ class PlayerUI implements Tickable {
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);
         }
-        TweenMax.staggerFrom(
-            this.actionButtons,
-            0.2,
-            { opacity: 0, scale: 0, ease: Back.easeIn },
-            0.1
-        );
+        TweenMax.staggerFrom(this.actionButtons, 0.2, { opacity: 0, scale: 0, ease: Back.easeIn }, 0.1);
     }
 
     public onButtonClicked(action?: Mahjong.Action) {
@@ -194,10 +170,147 @@ class PlayerUI implements Tickable {
 
     public onTick() {
         const absolutePos = new THREE.Vector3();
-        absolutePos.setFromMatrixPosition(
-            this.player.board.playerUIAnchor.matrixWorld
-        );
+        absolutePos.setFromMatrixPosition(this.player.board.playerUIAnchor.matrixWorld);
         const pos = game.projectTo2D(absolutePos);
         this.container.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+    }
+}
+
+class DoraIndicators {
+    public static readonly DORA_COUNT = 5;
+    private static readonly TILE_CLASSNAME = "tile";
+    public static readonly OPEN_TILE_CLASSNAME = "tile open";
+    private tiles: HTMLDivElement[] = [];
+    public readonly tileIDs: Mahjong.TileID[] = [];
+    private _currentTileIDs: Mahjong.TileID[] = [];
+    public get currentTileIDs() {
+        return this._currentTileIDs;
+    }
+    public set currentTileIDs(to: Mahjong.TileID[]) {
+        if (this._currentTileIDs === to) {
+            return;
+        }
+        const oldIDs = this._currentTileIDs;
+        this._currentTileIDs = to;
+        for (const old of oldIDs) {
+            Tile.updateDoras(Mahjong.getNextID(old));
+        }
+        for (const id of to) {
+            Tile.updateDoras(Mahjong.getNextID(id));
+        }
+    }
+
+    public updateAllDoras() {
+        for (const id of this.currentTileIDs) {
+            Tile.updateDoras(Mahjong.getNextID(id));
+        }
+    }
+
+    constructor() {
+        for (let i = 0; i < DoraIndicators.DORA_COUNT; i++) {
+            const tile = document.createElement("div");
+            tile.className = DoraIndicators.TILE_CLASSNAME;
+            UI.doraIndicators.appendChild(tile);
+            this.tiles.push(tile);
+        }
+    }
+
+    public reveal(tileID: Mahjong.TileID) {
+        Util.Assert`翻开的宝牌指示牌不超过5张：${this.tileIDs.length < 5}`;
+        const tile = this.tiles[this.tileIDs.length];
+        tile.appendChild(Assets.loadedImages[tileID].cloneNode());
+        this.tileIDs.push(tileID);
+        const tl = new TimelineMax();
+        tl.add(Util.BiDirectionConstantSet(tile, "className", DoraIndicators.OPEN_TILE_CLASSNAME));
+        tl.add(Util.BiDirectionConstantSet(this, "currentTileIDs", [...this.tileIDs]));
+        return tl;
+    }
+}
+
+type GameResult =
+    | {
+          huer: Player;
+          newTile: Tile;
+          type: "ZIMO" | "HU";
+          fan: string[];
+          score: number;
+      }
+    | {
+          huer: Player;
+          type: "DRAW";
+          reason: string;
+          score: number;
+      };
+
+class GameResultView {
+    private static readonly MAIN_CLASSNAME = "game-result";
+    private static readonly ACTIVE_CLASSNAME = "active";
+    private static readonly BLUR_CLASSNAME = "blur";
+    private static getHTMLForResult(result: GameResult) {
+        if (result.type === "DRAW") {
+            return `
+            <div class="result">
+                <div class="result-upper">
+                    <div class="player">
+                        <img class="avatar" src="${result.huer.info.imgid}" />
+                        <span class="position">${Util.POSITIONS[result.huer.playerID]}家</span>
+                        <span class="name">${result.huer.info.name}</span>
+                    </div>
+                    <div class="draw">流局</div>
+                </div>
+                <div class="fan">
+                    <label>原因</label>
+                    <span>${result.reason}</span>
+                    <label>得分</label>
+                    <span>${result.score}</span>
+                </div>
+            </div>
+            `;
+        }
+        return `
+        <div class="result">
+            <div class="result-upper">
+                <div class="player">
+                    <img class="avatar" src="${result.huer.info.imgid}" />
+                    <span class="position">${Util.POSITIONS[result.huer.playerID]}家</span>
+                    <span class="name">${result.huer.info.name}</span>
+                </div>
+                <div class="hu">${Mahjong.actionInfo[result.type].chnName}</div>
+            </div>
+            <div class="deck">
+                ${[...result.huer.board.deck.handTiles, result.newTile]
+                    .map(
+                        t =>
+                            `<div class="${DoraIndicators.OPEN_TILE_CLASSNAME}">
+                                <img src="${Assets.loadedImages[t.tileID].src}" />
+                            </div>`
+                    )
+                    .join("")}
+            </div>
+            <div class="fan">
+                <label>番型</label>
+                ${result.fan.map(f => `<span>${f}</span>`).join("")}
+            </div>
+            <div class="score">
+                <label>得分</label>
+                <span>${result.score}</span>
+            </div>
+        </div>
+        `;
+    }
+
+    public setResult(results: GameResult[]) {
+        const gameResultView = document.createElement("div");
+        gameResultView.className = GameResultView.MAIN_CLASSNAME;
+        gameResultView.innerHTML =
+            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        UI.gameResultBackground.appendChild(gameResultView);
+        const tl = new TimelineMax();
+        tl.add(Util.BiDirectionConstantSet(game, "pause", true));
+        tl.add(Util.BiDirectionConstantSet(UI.game, "className", GameResultView.BLUR_CLASSNAME));
+        tl.add(Util.BiDirectionConstantSet(UI.gameResultBackground, "className", GameResultView.ACTIVE_CLASSNAME));
+        tl.set(gameResultView, { display: "block", immediateRender: false }, 1);
+        tl.fromTo(gameResultView, 0.5, { y: "50vh" }, { y: 0, immediateRender: false, ease: Back.easeOut });
+        return tl;
     }
 }

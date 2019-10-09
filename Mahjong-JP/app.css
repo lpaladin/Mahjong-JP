@@ -51,11 +51,7 @@ body {
 }
 
 #logs > .primary {
-    background-image: linear-gradient(
-        to right,
-        rgb(235, 135, 135),
-        transparent 50%
-    );
+    background-image: linear-gradient(to right, rgb(235, 135, 135), transparent 50%);
 }
 
 #logs > .error {
@@ -79,27 +75,22 @@ body {
     transform: translate(-50%, -50%);
     font-size: 3em;
     padding: 1em;
-    background-image: radial-gradient(
-        ellipse farthest-side,
-        rgba(255, 255, 255, 0.5),
-        transparent
-    );
+    background-image: radial-gradient(ellipse farthest-side, rgba(255, 255, 255, 0.5), transparent);
     color: white;
-    text-shadow: black 0 1px, black 1px 0, black -1px 0, black 0 -1px,
-        black 0 0 1em;
+    text-shadow: black 0 1px, black 1px 0, black -1px 0, black 0 -1px, black 0 0 1em;
 }
 
-.player {
+#game .player {
     position: absolute;
     left: 0;
     top: 0;
 }
 
-.player > * {
+#game .player > * {
     display: inline-block;
 }
 
-.player .info {
+#game .player .info {
     background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
@@ -108,24 +99,24 @@ body {
     align-items: center;
 }
 
-.player .info:hover {
+#game .player .info:hover {
     opacity: 0.1;
 }
 
-.player .info .avatar {
+#game .player .info .avatar {
     display: inline-block;
     height: 3em;
     width: 3em;
     background-color: white;
 }
 
-.player .info .name {
+#game .player .info .name {
     margin: 0 0.5em;
     display: inline-block;
     color: black;
 }
 
-.player .info .position {
+#game .player .info .position {
     font-size: 1.5em;
     margin: 0 0.25em;
     text-align: center;
@@ -181,4 +172,225 @@ body {
 .center-info .tile-left::before {
     content: "剩余牌数：";
     color: black;
+}
+
+#doraIndicators {
+    position: fixed;
+    pointer-events: none;
+    top: 1em;
+    right: 1em;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+    padding: 0.1em 0.3em;
+}
+
+.tile {
+    height: 4em;
+    line-height: 4em;
+    width: 3em;
+    display: inline-block;
+    position: relative;
+    background-color: #0c8f5d;
+    box-shadow: 3px -4px white;
+    margin: 7px 0.2em 0;
+    box-sizing: content-box;
+    border-radius: 2px;
+}
+
+.tile.open {
+    animation: show-tile 0.3s;
+    background-color: white;
+    box-shadow: 3px -4px #0c8f5d;
+}
+
+.tile img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.4em;
+    visibility: hidden;
+}
+
+.tile.open img {
+    transition: visibility 0s 0.09s;
+    visibility: visible;
+}
+
+@keyframes show-tile {
+    0% {
+        filter: brightness(1);
+    }
+
+    30% {
+        filter: brightness(10);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+#game {
+    transition: filter 0.8s;
+}
+
+#game.blur {
+    filter: blur(5px);
+}
+
+#gameResultBackground {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.8s;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#gameResultBackground.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+#gameResultBackground .game-result {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+    padding: 1em 0;
+    max-width: 80vw;
+}
+
+.game-result header {
+    display: flex;
+    align-items: center;
+}
+
+.game-result header span {
+    padding: 0.5em 1em 0.5em 2em;
+    background-color: rgb(119, 86, 3);
+    color: white;
+}
+
+.game-result header hr {
+    flex-grow: 1;
+    margin: 0 1em;
+    border: 1px solid rgb(119, 86, 3);
+}
+
+.game-result .result-upper {
+    position: relative;
+    padding: 0 1em;
+    margin: 1em 0;
+}
+
+.game-result .player {
+    animation: swing 5s ease-in-out infinite alternate;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 6em;
+    background: linear-gradient(to right, goldenrod, transparent);
+}
+
+.game-result .player > * {
+    animation: rev-swing 5s ease-in-out infinite alternate;
+    margin-right: 0.5em;
+}
+
+.game-result .player .name {
+    padding: 0.5em 1em;
+    background-color: goldenrod;
+}
+
+.game-result .player .position {
+    padding: 0.25em 0.5em;
+    background-color: rgb(179, 133, 18);
+    color: white;
+}
+
+.game-result .player .avatar {
+    height: 3em;
+    width: 3em;
+    background-color: white;
+    border: 5px solid rgb(119, 86, 3);
+}
+
+.game-result .hu,
+.game-result .draw {
+    position: absolute;
+    top: 0.6em;
+    right: 0;
+    font-size: 1.2em;
+    padding: 0.2em 1.6em 0.2em 0.5em;
+    background-color: white;
+    color: rgb(119, 86, 3);
+}
+
+.game-result .draw {
+    background-color: black;
+    color: white;
+}
+
+.game-result .deck {
+    padding: 0 1em;
+}
+
+.game-result .deck .tile:last-child {
+    margin-left: 3em;
+}
+
+.game-result .fan,
+.game-result .score {
+    padding: 0.5em 1em;
+}
+
+.game-result label {
+    display: inline-block;
+    padding: 0.25em 1em;
+    margin-right: 1em;
+    background-color: rgb(119, 86, 3);
+    color: white;
+    animation: label-swing 5s ease-in-out infinite alternate;
+}
+
+.game-result .fan span,
+.game-result .score span {
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    background-color: rgb(226, 195, 114);
+    margin-right: 0.5em;
+}
+
+@keyframes swing {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(-2deg);
+    }
+}
+
+@keyframes rev-swing {
+    from {
+        transform: rotate(0) scale(1.05);
+    }
+    to {
+        transform: rotate(2deg);
+    }
+}
+
+@keyframes label-swing {
+    from {
+        transform: rotate(-1deg) scale(1.05);
+    }
+    to {
+        transform: rotate(1deg) scale(0.95);
+    }
 }

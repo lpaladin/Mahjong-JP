@@ -23,57 +23,46 @@ namespace Assets {
             Mahjong.TileIDs.map(
                 id =>
                     new Promise<HTMLImageElement>(ac =>
-                        loader.load(
-                            `Mahjong-JP/tiles/${Mahjong.tileInfo[id].imgName}`,
-                            img => {
-                                loadedImages[name] = img;
-                                const canvas = document.createElement("canvas");
-                                const h = (canvas.height = img.height);
-                                const w = img.width;
-                                canvas.width = h;
-                                /*
-                                 * w : h = 3 : 4
-                                 *  .  w   .  .
-                                 * .+------+--+
-                                 *  | o  o |  |
-                                 *  | o  o |  | <- 白色
-                                 * h| o  o |__| . 有色部分所占比例为 SIDE_COLOR_PERCENTAGE
-                                 *  | o  o |//| <- 背部颜色
-                                 * .+------+--+
-                                 *      ^ 牌面
-                                 */
-                                const backColorHeight =
-                                    h * Tile.SIDE_COLOR_PERCENTAGE;
-                                const ctx = canvas.getContext("2d");
-                                ctx.fillStyle = "white";
-                                ctx.fillRect(0, 0, h, h);
-                                ctx.fillStyle = Colors.toHexString(
-                                    Colors.TileBackColor
-                                );
-                                ctx.fillRect(
-                                    w,
-                                    h - backColorHeight,
-                                    h / 2,
-                                    backColorHeight
-                                );
-                                ctx.drawImage(
-                                    img,
-                                    (Tile.PADDING_PERCENTAGE_W * w) / 2,
-                                    (Tile.PADDING_PERCENTAGE_H * h) / 2,
-                                    w * (1 - Tile.PADDING_PERCENTAGE_W),
-                                    h * (1 - Tile.PADDING_PERCENTAGE_H)
-                                );
-                                Tile.TEXTURES[id] = new THREE.CanvasTexture(
-                                    canvas,
-                                    THREE.UVMapping,
-                                    THREE.MirroredRepeatWrapping,
-                                    THREE.MirroredRepeatWrapping
-                                    // THREE.NearestFilter,
-                                    // THREE.NearestFilter
-                                );
-                                ac(img);
-                            }
-                        )
+                        loader.load(`Mahjong-JP/tiles/${Mahjong.tileInfo[id].imgName}`, img => {
+                            loadedImages[id] = img;
+                            const canvas = document.createElement("canvas");
+                            const h = (canvas.height = img.height);
+                            const w = img.width;
+                            canvas.width = h;
+                            /*
+                             * w : h = 3 : 4
+                             *  .  w   .  .
+                             * .+------+--+
+                             *  | o  o |  |
+                             *  | o  o |  | <- 白色
+                             * h| o  o |__| . 有色部分所占比例为 SIDE_COLOR_PERCENTAGE
+                             *  | o  o |//| <- 背部颜色
+                             * .+------+--+
+                             *      ^ 牌面
+                             */
+                            const backColorHeight = h * Tile.SIDE_COLOR_PERCENTAGE;
+                            const ctx = canvas.getContext("2d");
+                            ctx.fillStyle = "white";
+                            ctx.fillRect(0, 0, h, h);
+                            ctx.fillStyle = Colors.toHexString(Colors.TileBackColor);
+                            ctx.fillRect(w, h - backColorHeight, h / 2, backColorHeight);
+                            ctx.drawImage(
+                                img,
+                                (Tile.PADDING_PERCENTAGE_W * w) / 2,
+                                (Tile.PADDING_PERCENTAGE_H * h) / 2,
+                                w * (1 - Tile.PADDING_PERCENTAGE_W),
+                                h * (1 - Tile.PADDING_PERCENTAGE_H)
+                            );
+                            Tile.TEXTURES[id] = new THREE.CanvasTexture(
+                                canvas,
+                                THREE.UVMapping,
+                                THREE.MirroredRepeatWrapping,
+                                THREE.MirroredRepeatWrapping
+                                // THREE.NearestFilter,
+                                // THREE.NearestFilter
+                            );
+                            ac(img);
+                        })
                     )
             )
         );
@@ -115,12 +104,7 @@ namespace Assets {
                             const x = vertices[i * 3];
                             const y = vertices[i * 3 + 1];
                             const z = vertices[i * 3 + 2];
-                            return z > 0
-                                ? new THREE.Vector2(
-                                      ((x + r) / w) * xSplit,
-                                      (y + r) / h
-                                  )
-                                : new THREE.Vector2(1, 0);
+                            return z > 0 ? new THREE.Vector2(((x + r) / w) * xSplit, (y + r) / h) : new THREE.Vector2(1, 0);
                         }),
                     generateSideWallUV: (
                         geometry: THREE.ExtrudeBufferGeometry,
@@ -250,18 +234,11 @@ namespace Assets {
         areaImage.src = POSTPROCESSING.SMAAEffect.areaImageDataURL;
 
         await loadedPromise;
-        smaaEffect = new POSTPROCESSING.SMAAEffect(
-            searchImage,
-            areaImage,
-            POSTPROCESSING.SMAAPreset.MEDIUM
-        );
+        smaaEffect = new POSTPROCESSING.SMAAEffect(searchImage, areaImage, POSTPROCESSING.SMAAPreset.MEDIUM);
         smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
     }
 
-    export function InitializeEffects(
-        scene: THREE.Scene,
-        camera: THREE.Camera
-    ) {
+    export function InitializeEffects(scene: THREE.Scene, camera: THREE.Camera) {
         outlineEffect = new POSTPROCESSING.OutlineEffect(scene, camera, {
             blendFunction: POSTPROCESSING.BlendFunction.ADD,
             pulseSpeed: 0.25,
@@ -275,6 +252,7 @@ namespace Colors {
     export const White = 0xffffff;
     export const TileBackColor = 0x0c8f5d;
     export const TileBackColorDark = 0x08613f;
+    export const Highlight = 0x191a11;
     export const DarkGray = 0x404040;
     export const LightGray = 0x808080;
 

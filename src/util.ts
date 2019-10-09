@@ -31,12 +31,7 @@ namespace Util {
         return ((me + 4 - other) % 4) - 2;
     }
 
-    export function MeshOpacityFromTo(
-        m: THREE.Mesh,
-        duration: number,
-        from: number,
-        to: number
-    ) {
+    export function MeshOpacityFromTo(m: THREE.Mesh, duration: number, from: number, to: number) {
         if (!Array.isArray(m.material)) {
             const t = TweenMax.fromTo(
                 m.material,
@@ -44,29 +39,17 @@ namespace Util {
                 { opacity: from },
                 { opacity: to, ease: Linear.easeNone, immediateRender: false }
             );
-            if (
-                (from == 0 || from == 1) &&
-                to + from == 1 &&
-                !m.material.transparent
-            ) {
+            if ((from == 0 || from == 1) && to + from == 1 && !m.material.transparent) {
                 const tl = new TimelineMax();
                 if (to) {
                     tl.add(BiDirectionConstantSet(m, "visible", true));
-                    tl.add(
-                        BiDirectionConstantSet(m.material, "transparent", true)
-                    );
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", true));
                     tl.add(t);
-                    tl.add(
-                        BiDirectionConstantSet(m.material, "transparent", false)
-                    );
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", false));
                 } else {
-                    tl.add(
-                        BiDirectionConstantSet(m.material, "transparent", true)
-                    );
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", true));
                     tl.add(t);
-                    tl.add(
-                        BiDirectionConstantSet(m.material, "transparent", false)
-                    );
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", false));
                     tl.add(BiDirectionConstantSet(m, "visible", false));
                 }
                 return tl;
@@ -75,11 +58,7 @@ namespace Util {
         }
     }
 
-    export function BiDirectionConstantSet<T>(
-        obj: T | T[],
-        propName: keyof T,
-        to: any
-    ) {
+    export function BiDirectionConstantSet<T>(obj: T | T[], propName: keyof T, to: any) {
         let initial: any;
         if (Array.isArray(obj))
             return TweenMax.to({}, 0.001, {
@@ -111,25 +90,24 @@ namespace Util {
             });
     }
 
-    function logComposeHTML(
-        parts: TemplateStringsArray,
-        args: Array<number | string | PlayerInfo>
-    ) {
+    function playerInfoToHTML(x: PlayerInfo) {
+        return `<img src="${x.imgid}" /><span>${neutralize(x.name)}</span>`;
+    }
+
+    function logComposeHTML(parts: TemplateStringsArray, args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
         return parts.reduce((prev, curr, i) => {
             const arg = args[i - 1];
+            if (Array.isArray(arg)) {
+                return `${prev}${arg.map(p => playerInfoToHTML(p)).join("、")}${curr}`;
+            }
             if (typeof arg === "object") {
-                return `${prev}<img src="${arg.imgid}" /><span>${neutralize(
-                    arg.name
-                )}</span>${curr}`;
+                return `${prev}${playerInfoToHTML(arg)}${curr}`;
             }
             return `${prev}<span>${neutralize(arg)}</span>${curr}`;
         });
     }
 
-    export function Log(
-        parts: TemplateStringsArray,
-        ...args: Array<number | string | PlayerInfo>
-    ) {
+    export function Log(parts: TemplateStringsArray, ...args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
         const newChild = document.createElement("div");
         newChild.innerHTML = logComposeHTML(parts, args);
         UI.logs.appendChild(newChild);
@@ -146,10 +124,7 @@ namespace Util {
         );
     }
 
-    export function PrimaryLog(
-        parts: TemplateStringsArray,
-        ...args: Array<number | string | PlayerInfo>
-    ) {
+    export function PrimaryLog(parts: TemplateStringsArray, ...args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
         const newChild = document.createElement("div");
         newChild.className = "primary";
         newChild.innerHTML = logComposeHTML(parts, args);
@@ -162,10 +137,7 @@ namespace Util {
         TweenMax.from(newChild, 0.1, { opacity: 0 });
     }
 
-    export function Assert(
-        parts: TemplateStringsArray,
-        ...args: Array<boolean>
-    ) {
+    export function Assert(parts: TemplateStringsArray, ...args: Array<boolean>) {
         if (args.some(v => !v)) {
             const newChild = document.createElement("div");
             newChild.className = "error";

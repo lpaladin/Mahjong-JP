@@ -56,6 +56,11 @@ class Deck extends THREE.Group {
         return tl;
     }
 
+    public getTileById(tileID: Mahjong.TileID) {
+        if (this.drawnTile && this.drawnTile.tileID === tileID) return this.drawnTile;
+        return this.handTiles.find(t => t.tileID === tileID);
+    }
+
     public drawTile(tileID: Mahjong.TileID) {
         const t = new Tile(tileID, -1);
         t.position.x = this.getTilePosition(-1);
@@ -64,7 +69,6 @@ class Deck extends THREE.Group {
         t.open = this.open;
         const tl = new TimelineMax();
         tl.add(Util.MeshOpacityFromTo(t, 0.2, 0, 1));
-        tl.add(Util.BiDirectionConstantSet(game.centerScreen, "tileLeft", --Tile.tileLeft));
         if (!game.playerMe || game.playerMe.board.deck == this) {
             tl.call(() => Util.Log`${game.playerMe.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`);
         } else {
@@ -349,17 +353,6 @@ class PlayerArea extends THREE.Group {
             if (tile) tile.hovered = true;
         }
     }
-
-    public onClick() {
-        if (this.hoveredTile && this.player.interactable) {
-            this.player.interactable = false;
-            const tl = new TimelineMax();
-            this.player.puttingLizhiTile = Math.random() > 0.7;
-            tl.add(this.player.playTile(this.hoveredTile));
-            tl.add(this.river.finalizeLatestTile(), "+=0.2");
-            return tl;
-        }
-    }
 }
 
 class CenterScreen extends THREE.Mesh {
@@ -375,7 +368,7 @@ class CenterScreen extends THREE.Mesh {
     private lizhiSticks: THREE.Mesh[] = [];
 
     private _roundWind = 0;
-    private _tileLeft = 0;
+    private _tileLeft = -1;
     private _viewPoint = 0;
 
     public get roundWind() {
@@ -414,7 +407,7 @@ class CenterScreen extends THREE.Mesh {
 
     public updateText() {
         this.textUI.roundWind = Util.POSITIONS[this.roundWind];
-        this.textUI.tileLeft = this.tileLeft.toString();
+        this.textUI.tileLeft = this.tileLeft < 0 ? " - " : this.tileLeft.toString();
     }
 
     public putLizhiStick(playerID: number) {

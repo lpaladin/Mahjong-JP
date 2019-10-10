@@ -39,8 +39,6 @@ class Tile extends THREE.Mesh implements Tickable {
             }
     }
 
-    public static tileLeft = 9 * 4 * 3 + 7 * 4;
-
     private _outlined = undefined;
     public get outlined() {
         return this._outlined;

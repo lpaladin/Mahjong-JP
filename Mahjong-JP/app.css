@@ -97,6 +97,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 #game .player .info:hover {
@@ -404,4 +405,28 @@ body {
     to {
         transform: rotate(1deg) scale(0.95);
     }
+}
+
+#audienceToolbar {
+    position: fixed;
+    bottom: 1em;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#audienceToolbar button {
+    padding: 0.3em 1em;
+    margin: 0.8em 0.5em;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: none;
+    outline: 0;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.active {
+    background-color: rgba(255, 232, 100, 0.5);
+    border: 1px solid rgba(255, 232, 100, 0.9);
 }

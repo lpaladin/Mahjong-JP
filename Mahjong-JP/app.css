@@ -338,6 +338,17 @@ body {
     color: white;
 }
 
+.game-result .hu .from {
+    position: absolute;
+    white-space: nowrap;
+    bottom: 100%;
+    right: 0;
+    padding: 0.2em;
+    font-size: 0.5em;
+    color: white;
+    background-color: rgb(119, 86, 3);
+}
+
 .game-result .deck {
     padding: 0 1em;
 }

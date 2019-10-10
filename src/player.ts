@@ -121,6 +121,7 @@ class Player implements Tickable {
                                 {
                                     huer: this,
                                     newTile: tile,
+                                    from: action.type === 'HU' ? action.from : this.playerID,
                                     type: action.type,
                                     fan: ["断幺九", "平和", "清一色", "断幺九", "平和", "清一色"],
                                     score: 18000
@@ -130,6 +131,7 @@ class Player implements Tickable {
                                 {
                                     huer: this,
                                     newTile: tile,
+                                    from: action.type === 'HU' ? action.from : this.playerID,
                                     type: action.type,
                                     fan: ["断幺九", "平和", "清一色", "断幺九", "平和", "清一色"],
                                     score: 18000
@@ -137,6 +139,7 @@ class Player implements Tickable {
                                 {
                                     huer: game.players[2],
                                     newTile: tile,
+                                    from: action.type === 'HU' ? action.from : this.playerID,
                                     type: action.type,
                                     fan: ["断幺九", "平和", "清一色", "断幺九", "平和", "清一色"],
                                     score: 18000

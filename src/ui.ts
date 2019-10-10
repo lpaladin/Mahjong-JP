@@ -231,6 +231,7 @@ type GameResult =
     | {
           huer: Player;
           newTile: Tile;
+          from: number;
           type: "ZIMO" | "HU";
           fan: string[];
           score: number;
@@ -275,7 +276,10 @@ class GameResultView {
                     <span class="position">${Util.POSITIONS[result.huer.playerID]}家</span>
                     <span class="name">${result.huer.info.name}</span>
                 </div>
-                <div class="hu">${Mahjong.actionInfo[result.type].chnName}</div>
+                <div class="hu">
+                    <span class="type">${Mahjong.actionInfo[result.type].chnName}</span>
+                    ${result.type === "HU" ? `<span class="from">${Util.POSITIONS[result.from]}家点炮</span>` : ""}
+                </div>
             </div>
             <div class="deck">
                 ${[...result.huer.board.deck.handTiles, result.newTile]
@@ -302,8 +306,7 @@ class GameResultView {
     public setResult(results: GameResult[]) {
         const gameResultView = document.createElement("div");
         gameResultView.className = GameResultView.MAIN_CLASSNAME;
-        gameResultView.innerHTML =
-            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        gameResultView.innerHTML = "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
         UI.gameResultBackground.appendChild(gameResultView);
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));

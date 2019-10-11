@@ -69,10 +69,11 @@ class Deck extends THREE.Group {
         t.open = this.open;
         const tl = new TimelineMax();
         tl.add(Util.MeshOpacityFromTo(t, 0.2, 0, 1));
-        if (!game.playerMe || game.playerMe.board.deck == this) {
-            tl.call(() => Util.Log`${game.playerMe.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`);
+        const watchingPlayer = game.players[game.viewPoint];
+        if (watchingPlayer.board.deck == this) {
+            tl.call(() => Util.Log`${watchingPlayer.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`);
         } else {
-            tl.call(() => Util.Log`${game.playerMe.info}摸了一张牌`);
+            tl.call(() => Util.Log`${watchingPlayer.info}摸了一张牌`);
         }
         return tl;
     }
@@ -98,6 +99,10 @@ class River extends THREE.Group {
 
     public constructor(public readonly player: Player) {
         super();
+    }
+
+    public get latestTile(): Tile {
+        return this.riverTiles[this.riverTiles.length - 1];
     }
 
     public getLatestTileTargetPos() {
@@ -220,12 +225,7 @@ class OpenTiles extends THREE.Group {
         Util.Assert`找不到可以补杠的牌(${false})`;
     }
 
-    public addStack(
-        type: OpenTileType,
-        existingTilesID: Mahjong.TileID[],
-        newTileID: Mahjong.TileID = null,
-        fromPlayerRelative = 0
-    ) {
+    public addStack(type: OpenTileType, existingTilesID: Mahjong.TileID[], newTileID: Mahjong.TileID = null, fromPlayerRelative = 0) {
         const tl = new TimelineMax();
         let tiles = existingTilesID.map(t => new Tile(t, -1));
         if (type == "ANGANG") {
@@ -278,10 +278,7 @@ class PlayerArea extends THREE.Group {
     public static readonly BOARD_GAP = 0.5;
     public hoveredTile: Tile;
     public readonly deck = new Deck(this.player);
-    public readonly background = new THREE.Mesh(
-        Assets.GetBoardGeometry(),
-        new THREE.MeshLambertMaterial({ color: Colors.TileBackColor })
-    );
+    public readonly background = new THREE.Mesh(Assets.GetBoardGeometry(), new THREE.MeshLambertMaterial({ color: Colors.TileBackColor }));
     public readonly river = new River(this.player);
     public readonly openTiles = new OpenTiles();
     public readonly playerUIAnchor = new THREE.Object3D();

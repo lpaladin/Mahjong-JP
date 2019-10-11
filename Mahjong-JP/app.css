@@ -1,11 +1,11 @@
 * {
     margin: 0;
-    cursor: default;
     user-select: none;
 }
 
 body {
     overflow: hidden;
+    cursor: default;
 }
 
 #background {
@@ -127,7 +127,7 @@ body {
     text-align: center;
 }
 
-.actions .action {
+button {
     padding: 0.3em 1em;
     margin: 0.8em 0.5em;
     background-color: rgba(255, 255, 255, 0.3);
@@ -137,7 +137,7 @@ body {
     outline: 0;
 }
 
-.actions .action:hover {
+button:hover {
     background-color: rgba(255, 255, 255, 0.6);
     transition: background-color 0.2s;
 }
@@ -407,7 +407,7 @@ body {
     }
 }
 
-#audienceToolbar {
+#spectatorToolbar {
     position: fixed;
     bottom: 1em;
     left: 0;
@@ -415,18 +415,8 @@ body {
     text-align: center;
 }
 
-#audienceToolbar button {
-    padding: 0.3em 1em;
-    margin: 0.8em 0.5em;
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
-    -webkit-appearance: none;
-    outline: 0;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-.active {
+button.active,
+.info.active {
     background-color: rgba(255, 232, 100, 0.5);
     border: 1px solid rgba(255, 232, 100, 0.9);
 }

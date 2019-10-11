@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title>F**k Mahjong</title>
+        <link rel="stylesheet" href="Mahjong-JP/app.css" />
+        <script src="player_api.js"></script>
+        <script src="Mahjong-JP/three.min.js"></script>
+        <script src="Mahjong-JP/postprocessing.min.js"></script>
+        <script src="Mahjong-JP/CSS3DRenderer.js"></script>
+    </head>
 
-<head>
-    <meta charset="utf-8" />
-    <title>F**k Mahjong</title>
-    <link rel="stylesheet" href="Mahjong-JP/app.css" />
-    <script src="player_api.js"></script>
-    <script src="Mahjong-JP/three.min.js"></script>
-    <script src="Mahjong-JP/postprocessing.min.js"></script>
-    <script src="Mahjong-JP/CSS3DRenderer.js"></script>
-</head>
-
-<body>
-    <div id="game">
-        <div id="background"></div>
-        <canvas id="mainCanvas"></canvas>
-        <div id="cssRenderOverlay"></div>
-        <div id="doraIndicators"></div>
-        <div id="audienceToolbar"></div>
-    </div>
-    <div id="gameResultBackground"></div>
-    <div id="logs"></div>
-    <script src="Mahjong-JP/app.js"></script>
-</body>
-
+    <body>
+        <div id="game">
+            <div id="background"></div>
+            <canvas id="mainCanvas"></canvas>
+            <div id="cssRenderOverlay"></div>
+            <div id="doraIndicators"></div>
+            <div id="spectatorToolbar"></div>
+        </div>
+        <div id="gameResultBackground"></div>
+        <div id="logs"></div>
+        <script src="Mahjong-JP/app.js"></script>
+    </body>
 </html>

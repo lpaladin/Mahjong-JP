@@ -110,9 +110,7 @@ class Game implements Tickable {
         this.setupPostProcessing();
 
         window.addEventListener("resize", () => this.initRenderer());
-        window.addEventListener("mousemove", e =>
-            this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1)
-        );
+        window.addEventListener("mousemove", e => this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1));
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
                 if (!this.mouseRightButtonDown) {
@@ -203,6 +201,9 @@ class Game implements Tickable {
         console.log(log);
         const tl = new TimelineMax();
         if ("action" in log) {
+            if ("tileCnt" in log) {
+                tl.add(Util.BiDirectionConstantSet(this.centerScreen, "tileLeft", log.tileCnt));
+            }
             if (log.action === "DEAL") {
                 for (const p of this.players) {
                     p.board.deck.init(log[p.playerID].split(" ").slice(1) as Mahjong.TileID[]);
@@ -217,6 +218,7 @@ class Game implements Tickable {
                     case "DRAW":
                         if (this.lastPlayedPlayer != -1) {
                             tl.add(game.players[this.lastPlayedPlayer].board.river.finalizeLatestTile());
+                            this.lastPlayedPlayer = -1;
                         }
                         newActions.push({
                             type: "DRAW",
@@ -255,26 +257,39 @@ class Game implements Tickable {
                     tl.add(player.doAction(action));
                 }
             }
-            if ("tileCnt" in log) {
-                tl.add(Util.BiDirectionConstantSet(this.centerScreen, "tileLeft", log.tileCnt));
-            }
         } else {
             const results: GameResult[] = [];
             for (const p of this.players) {
                 const result: DisplayLog.PlayerResult | null = log[p.playerID];
+                const isZimo = this.lastPlayedPlayer === -1;
                 if (result) {
+                    if (isZimo) {
+                        tl.add(
+                            p.doAction({
+                                type: "ZIMO"
+                            })
+                        );
+                    } else {
+                        tl.add(
+                            p.doAction({
+                                type: "HU",
+                                from: this.lastPlayedPlayer,
+                                tile: this.players[this.lastPlayedPlayer].board.river.latestTile
+                            })
+                        );
+                    }
                     results.push({
-                        type: result.player === p.playerID ? "ZIMO" : "HU",
+                        type: isZimo ? "ZIMO" : "HU",
                         huer: p,
-                        from: result.player,
-                        newTile: result.player === p.playerID ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
+                        from: isZimo ? p.playerID : this.lastPlayedPlayer,
+                        newTile: isZimo ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
                         fan: result.fan.map(f => `${f.name} - ${f.value}番`),
                         fu: result.fuCnt,
                         score: result.ScoreCnt
                     });
                 }
             }
-            tl.add(this.gameFinish(results));
+            tl.add(this.gameFinish(results), "+=0.5");
         }
         return tl;
     };

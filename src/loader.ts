@@ -21,11 +21,11 @@ namespace Loader {
                 gsapScript.addEventListener("error", rej);
                 document.body.appendChild(gsapScript);
             });
-            const fullLog = await (await fetch("in_hedimoyu_haidilaoyue.json")).json();
+            const fullLog = await (await fetch("in.json")).json();
             let displayCB: Function;
             window["infoProvider"] = <any>{
                 dbgMode: true,
-                getPlayerID: () => 0,
+                getPlayerID: () => -1,
                 getPlayerNames: () => [
                     { name: "青龙", imgid: "default.png" },
                     { name: "白虎", imgid: "default.png" },

@@ -6,7 +6,7 @@ const UI = {
     logs: null as HTMLDivElement,
     doraIndicators: null as HTMLDivElement,
     gameResultBackground: null as HTMLDivElement,
-    audienceToolbar: null as HTMLDivElement
+    spectatorToolbar: null as HTMLDivElement
 };
 
 for (const id of Object.keys(UI)) UI[id] = document.getElementById(id);
@@ -62,7 +62,7 @@ class PlayerShout {
         UI.game.appendChild(this.container);
     }
 
-    public shout(content: string) {
+    public shout(content: string): void {
         const absolutePos = new THREE.Vector3();
         absolutePos.setFromMatrixPosition(this.player.board.shoutBeginAnchor.matrixWorld);
         const beginPos = game.projectTo2D(absolutePos);
@@ -77,8 +77,8 @@ class PlayerShout {
             y: ((endPos.y - beginPos.y) * 2) / 3 + beginPos.y
         };
         const tl = new TimelineMax();
-        tl.add(Util.BiDirectionConstantSet(this.content, "textContent", content), 0);
-        tl.add(Util.BiDirectionConstantSet(this.container.style, "display", "block"), 0);
+        this.content.textContent = content;
+        this.container.style.display = "block";
         tl.fromTo(
             this.container,
             0.1,
@@ -94,7 +94,7 @@ class PlayerShout {
             },
             0
         );
-        tl.to(this.container, 0.3, {
+        tl.to(this.container, 0.6, {
             scale: 1.2,
             ...twoThirdPos
         });
@@ -103,8 +103,7 @@ class PlayerShout {
             opacity: 0,
             ...endPos
         });
-        tl.add(Util.BiDirectionConstantSet(this.container.style, "display", "none"));
-        return tl;
+        tl.call(() => (this.container.style.display = "none"));
     }
 }
 
@@ -320,8 +319,7 @@ class GameResultView {
     public setResult(results: GameResult[]) {
         const gameResultView = document.createElement("div");
         gameResultView.className = GameResultView.MAIN_CLASSNAME;
-        gameResultView.innerHTML =
-            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        gameResultView.innerHTML = "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
         UI.gameResultBackground.appendChild(gameResultView);
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));
@@ -335,7 +333,7 @@ class GameResultView {
 
 class SpectatorControl {
     public set visible(to: boolean) {
-        UI.audienceToolbar.style.display = to ? "block" : "none";
+        UI.spectatorToolbar.style.display = to ? "block" : "none";
     }
     constructor() {
         const left = document.createElement("button");
@@ -355,8 +353,8 @@ class SpectatorControl {
         right.addEventListener("click", () => {
             game.viewPoint = (game.viewPoint + 1) % 4;
         });
-        UI.audienceToolbar.appendChild(left);
-        UI.audienceToolbar.appendChild(toggleOpen);
-        UI.audienceToolbar.appendChild(right);
+        UI.spectatorToolbar.appendChild(left);
+        UI.spectatorToolbar.appendChild(toggleOpen);
+        UI.spectatorToolbar.appendChild(right);
     }
 }

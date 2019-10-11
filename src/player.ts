@@ -36,14 +36,17 @@ class Player implements Tickable {
     public doAction(action: Mahjong.Action) {
         const tl = new TimelineMax();
         if (action.type !== "DRAW" && action.type !== "PLAY") {
-            tl.add(this.shout.shout(Mahjong.actionInfo[action.type].chnName));
+            tl.call(this.shout.shout, [Mahjong.actionInfo[action.type].chnName], this.shout);
         }
         if ("tile" in action) {
             const tileId = action.tile instanceof Tile ? action.tile.tileID : action.tile;
             if ("from" in action) {
                 tl.call(
                     () =>
-                        Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了${game.players[action.from].info}的${Mahjong.tileInfo[tileId].chnName}`
+                        Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了${game.players[action.from].info}的${Mahjong.tileInfo[tileId].chnName}`,
+                    null,
+                    null,
+                    1
                 );
                 if (action.type !== "HU") {
                     tl.add(game.players[action.from].board.river.removeLatestTile(), 1);
@@ -51,13 +54,15 @@ class Player implements Tickable {
             } else {
                 if (action.type !== "DRAW") {
                     tl.call(
-                        () =>
-                            Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`
+                        () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
+                        null,
+                        null,
+                        1
                     );
                 }
             }
         } else {
-            tl.call(() => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了`);
+            tl.call(() => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了`, null, null, 1);
         }
         if ("existing" in action)
             action.existing.forEach(t => {
@@ -90,14 +95,14 @@ class Player implements Tickable {
             });
         switch (action.type) {
             case "DRAW":
-                tl.add(this.board.deck.drawTile(action.tile));
+                tl.add(this.board.deck.drawTile(action.tile), "+=0.5");
                 break;
             case "PLAY":
             case "LIZHI":
                 if (action.type === "LIZHI") {
                     this.puttingLizhiTile = true;
                 }
-                tl.add(this.playTile(action.tile), "+=1");
+                tl.add(this.playTile(action.tile));
                 break;
             case "CHI":
             case "PENG":

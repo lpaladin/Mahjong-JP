@@ -248,7 +248,12 @@ class OpenTiles extends THREE.Group {
         Util.Assert`找不到可以补杠的牌(${false})`;
     }
 
-    public addStack(type: OpenTileType, existingTilesID: Mahjong.TileID[], newTileID: Mahjong.TileID = null, fromPlayerRelative = 0) {
+    public addStack(
+        type: OpenTileType,
+        existingTilesID: Mahjong.TileID[],
+        newTileID: Mahjong.TileID = null,
+        fromPlayerRelative = 0
+    ) {
         const tl = new TimelineMax();
         let tiles = existingTilesID.map(t => new Tile(t, -1));
         if (type == "ANGANG") {
@@ -301,7 +306,10 @@ class PlayerArea extends THREE.Group {
     public static readonly BOARD_GAP = 0.5;
     public hoveredTile: Tile;
     public readonly deck = new Deck(this.player);
-    public readonly background = new THREE.Mesh(Assets.GetBoardGeometry(), new THREE.MeshLambertMaterial({ color: Colors.TileBackColor }));
+    public readonly background = new THREE.Mesh(
+        Assets.GetBoardGeometry(),
+        new THREE.MeshLambertMaterial({ color: Colors.TileBackColor })
+    );
     public readonly river = new River(this.player);
     public readonly openTiles = new OpenTiles();
     public readonly playerUIAnchor = new THREE.Object3D();
@@ -390,6 +398,7 @@ class CenterScreen extends THREE.Mesh {
     private _roundWind = 0;
     private _tileLeft = -1;
     private _viewPoint = 0;
+    private viewPointRotation = 0;
 
     public get roundWind() {
         return this._roundWind;
@@ -419,10 +428,21 @@ class CenterScreen extends THREE.Mesh {
         if (this._viewPoint === to) {
             return;
         }
-        this._viewPoint = to;
+        switch ((to + 4 - this._viewPoint) % 4) {
+            case 1:
+                this.viewPointRotation += Util.RAD90;
+                break;
+            case 2:
+                this.viewPointRotation += Util.RAD90 * 2;
+                break;
+            case 3:
+                this.viewPointRotation -= Util.RAD90;
+        }
         TweenMax.to(this.textCSSObj.rotation, 0.3, {
-            z: Util.RAD90 * to
+            z: this.viewPointRotation,
+            ease: Linear.easeNone
         });
+        this._viewPoint = to;
     }
 
     public updateText() {

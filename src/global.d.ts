@@ -10,6 +10,7 @@ declare const Expo: typeof gsap.Expo;
 declare const Linear: typeof gsap.Linear;
 declare const Back: typeof gsap.Back;
 declare const Quad: typeof gsap.Quad;
+declare const Sine: typeof gsap.Sine;
 declare const Circ: typeof gsap.Circ;
 declare const Cubic: typeof gsap.Cubic;
 declare const Power2: typeof gsap.Power2;

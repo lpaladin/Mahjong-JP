@@ -94,12 +94,24 @@ class Game implements Tickable {
         this.cameraKeepFocusing = this.cameraUncontrolled = true;
         this.cameraPositionBase.set(Util.DIR_X[to] * 70, 35, Util.DIR_Z[to] * 70);
         this.centerScreen.viewPoint = to;
-        TweenMax.to(this.camera.position, 0.3, {
-            ...Util.ToPlain(this.cameraPositionBase),
-            onComplete: () => {
-                this.camera.lookAt(Util.ZERO3);
-                this.cameraKeepFocusing = this.cameraUncontrolled = false;
-            }
+        const tl = new TimelineMax();
+        tl.to(this.camera.position, 0.3, {
+            x: this.cameraPositionBase.x,
+            ease: to % 2 ? Sine.easeOut : Sine.easeIn
+        });
+        tl.to(
+            this.camera.position,
+            0.3,
+            {
+                z: this.cameraPositionBase.z,
+                ease: to % 2 ? Sine.easeIn : Sine.easeOut
+            },
+            0
+        );
+        tl.set(this.camera.position, { y: this.cameraPositionBase.y });
+        tl.call(() => {
+            this.camera.lookAt(Util.ZERO3);
+            this.cameraKeepFocusing = this.cameraUncontrolled = false;
         });
         this.doraIndicators.updateAllDoras();
     }
@@ -126,7 +138,9 @@ class Game implements Tickable {
         this.setupPostProcessing();
 
         window.addEventListener("resize", () => this.initRenderer());
-        window.addEventListener("mousemove", e => this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1));
+        window.addEventListener("mousemove", e =>
+            this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1)
+        );
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
                 if (!this.mouseRightButtonDown) {

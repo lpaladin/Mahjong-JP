@@ -42,7 +42,7 @@ body {
     width: 1em;
 }
 
-#logs>* {
+#logs > * {
     padding: 0.1em 0.5em;
     overflow: hidden;
     background-image: linear-gradient(to right, skyblue, transparent 50%);
@@ -50,15 +50,15 @@ body {
     vertical-align: middle;
 }
 
-#logs>.primary {
+#logs > .primary {
     background-image: linear-gradient(to right, rgb(235, 135, 135), transparent 50%);
 }
 
-#logs>.error {
+#logs > .error {
     background-image: linear-gradient(to right, red, transparent 50%);
 }
 
-#logs>*>span {
+#logs > * > span {
     color: yellow;
     margin: 0 0.2em;
 }
@@ -86,7 +86,7 @@ body {
     top: 0;
 }
 
-#game .player>* {
+#game .player > * {
     display: inline-block;
 }
 
@@ -151,7 +151,7 @@ button:hover {
     text-align: center;
 }
 
-.center-info>* {
+.center-info > * {
     transform-origin: top center;
     transform: scaleY(2);
     margin-bottom: 2em;
@@ -300,7 +300,7 @@ button:hover {
     background: linear-gradient(to right, goldenrod, transparent);
 }
 
-.game-result .player>* {
+.game-result .player > * {
     animation: rev-swing 5s ease-in-out infinite alternate;
     margin-right: 0.5em;
 }
@@ -429,6 +429,10 @@ button.active,
     color: white !important;
 }
 
-#spectatorToolbar input {
+input[type="range"] {
+    position: fixed;
+    bottom: 1em;
+    left: 25vw;
+    right: 25vw;
     width: 50vw;
 }

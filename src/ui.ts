@@ -340,7 +340,8 @@ class GameResultView {
     public setResult(results: GameResult[]) {
         const gameResultView = document.createElement("div");
         gameResultView.className = GameResultView.MAIN_CLASSNAME;
-        gameResultView.innerHTML = "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        gameResultView.innerHTML =
+            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
         UI.gameResultBackground.appendChild(gameResultView);
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));
@@ -348,6 +349,13 @@ class GameResultView {
         tl.add(Util.BiDirectionConstantSet(UI.gameResultBackground, "className", GameResultView.ACTIVE_CLASSNAME));
         tl.set(gameResultView, { display: "block", immediateRender: false }, 1);
         tl.fromTo(gameResultView, 0.5, { y: "50vh" }, { y: 0, immediateRender: false, ease: Back.easeOut });
+        tl.from(gameResultView.querySelector("header"), 0.3, { y: "-100%", opacity: 0 });
+        for (const element of gameResultView.querySelectorAll(".result")) {
+            tl.from(element.querySelector(".result-upper > .player"), 0.2, { opacity: 0 });
+            tl.from(element.querySelector(".result-upper > :not(.player)"), 0.2, { x: "-100%", opacity: 0 }, "-=0.1");
+            tl.staggerFrom(element.querySelectorAll(".deck > *"), 0.2, { y: "100%", opacity: 0 }, 0.05);
+            tl.staggerFrom(element.querySelectorAll(".fan > *, .score > *"), 0.3, { x: "-100%", opacity: 0 }, 0.1);
+        }
         return tl;
     }
 }
@@ -393,10 +401,11 @@ class SpectatorControl implements Tickable {
                 tickableManager.add(this);
                 Loader.globalTL.play();
             });
-            this.progress.addEventListener("change", e => Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true));
+            this.progress.addEventListener("change", e =>
+                Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true)
+            );
             tickableManager.add(this);
-            UI.spectatorToolbar.appendChild(document.createElement("br"));
-            UI.spectatorToolbar.appendChild(this.progress);
+            document.body.appendChild(this.progress);
         }
     }
     public onTick() {

@@ -1184,8 +1184,8 @@
             },
             "1": {
                 "verdict": "OK",
-                "raw": "PLAY Z1",
-                "response": "PLAY Z1"
+                "raw": "PLAY B6",
+                "response": "PLAY B6"
             },
             "2": {
                 "verdict": "OK",
@@ -1201,15 +1201,15 @@
             "output": {
                 "command": "request",
                 "content": {
-                    "0": "3 1 PLAY Z1",
-                    "1": "3 1 PLAY Z1",
-                    "2": "3 1 PLAY Z1",
-                    "3": "3 1 PLAY Z1"
+                    "0": "3 1 PLAY B6",
+                    "1": "3 1 PLAY B6",
+                    "2": "3 1 PLAY B6",
+                    "3": "3 1 PLAY B6"
                 },
                 "display": {
                     "action": "PLAY",
                     "player": 1,
-                    "tile": "Z1",
+                    "tile": "B6",
                     "tileCnt": 56
                 }
             },
@@ -2656,7 +2656,7 @@
                 },
                 "display": {
                     "action": "CHI",
-                    "player": 0,
+                    "player": 1,
                     "tile": "T1",
                     "tileCHI": "B5 B3 B4",
                     "tileCnt": 39
@@ -4536,7 +4536,7 @@
                 "display": {
                     "action": "PLAY",
                     "player": 1,
-                    "tile": "B2",
+                    "tile": "W7",
                     "tileCnt": 15
                 }
             },
@@ -5200,7 +5200,7 @@
                 },
                 "display": {
                     "action": "CHI",
-                    "player": 0,
+                    "player": 2,
                     "tile": "W2",
                     "tileCHI": "T4 T0 T6",
                     "tileCnt": 7
@@ -5476,7 +5476,7 @@
                 },
                 "display": {
                     "action": "CHI",
-                    "player": 0,
+                    "player": 2,
                     "tile": "T9",
                     "tileCHI": "W6 W4 W5",
                     "tileCnt": 7
@@ -5819,38 +5819,41 @@
             }
         },
         {
-            "command": "finish",
-            "content": {
-                "0": 25000,
-                "1": 27000,
-                "2": 23000,
-                "3": 25000
-            },
-            "display": {
-                "0": null,
-                "1": {
-                    "ScoreCnt": 2000,
-                    "action": "HU",
-                    "fan": [
-                        {
-                            "name": "河底摸鱼",
-                            "value": 1
-                        },
-
-                        {
-                            "name": "宝牌",
-                            "value": 1
-                        }
-                    ],
-                    "fanCnt": 2,
-                    "fuCnt": 30,
-                    "isYaKuMan": false,
-                    "player": 1
+            "output": {
+                "command": "finish",
+                "content": {
+                    "0": 25000,
+                    "1": 26600,
+                    "2": 23400,
+                    "3": 25000
                 },
-                "2": null,
-                "3": null,
-                "canHu": [-4, -4, -4, -4],
-                "score": [25000, 27000, 23000, 25000]
+                "display": {
+                    "0": null,
+                    "1": {
+                        "ScoreCnt": 1600,
+                        "action": "HU",
+                        "fan": [
+                            {
+                                "name": "河底摸鱼",
+                                "value": 1
+                            },
+
+                            {
+                                "name": "宝牌",
+                                "value": 1
+                            }
+                        ],
+                        "fanCnt": 2,
+                        "fuCnt": 25,
+                        "isYaKuMan": false,
+                        "player": 1
+                    },
+                    "2": null,
+                    "3": null,
+                    "canHu": [-4, -4, -4, -4],
+                    "prompt": {},
+                    "score": [25000, 26600, 23400, 25000]
+                }
             }
         }
     ],

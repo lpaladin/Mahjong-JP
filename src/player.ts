@@ -4,7 +4,7 @@ class Player implements Tickable {
     public readonly board = new PlayerArea(this);
     public readonly shout = new PlayerShout(this);
 
-    public playDrawnTileOnly = false;
+    public partialSpecialAction: Mahjong.Action;
     public puttingLizhiTile = false;
 
     private _interactable = false;
@@ -53,12 +53,16 @@ class Player implements Tickable {
                 }
             } else {
                 if (action.type !== "DRAW") {
-                    tl.call(
-                        () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
-                        null,
-                        null,
-                        1
-                    );
+                    if (action.type === "LIZHI") {
+                        tl.call(() => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
+                    } else {
+                        tl.call(
+                            () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            null,
+                            null,
+                            1
+                        );
+                    }
                 }
             }
         } else {
@@ -95,7 +99,7 @@ class Player implements Tickable {
             });
         switch (action.type) {
             case "DRAW":
-                tl.add(this.board.deck.drawTile(action.tile), "+=0.5");
+                tl.add(this.board.deck.drawTile(action.tile));
                 break;
             case "PLAY":
             case "LIZHI":
@@ -115,18 +119,12 @@ class Player implements Tickable {
                         Util.GetRelativePlayerPosition(this.playerID, action.from)
                     )
                 );
-                if (action.type == "DAMINGGANG") {
-                    tl.add(this.board.deck.drawTile(action.drawnTile));
-                }
-                // game.nextPlayer(this.playerID);
                 break;
             case "ANGANG":
                 tl.add(this.board.openTiles.addStack(action.type, action.existing.map(t => t.tileID)));
-                tl.add(this.board.deck.drawTile(action.drawnTile));
                 break;
             case "BUGANG":
                 tl.add(this.board.openTiles.addGang(action.existing[0].tileID));
-                tl.add(this.board.deck.drawTile(action.drawnTile));
                 break;
             case "ZIMO":
             case "HU":
@@ -134,8 +132,7 @@ class Player implements Tickable {
                 if (action.type === "ZIMO") {
                     tile = this.board.deck.drawnTile;
                 } else {
-                    const fromRiver = game.players[action.from].board.river;
-                    tile = fromRiver.riverTiles[fromRiver.riverTiles.length - 1];
+                    tile = game.players[action.from].board.river.latestTile;
                 }
                 tl.add(Util.BiDirectionConstantSet(tile, "shaking", true));
                 tl.call(game.focusAndWave, [tile], game);

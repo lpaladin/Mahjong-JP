@@ -16,8 +16,8 @@ class Deck extends THREE.Group {
     }
 
     public set open(to: boolean) {
-        for (const t of [...this.handTiles, this.drawnTile])
-            if (t) {
+        for (const t of this.children)
+            if (t && t instanceof Tile) {
                 t.open = to;
             }
     }
@@ -49,10 +49,12 @@ class Deck extends THREE.Group {
             this.handTiles.push(this.drawnTile);
             this.drawnTile = null;
         }
-        Mahjong.sortTiles(this.handTiles, t => t.tileID).forEach((t, i) => {
-            tl.fromTo(t.position, 0.2, { x: t.position.x }, { x: this.getTilePosition(i), immediateRender: false }, 0);
-            t.idx = i;
-        });
+        this.handTiles
+            .sort((a, b) => a.uniqueRank - b.uniqueRank)
+            .forEach((t, i) => {
+                tl.to(t.position, 0.2, { x: this.getTilePosition(i), immediateRender: false }, 0);
+                t.idx = i;
+            });
         return tl;
     }
 
@@ -69,12 +71,13 @@ class Deck extends THREE.Group {
         t.open = this.open;
         const tl = new TimelineMax();
         tl.add(Util.MeshOpacityFromTo(t, 0.2, 0, 1));
-        const watchingPlayer = game.players[game.viewPoint];
-        if (watchingPlayer.board.deck == this) {
-            tl.call(() => Util.Log`${watchingPlayer.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`);
-        } else {
-            tl.call(() => Util.Log`${watchingPlayer.info}摸了一张牌`);
-        }
+        tl.call(() => {
+            if (this.player.playerID === game.viewPoint) {
+                Util.Log`${this.player.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`;
+            } else {
+                Util.Log`${this.player.info}摸了一张牌`;
+            }
+        });
         return tl;
     }
 
@@ -92,9 +95,9 @@ class River extends THREE.Group {
     public static readonly BEGIN_HEIGHT = 8;
     public static readonly LINE_SIZE = 6;
 
-    public readonly riverTiles: Tile[] = [];
-
     public static readonly BEGIN_X = (-(River.LINE_SIZE - 1) / 2) * (Tile.WIDTH + River.GAP);
+
+    private readonly riverTiles: Tile[] = [];
     private nextXOffset = 0;
 
     public constructor(public readonly player: Player) {
@@ -155,34 +158,54 @@ class River extends THREE.Group {
         tl.add(Util.BiDirectionConstantSet(latestTile, "shaking", false));
         if (this.player.puttingLizhiTile) {
             this.player.puttingLizhiTile = false;
-            tl.fromTo(latestTile.rotation, 0.45, { z: 0 }, { z: Util.RAD90 * 5 });
             tl.fromTo(
                 latestTile.position,
                 0.15,
-                { y: targetPos.y + Tile.DEPTH },
                 {
+                    ...targetPos,
+                    y: targetPos.y + Tile.DEPTH
+                },
+                {
+                    ...targetPos,
                     y: targetPos.y + Tile.DEPTH * 4,
                     immediateRender: false,
                     ease: Expo.easeOut
                 },
-                "-=0.45"
+                0
             );
             tl.fromTo(
                 latestTile.position,
                 0.3,
-                { y: targetPos.y + Tile.DEPTH * 4 },
+                {
+                    y: targetPos.y + Tile.DEPTH * 4,
+                    x: targetPos.x,
+                    z: targetPos.z
+                },
                 {
                     y: targetPos.y,
                     x: targetPos.x + (Tile.HEIGHT - Tile.WIDTH) / 2,
+                    z: targetPos.z,
                     immediateRender: false,
                     ease: Expo.easeIn
                 }
             );
+            tl.fromTo(latestTile.rotation, 0.45, { z: 0 }, { z: Util.RAD90 * 5, immediateRender: false }, 0);
             tl.call(game.cameraShake, [0.5, 6, 0.2], game);
-            tl.add(game.centerScreen.putLizhiStick(this.player.playerID));
             this.nextXOffset = this.riverTiles.length % River.LINE_SIZE ? this.nextXOffset + Tile.HEIGHT : 0;
         } else {
-            tl.fromTo(latestTile.position, 0.1, { y: targetPos.y + Tile.DEPTH }, { y: targetPos.y, immediateRender: false });
+            tl.fromTo(
+                latestTile.position,
+                0.1,
+                {
+                    ...targetPos,
+                    y: targetPos.y + Tile.DEPTH
+                },
+                {
+                    ...targetPos,
+                    y: targetPos.y,
+                    immediateRender: false
+                }
+            );
             this.nextXOffset = this.riverTiles.length % River.LINE_SIZE ? this.nextXOffset + Tile.WIDTH : 0;
         }
         return tl;
@@ -205,7 +228,7 @@ class OpenTiles extends THREE.Group {
 
     public addGang(newTileID: Mahjong.TileID) {
         for (const s of this.openStacks) {
-            if (s.type == "PENG" && s.newTile.tileID == newTileID) {
+            if (s.type == "PENG" && Mahjong.getLiteralID(s.newTile.tileID) == Mahjong.getLiteralID(newTileID)) {
                 const tl = new TimelineMax();
                 const newTile = new Tile(newTileID, -1);
                 newTile.position.x = s.newTile.position.x;

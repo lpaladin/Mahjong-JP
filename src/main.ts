@@ -46,18 +46,34 @@ class Game implements Tickable {
     public pause = false;
 
     private lastPlayedPlayer = -1;
-
+    private lastLizhiPlayer = -1;
     private lastPlayedTile: Mahjong.TileID;
     private w = 0;
     private h = 0;
     private cameraPositionBase = new THREE.Vector3();
     private mouseRightButtonDown = false;
     private light: THREE.DirectionalLight;
-    private round = 0;
     private currPlayerID = -1;
     private _viewPoint = -1;
     private cameraKeepFocusing = false;
     private cameraUncontrolled = false;
+    private _activePlayerId = -1;
+    public get activePlayerId() {
+        return this._activePlayerId;
+    }
+
+    public set activePlayerId(to: number) {
+        if (this._activePlayerId === to) {
+            return;
+        }
+        if (this._activePlayerId !== -1) {
+            this.players[this._activePlayerId].ui.active = false;
+        }
+        if (to !== -1) {
+            this.players[to].ui.active = true;
+        }
+        this._activePlayerId = to;
+    }
 
     public get currPlayer() {
         return this.players[this.currPlayerID];
@@ -138,9 +154,10 @@ class Game implements Tickable {
             }
         });
         UI.mainCanvas.addEventListener("click", () => {
-            if (this.playerMe.interactable) {
+            if (infoProvider.getPlayerID() !== -1 && this.playerMe.interactable) {
                 const playedTile = this.playerMe.board.hoveredTile.tileID;
-                infoProvider.notifyPlayerMove("PLAY " + playedTile);
+                const preAction = this.playerMe.partialSpecialAction;
+                infoProvider.notifyPlayerMove((preAction ? preAction.type : "PLAY") + " " + playedTile);
                 this.playerMe.interactable = false;
                 Util.PrimaryLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
             }
@@ -186,23 +203,27 @@ class Game implements Tickable {
 
         infoProvider.v2.setDisplayCallback(this.handleDisplayLog);
         infoProvider.v2.setRequestCallback(() => {
-            this.playerMe.ui.active = true;
-            if ((this.playerMe.interactable = !this.playerMe.playDrawnTileOnly)) {
-                Util.Log`${"你"}的回合，请选择要打出的牌`;
-            }
-            return null;
+            this.playerMe.interactable = true;
+            Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`; // TODO or action
+            const tl = new TimelineMax();
+            tl.call(() => (this.activePlayerId = infoProvider.getPlayerID()));
+            return tl;
         });
 
         Util.Log`初始化完成`;
     }
 
     public handleDisplayLog = (log: DisplayLog): TimelineMax => {
-        console.log(game.players.map(x => x.board.deck.handTiles.map(x => x.tileID).join(", ")).join("\n"));
-        console.log(log);
+        // console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
+        // console.log(log);
         const tl = new TimelineMax();
         if ("action" in log) {
+            if (this.lastLizhiPlayer !== -1) {
+                tl.add(game.centerScreen.putLizhiStick(this.lastLizhiPlayer));
+                this.lastLizhiPlayer = -1;
+            }
             if ("tileCnt" in log) {
-                tl.add(Util.BiDirectionConstantSet(this.centerScreen, "tileLeft", log.tileCnt));
+                tl.add(Util.BiDirectionConstantSet(this.centerScreen, "tileLeft", log.tileCnt), "+=0.5");
             }
             if (log.action === "DEAL") {
                 for (const p of this.players) {
@@ -212,6 +233,7 @@ class Game implements Tickable {
             } else if (log.action === "INIT") {
                 // pass
             } else {
+                tl.add(Util.BiDirectionConstantSet(this, "activePlayerId", log.player));
                 const player = this.players[log.player];
                 const newActions: Mahjong.Action[] = [];
                 switch (log.action) {
@@ -225,33 +247,31 @@ class Game implements Tickable {
                             tile: log.tile
                         });
                         break;
+                    case "CHI":
                     case "PLAY":
+                    case "LIZHI":
+                        if (log.action === "CHI") {
+                            newActions.push({
+                                type: "CHI",
+                                from: this.lastPlayedPlayer,
+                                tile: this.lastPlayedTile,
+                                existing: (log.tileCHI.split(" ") as Mahjong.TileID[])
+                                    .filter(t => t !== this.lastPlayedTile)
+                                    .map(t => player.board.deck.getTileById(t)) as [Tile, Tile]
+                            });
+                        }
                         {
                             const tile = player.board.deck.getTileById(log.tile);
                             Util.Assert`打出的一定是手中的牌：${!!tile}`;
                             newActions.push({
-                                type: "PLAY",
+                                type: log.action === "LIZHI" ? "LIZHI" : "PLAY",
                                 tile
                             });
                             this.lastPlayedPlayer = log.player;
+                            this.lastLizhiPlayer = log.action === "LIZHI" ? log.player : -1;
                             this.lastPlayedTile = log.tile;
                         }
                         break;
-                    case "CHI":
-                        newActions.push({
-                            type: "CHI",
-                            from: this.lastPlayedPlayer,
-                            tile: this.lastPlayedTile,
-                            existing: (log.tileCHI.split(" ") as Mahjong.TileID[])
-                                .filter(t => t !== this.lastPlayedTile)
-                                .map(t => player.board.deck.getTileById(t)) as [Tile, Tile]
-                        });
-                        break;
-                    case "LIZHI":
-                        newActions.push({
-                            type: "LIZHI",
-                            tile: player.board.deck.getTileById(log.tile)
-                        });
                 }
                 for (const action of newActions) {
                     tl.add(player.doAction(action));
@@ -267,7 +287,8 @@ class Game implements Tickable {
                         tl.add(
                             p.doAction({
                                 type: "ZIMO"
-                            })
+                            }),
+                            "+=1"
                         );
                     } else {
                         tl.add(
@@ -275,7 +296,8 @@ class Game implements Tickable {
                                 type: "HU",
                                 from: this.lastPlayedPlayer,
                                 tile: this.players[this.lastPlayedPlayer].board.river.latestTile
-                            })
+                            }),
+                            "+=1"
                         );
                     }
                     results.push({
@@ -392,7 +414,7 @@ class Game implements Tickable {
             this.cameraUncontrolled = false;
             this.composer.removePass(swPass);
         });
-        return; // DO NOT return tl
+        // DO NOT return tl
     }
 
     public gameFinish(results: GameResult[]) {
@@ -421,14 +443,14 @@ class Game implements Tickable {
             });
         }
         tl.call(() => (this.cameraUncontrolled = false));
-        return; // DO NOT return tl
+        // DO NOT return tl
     }
 
     private get cameraPosition() {
         return new THREE.Vector3(
-            this.cameraPositionBase.x + this.mouseCoord.x * 0.3,
+            this.cameraPositionBase.x + Util.DIR_Z[this.viewPoint] * this.mouseCoord.x * 0.3,
             this.cameraPositionBase.y + this.mouseCoord.y * 0.3,
-            this.cameraPositionBase.z
+            this.cameraPositionBase.z - Util.DIR_X[this.viewPoint] * this.mouseCoord.x * 0.3
         );
     }
 

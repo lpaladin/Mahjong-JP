@@ -119,9 +119,21 @@ class PlayerUI implements Tickable {
 
     private actionBar: HTMLDivElement;
     private actionButtons: HTMLButtonElement[] = [];
+    private _active = false;
+
+    public get active() {
+        return this._active;
+    }
 
     public set active(to: boolean) {
+        if (this._active === to) {
+            return;
+        }
+        this._active = to;
         this.info.className = to ? PlayerUI.INFO_ACTIVE_CLASSNAME : PlayerUI.INFO_CLASSNAME;
+        if (to) {
+            Util.PrimaryLog`${this.player.info}的回合`;
+        }
     }
 
     constructor(public readonly player: Player) {
@@ -175,7 +187,14 @@ class PlayerUI implements Tickable {
 
     public onButtonClicked(action?: Mahjong.Action) {
         if (this.actionButtons.length == 0) return;
-        if (action) this.player.doAction(action);
+        if (action) {
+            this.player.doAction(action);
+            if (Mahjong.isSpecialActionWithNeedToPlayTile(action.type)) {
+                this.player.partialSpecialAction = action;
+                this.player.interactable = true;
+                Util.PrimaryLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
+            }
+        }
         this.actionButtons.forEach(b => b.remove());
         this.actionButtons = [];
     }
@@ -311,6 +330,8 @@ class GameResultView {
             <div class="score">
                 <label>得分</label>
                 <span>${result.score}</span>
+                <label>符数</label>
+                <span>${result.fu}</span>
             </div>
         </div>
         `;
@@ -331,7 +352,8 @@ class GameResultView {
     }
 }
 
-class SpectatorControl {
+class SpectatorControl implements Tickable {
+    private progress: HTMLInputElement;
     public set visible(to: boolean) {
         UI.spectatorToolbar.style.display = to ? "block" : "none";
     }
@@ -356,5 +378,28 @@ class SpectatorControl {
         UI.spectatorToolbar.appendChild(left);
         UI.spectatorToolbar.appendChild(toggleOpen);
         UI.spectatorToolbar.appendChild(right);
+
+        if (infoProvider["dbgMode"]) {
+            this.progress = document.createElement("input");
+            this.progress.type = "range";
+            this.progress.max = "1";
+            this.progress.min = "0";
+            this.progress.step = "any";
+            this.progress.addEventListener("mousedown", () => {
+                tickableManager.delete(this);
+                Loader.globalTL.pause();
+            });
+            this.progress.addEventListener("mouseup", () => {
+                tickableManager.add(this);
+                Loader.globalTL.play();
+            });
+            this.progress.addEventListener("change", e => Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true));
+            tickableManager.add(this);
+            UI.spectatorToolbar.appendChild(document.createElement("br"));
+            UI.spectatorToolbar.appendChild(this.progress);
+        }
+    }
+    public onTick() {
+        this.progress.value = Loader.globalTL.progress().toString();
     }
 }

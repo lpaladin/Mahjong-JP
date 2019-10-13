@@ -1,6 +1,8 @@
 namespace Loader {
     let nextPromise: Promise<any> = Promise.resolve();
 
+    export let globalTL: TimelineMax;
+
     async function BotzoneInit(): Promise<void> {
         window["THREEx"] = window["THREE"] as any;
         if (typeof infoProvider !== "undefined") {
@@ -21,7 +23,7 @@ namespace Loader {
                 gsapScript.addEventListener("error", rej);
                 document.body.appendChild(gsapScript);
             });
-            const fullLog = await (await fetch("in.json")).json();
+            const fullLog = await (await fetch("in_hedimoyu_haidilaoyue.json")).json();
             let displayCB: Function;
             window["infoProvider"] = <any>{
                 dbgMode: true,
@@ -37,7 +39,7 @@ namespace Loader {
                     setDisplayCallback: (cb: Function) => (displayCB = cb),
                     setRequestCallback: Util.IDENTITY,
                     notifyInitComplete: (tl: TimelineMax) => {
-                        tl = tl || new TimelineMax();
+                        globalTL = tl = tl || new TimelineMax();
                         for (const l of fullLog.log) {
                             if ("output" in l && "display" in l.output) {
                                 tl.add(displayCB(l.output.display));

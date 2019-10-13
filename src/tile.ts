@@ -39,6 +39,10 @@ class Tile extends THREE.Mesh implements Tickable {
             }
     }
 
+    private static allocatedTileCount = 0;
+
+    public readonly uniqueRank: number;
+
     private _outlined = undefined;
     public get outlined() {
         return this._outlined;
@@ -174,6 +178,7 @@ class Tile extends THREE.Mesh implements Tickable {
             // 	wireframe: true
             // })
         );
+        this.uniqueRank = Mahjong.tileInfo[tileID].relativeRank + Tile.allocatedTileCount++ / 10000;
         Tile.buckets[Mahjong.getLiteralID(this.tileID)].add(this);
         this.updateDora();
         this.visible = false;

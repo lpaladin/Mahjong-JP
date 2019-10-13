@@ -49,9 +49,8 @@ namespace Mahjong {
     export type TileID = keyof typeof tileInfo;
     export const TileIDs = Object.keys(tileInfo) as TileID[];
 
-    export function sortTiles<T>(array: T[], mapper: (t: T) => TileID): T[] {
-        array.sort((a, b) => tileInfo[mapper(a)].relativeRank - tileInfo[mapper(b)].relativeRank);
-        return array;
+    export function isSpecialActionWithNeedToPlayTile(type: ActionType) {
+        return type === "CHI" || type === "PENG";
     }
 
     export const actionInfo = {
@@ -64,7 +63,8 @@ namespace Mahjong {
         BUGANG: { id: "ANGANG", chnName: "补杠" },
         LIZHI: { id: "LIZHI", chnName: "立直" },
         HU: { id: "HU", chnName: "胡" },
-        ZIMO: { id: "ZIMO", chnName: "自摸" }
+        ZIMO: { id: "ZIMO", chnName: "自摸" },
+        PASS: { id: "PASS", chnName: "过" }
     };
     export type ActionType = keyof typeof actionInfo;
     export const ActionTypes = Object.keys(actionInfo) as ActionType[];
@@ -88,17 +88,14 @@ namespace Mahjong {
               from: number;
               existing: [Tile, Tile, Tile];
               tile: TileID;
-              drawnTile: TileID;
           }
         | {
               type: "ANGANG";
               existing: [Tile, Tile, Tile, Tile];
-              drawnTile: TileID;
           }
         | {
               type: "BUGANG";
               existing: [Tile];
-              drawnTile: TileID;
           }
         | {
               type: "LIZHI";
@@ -111,6 +108,9 @@ namespace Mahjong {
           }
         | {
               type: "ZIMO";
+          }
+        | {
+              type: "PASS";
           };
 
     // export function testAvailableActions(player: Player, newTile?: TileID, from = -1): Action[] {

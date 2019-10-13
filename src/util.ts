@@ -42,13 +42,13 @@ namespace Util {
             if ((from == 0 || from == 1) && to + from == 1 && !m.material.transparent) {
                 const tl = new TimelineMax();
                 if (to) {
-                    tl.add(BiDirectionConstantSet(m, "visible", true));
-                    tl.add(BiDirectionConstantSet(m.material, "transparent", true));
-                    tl.add(t);
+                    tl.add(BiDirectionConstantSet(m, "visible", true), 0);
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", true), 0);
+                    tl.add(t, 0);
                     tl.add(BiDirectionConstantSet(m.material, "transparent", false));
                 } else {
-                    tl.add(BiDirectionConstantSet(m.material, "transparent", true));
-                    tl.add(t);
+                    tl.add(BiDirectionConstantSet(m.material, "transparent", true), 0);
+                    tl.add(t, 0);
                     tl.add(BiDirectionConstantSet(m.material, "transparent", false));
                     tl.add(BiDirectionConstantSet(m, "visible", false));
                 }
@@ -59,35 +59,36 @@ namespace Util {
     }
 
     export function BiDirectionConstantSet<T>(obj: T | T[], propName: keyof T, to: any) {
-        let initial: any;
-        if (Array.isArray(obj))
-            return TweenMax.to({}, 0.001, {
-                immediateRender: false,
-                onComplete: function() {
-                    initial = obj[0] && obj[0][propName];
-                    if (to instanceof Function) to = to();
-                    obj.forEach(function(o) {
-                        return (o[propName] = to);
-                    });
-                },
-                onReverseComplete: function() {
-                    return obj.forEach(function(o) {
-                        return (o[propName] = initial);
-                    });
-                }
-            });
-        else
-            return TweenMax.to({}, 0.001, {
-                immediateRender: false,
-                onComplete: function() {
-                    initial = obj[propName];
-                    if (to instanceof Function) obj[propName] = to();
-                    else obj[propName] = to;
-                },
-                onReverseComplete: function() {
-                    return (obj[propName] = initial);
-                }
-            });
+        return TweenMax.set(obj, { [propName]: to, immediateRender: false });
+        // let initial: any;
+        // if (Array.isArray(obj))
+        //     return TweenMax.to({}, 0.001, {
+        //         immediateRender: false,
+        //         onComplete: function() {
+        //             initial = obj[0] && obj[0][propName];
+        //             if (to instanceof Function) to = to();
+        //             obj.forEach(function(o) {
+        //                 return (o[propName] = to);
+        //             });
+        //         },
+        //         onReverseComplete: function() {
+        //             return obj.forEach(function(o) {
+        //                 return (o[propName] = initial);
+        //             });
+        //         }
+        //     });
+        // else
+        //     return TweenMax.to({}, 0.001, {
+        //         immediateRender: false,
+        //         onComplete: function() {
+        //             initial = obj[propName];
+        //             if (to instanceof Function) obj[propName] = to();
+        //             else obj[propName] = to;
+        //         },
+        //         onReverseComplete: function() {
+        //             return (obj[propName] = initial);
+        //         }
+        //     });
     }
 
     function playerInfoToHTML(x: PlayerInfo) {
@@ -113,26 +114,23 @@ namespace Util {
         UI.logs.appendChild(newChild);
         const tl = new TimelineMax();
         tl.from(newChild, 0.1, { opacity: 0 });
-        tl.to(
-            newChild,
-            0.1,
-            {
-                height: 0,
-                onComplete: () => UI.logs.removeChild(newChild)
-            },
-            2
-        );
+        tl.to(newChild, 0.1, { height: 0, onComplete: () => UI.logs.removeChild(newChild) }, 2);
     }
 
     export function PrimaryLog(parts: TemplateStringsArray, ...args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
         const newChild = document.createElement("div");
         newChild.className = "primary";
         newChild.innerHTML = logComposeHTML(parts, args);
-        for (const c of UI.logs.querySelectorAll(".primary"))
+        for (const c of UI.logs.querySelectorAll(".primary")) {
             TweenMax.to(c, 0.1, {
                 height: 0,
-                onComplete: () => UI.logs.removeChild(c)
+                onComplete: () => {
+                    try {
+                        UI.logs.removeChild(c);
+                    } catch {}
+                }
             });
+        }
         UI.logs.appendChild(newChild);
         TweenMax.from(newChild, 0.1, { opacity: 0 });
     }

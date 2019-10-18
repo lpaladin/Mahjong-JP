@@ -6,7 +6,8 @@ const UI = {
     logs: null as HTMLDivElement,
     doraIndicators: null as HTMLDivElement,
     gameResultBackground: null as HTMLDivElement,
-    spectatorToolbar: null as HTMLDivElement
+    spectatorToolbar: null as HTMLDivElement,
+    loadingContainer: null as HTMLDivElement
 };
 
 for (const id of Object.keys(UI)) UI[id] = document.getElementById(id);
@@ -401,7 +402,7 @@ class SpectatorControl implements Tickable {
                 tickableManager.add(this);
                 Loader.globalTL.play();
             });
-            this.progress.addEventListener("change", e =>
+            this.progress.addEventListener("input", e =>
                 Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true)
             );
             tickableManager.add(this);

@@ -18,8 +18,10 @@ namespace Assets {
         return new THREE.CanvasTexture(canvas);
     }
 
-    export function LoadAllTiles(): Promise<HTMLImageElement[]> {
-        return Promise.all(
+    export const LoadAllTiles: Initializable = addProgress => ({
+        description: "载入牌面资源",
+        totalProgress: Mahjong.TileIDs.length,
+        finishPromise: Promise.all(
             Mahjong.TileIDs.map(
                 id =>
                     new Promise<HTMLImageElement>(ac =>
@@ -61,12 +63,13 @@ namespace Assets {
                                 // THREE.NearestFilter,
                                 // THREE.NearestFilter
                             );
+                            addProgress();
                             ac(img);
                         })
                     )
             )
-        );
-    }
+        )
+    });
 
     let roundEdgedTileGeometry: THREE.BufferGeometry;
     export function GetRoundEdgedTileGeometry() {
@@ -221,22 +224,38 @@ namespace Assets {
     export let bloomEffect: Effect;
     export let outlineEffect: Effect;
 
-    export async function InitializeSMAA(): Promise<void> {
-        const searchImage = new Image();
-        const areaImage = new Image();
+    export const InitializeSMAA: Initializable = addProgress => {
+        return {
+            description: "载入 SMAA 所需纹理",
+            totalProgress: 2,
+            finishPromise: (async () => {
+                const searchImage = new Image();
+                const areaImage = new Image();
 
-        const loadedPromise = Promise.all([
-            new Promise(ac => searchImage.addEventListener("load", ac)),
-            new Promise(ac => areaImage.addEventListener("load", ac))
-        ]);
+                const loadedPromise = Promise.all([
+                    new Promise(ac =>
+                        searchImage.addEventListener("load", () => {
+                            addProgress();
+                            ac();
+                        })
+                    ),
+                    new Promise(ac =>
+                        areaImage.addEventListener("load", () => {
+                            addProgress();
+                            ac();
+                        })
+                    )
+                ]);
 
-        searchImage.src = POSTPROCESSING.SMAAEffect.searchImageDataURL;
-        areaImage.src = POSTPROCESSING.SMAAEffect.areaImageDataURL;
+                searchImage.src = POSTPROCESSING.SMAAEffect.searchImageDataURL;
+                areaImage.src = POSTPROCESSING.SMAAEffect.areaImageDataURL;
 
-        await loadedPromise;
-        smaaEffect = new POSTPROCESSING.SMAAEffect(searchImage, areaImage, POSTPROCESSING.SMAAPreset.MEDIUM);
-        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
-    }
+                await loadedPromise;
+                smaaEffect = new POSTPROCESSING.SMAAEffect(searchImage, areaImage, POSTPROCESSING.SMAAPreset.MEDIUM);
+                smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+            })()
+        };
+    };
 
     export function InitializeEffects(scene: THREE.Scene, camera: THREE.Camera) {
         outlineEffect = new POSTPROCESSING.OutlineEffect(scene, camera, {

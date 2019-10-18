@@ -23,6 +23,11 @@ interface Window {
     Linear?: typeof gsap.Linear;
     Back?: typeof gsap.Back;
     Quad?: typeof gsap.Quad;
+    Sine?: typeof gsap.Sine;
+    Circ?: typeof gsap.Circ;
+    Cubic?: typeof gsap.Cubic;
+    Power2?: typeof gsap.Power2;
+    Power4?: typeof gsap.Power4;
 }
 
 declare const POSTPROCESSING: any;

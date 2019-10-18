@@ -512,8 +512,15 @@ class Game implements Tickable {
 let game: Game;
 let tickableManager: TickableManager;
 
-Loader.onFinish(() => {
-    tickableManager = new TickableManager();
-    game = new Game();
-    infoProvider.v2.notifyInitComplete();
-});
+Loader.addInitializable(addProgress => ({
+    description: "游戏逻辑初始化",
+    totalProgress: 1,
+    finishPromise: (async () => {
+        tickableManager = new TickableManager();
+        game = new Game();
+        infoProvider.v2.notifyInitComplete();
+        const tl = new TimelineMax();
+        tl.to(UI.loadingContainer, 1, { opacity: 0 });
+        tl.call(() => UI.loadingContainer.remove());
+    })()
+}));

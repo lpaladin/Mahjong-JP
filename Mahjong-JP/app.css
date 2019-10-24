@@ -6,6 +6,7 @@
 body {
     overflow: hidden;
     cursor: default;
+    font-size: 0.7em;
 }
 
 #background {

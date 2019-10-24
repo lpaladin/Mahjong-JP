@@ -72,6 +72,8 @@ declare var infoProvider: {
         setMinSize: (width: number, height: number) => void;
         // 传入一个函数，在全局 Timeline 进行渲染时调用
         setRenderTickCallback: (fn: () => void) => void;
+        // 设置拖动进度条时不必执行 Timeline 中的回调
+        setSeekCallbackSuppressable: () => void;
         // 内部初始化结束后调用，参数是可选的开场动画
         notifyInitComplete: (intro?: TimelineMax) => void;
         // 返回的一定要是【这个】TimelineMax new 出来的对象啊！

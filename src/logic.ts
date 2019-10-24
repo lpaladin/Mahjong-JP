@@ -64,7 +64,9 @@ namespace Mahjong {
         LIZHI: { id: "LIZHI", chnName: "立直" },
         HU: { id: "HU", chnName: "胡" },
         ZIMO: { id: "ZIMO", chnName: "自摸" },
-        PASS: { id: "PASS", chnName: "过" }
+        PASS: { id: "PASS", chnName: "过" },
+        TING: { id: "TING", chnName: "听牌" },
+        NOTING: { id: "NOTING", chnName: "未听牌" }
     };
     export type ActionType = keyof typeof actionInfo;
     export const ActionTypes = Object.keys(actionInfo) as ActionType[];
@@ -111,6 +113,12 @@ namespace Mahjong {
           }
         | {
               type: "PASS";
+          }
+        | {
+              type: "TING";
+          }
+        | {
+              type: "NOTING";
           };
 
     // export function testAvailableActions(player: Player, newTile?: TileID, from = -1): Action[] {

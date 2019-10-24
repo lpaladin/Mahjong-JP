@@ -15,6 +15,13 @@ namespace Util {
         return dummy.innerHTML;
     }
 
+    export function LessOne<T>(array: T[], one: T) {
+        const idx = array.indexOf(one);
+        const result = [...array];
+        result.splice(idx, 1);
+        return result;
+    }
+
     export function RandInArray<T>(array: T[]) {
         return array[Math.floor(Math.random() * array.length)];
     }

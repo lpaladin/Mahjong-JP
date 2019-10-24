@@ -35,7 +35,7 @@ class Player implements Tickable {
 
     public doAction(action: Mahjong.Action) {
         const tl = new TimelineMax();
-        if (action.type !== "DRAW" && action.type !== "PLAY") {
+        if (action.type !== "DRAW" && action.type !== "PLAY" && action.type !== "NOTING") {
             tl.call(this.shout.shout, [Mahjong.actionInfo[action.type].chnName], this.shout);
         }
         if ("tile" in action) {
@@ -54,10 +54,16 @@ class Player implements Tickable {
             } else {
                 if (action.type !== "DRAW") {
                     if (action.type === "LIZHI") {
-                        tl.call(() => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
+                        tl.call(
+                            () => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            null,
+                            null,
+                            1
+                        );
                     } else {
                         tl.call(
-                            () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            () =>
+                                Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
                             null,
                             null,
                             1
@@ -137,6 +143,13 @@ class Player implements Tickable {
                 tl.add(Util.BiDirectionConstantSet(tile, "shaking", true));
                 tl.call(game.focusAndWave, [tile], game);
                 tl.add(Util.BiDirectionConstantSet(this.board, "openDeck", true), "+=2.5");
+                break;
+            case "TING":
+                tl.add(Util.BiDirectionConstantSet(this.board, "openDeck", true));
+                break;
+            case "NOTING":
+                tl.add(Util.BiDirectionConstantSet(this.board, "closeDeck", true));
+                break;
         }
         return tl;
     }

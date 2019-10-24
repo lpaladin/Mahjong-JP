@@ -231,7 +231,7 @@ class Game implements Tickable {
         // console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
         // console.log(log);
         const tl = new TimelineMax();
-        if ("action" in log) {
+        if (log.action !== "HUANG" && log.action !== "HU") {
             if (this.lastLizhiPlayer !== -1) {
                 tl.add(game.centerScreen.putLizhiStick(this.lastLizhiPlayer));
                 this.lastLizhiPlayer = -1;
@@ -241,7 +241,9 @@ class Game implements Tickable {
             }
             if (log.action === "DEAL") {
                 for (const p of this.players) {
-                    p.board.deck.init(log[p.playerID].split(" ").slice(1) as Mahjong.TileID[]);
+                    tl.add(p.board.deck.init(log.hand[p.playerID]));
+                }
+                for (const p of this.players) {
                     tl.add(p.board.deck.sort());
                 }
             } else if (log.action === "INIT") {
@@ -262,20 +264,21 @@ class Game implements Tickable {
                         });
                         break;
                     case "CHI":
+                    case "PENG":
                     case "PLAY":
                     case "LIZHI":
-                        if (log.action === "CHI") {
+                        if (log.action === "CHI" || log.action === "PENG") {
                             newActions.push({
-                                type: "CHI",
+                                type: log.action,
                                 from: this.lastPlayedPlayer,
                                 tile: this.lastPlayedTile,
-                                existing: (log.tileCHI.split(" ") as Mahjong.TileID[])
-                                    .filter(t => t !== this.lastPlayedTile)
-                                    .map(t => player.board.deck.getTileById(t)) as [Tile, Tile]
+                                existing: player.board.deck.getTilesByIds(
+                                    Util.LessOne(log["tile" + log.action].split(" ") as Mahjong.TileID[], this.lastPlayedTile)
+                                ) as [Tile, Tile]
                             });
                         }
                         {
-                            const tile = player.board.deck.getTileById(log.tile);
+                            const tile = player.board.deck.getTilesByIds([log.tile])[0];
                             Util.Assert`打出的一定是手中的牌：${!!tile}`;
                             newActions.push({
                                 type: log.action === "LIZHI" ? "LIZHI" : "PLAY",
@@ -291,7 +294,7 @@ class Game implements Tickable {
                     tl.add(player.doAction(action));
                 }
             }
-        } else {
+        } else if (log.action === "HU") {
             const results: GameResult[] = [];
             for (const p of this.players) {
                 const result: DisplayLog.PlayerResult | null = log[p.playerID];
@@ -324,6 +327,25 @@ class Game implements Tickable {
                         score: result.ScoreCnt
                     });
                 }
+            }
+            tl.add(this.gameFinish(results), "+=0.5");
+        } else {
+            const results: GameResult[] = [];
+            tl.add(this.players[this.lastPlayedPlayer].board.river.finalizeLatestTile(), "+=0.5");
+            const baseTime = tl.duration();
+            for (const p of this.players) {
+                tl.add(
+                    p.doAction({
+                        type: "NOTING"
+                    }),
+                    baseTime
+                );
+                results.push({
+                    type: "DRAW",
+                    huer: p,
+                    score: log.score[p.playerID],
+                    reason: "荒牌流局"
+                });
             }
             tl.add(this.gameFinish(results), "+=0.5");
         }
@@ -518,7 +540,9 @@ Loader.addInitializable(addProgress => ({
     finishPromise: (async () => {
         tickableManager = new TickableManager();
         game = new Game();
+
         infoProvider.v2.notifyInitComplete();
+
         const tl = new TimelineMax();
         tl.to(UI.loadingContainer, 1, { opacity: 0 });
         tl.call(() => UI.loadingContainer.remove());

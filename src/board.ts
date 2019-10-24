@@ -9,6 +9,20 @@ class Deck extends THREE.Group {
     public readonly handTiles: Tile[] = [];
     public drawnTile: Tile;
 
+    private _close: boolean = false;
+
+    public get close() {
+        return this._close;
+    }
+
+    public set close(to: boolean) {
+        this._close = to;
+        for (const t of this.children)
+            if (t && t instanceof Tile) {
+                t.close = to;
+            }
+    }
+
     private _open: boolean = false;
 
     public get open() {
@@ -16,6 +30,7 @@ class Deck extends THREE.Group {
     }
 
     public set open(to: boolean) {
+        this._open = to;
         for (const t of this.children)
             if (t && t instanceof Tile) {
                 t.open = to;
@@ -33,14 +48,17 @@ class Deck extends THREE.Group {
     }
 
     public init(deck: Mahjong.TileID[]) {
+        const tl = new TimelineMax();
         for (let i = 0; i < deck.length; i++) {
             const t = new Tile(deck[i], i);
             t.position.x = this.getTilePosition(i);
-            t.visible = true;
             this.handTiles.push(t);
             this.add(t);
             t.open = this.open;
+            tl.add(Util.MeshOpacityFromTo(t, 0.1, 0, 1), 0.01 * i);
+            tl.fromTo(t.position, 0.1, { y: Tile.HEIGHT }, { y: 0 }, 0.01 * i);
         }
+        return tl;
     }
 
     public sort() {
@@ -58,9 +76,17 @@ class Deck extends THREE.Group {
         return tl;
     }
 
-    public getTileById(tileID: Mahjong.TileID) {
-        if (this.drawnTile && this.drawnTile.tileID === tileID) return this.drawnTile;
-        return this.handTiles.find(t => t.tileID === tileID);
+    public getTilesByIds(tileIDs: Mahjong.TileID[]) {
+        const candidates = [...this.handTiles];
+        if (this.drawnTile) {
+            candidates.push(this.drawnTile);
+        }
+        const result: Tile[] = [];
+        for (const tileID of tileIDs) {
+            const idx = candidates.findIndex(t => t.tileID === tileID);
+            result.push(...candidates.splice(idx, 1));
+        }
+        return result;
     }
 
     public drawTile(tileID: Mahjong.TileID) {
@@ -328,6 +354,23 @@ class PlayerArea extends THREE.Group {
             this.deck.open = to;
             TweenMax.to(this.deck.position, 0.1, {
                 z: PlayerArea.HEIGHT + PlayerArea.BOARD_GAP - (to ? Tile.HEIGHT - Tile.DEPTH : 0),
+                y: to ? -(Tile.HEIGHT - Tile.DEPTH) / 2 : 0
+            });
+        }
+    }
+
+    private _closeDeck = false;
+
+    public get closeDeck() {
+        return this._closeDeck;
+    }
+
+    public set closeDeck(to: boolean) {
+        if (this._closeDeck != to) {
+            this._closeDeck = to;
+            this.deck.close = to;
+            TweenMax.to(this.deck.position, 0.1, {
+                z: PlayerArea.HEIGHT + PlayerArea.BOARD_GAP + (to ? Tile.HEIGHT - Tile.DEPTH : 0),
                 y: to ? -(Tile.HEIGHT - Tile.DEPTH) / 2 : 0
             });
         }

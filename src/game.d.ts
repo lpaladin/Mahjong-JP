@@ -3,14 +3,21 @@ interface ForEachPlayer<T> {
 }
 
 declare namespace DisplayLog {
+    export interface Base {
+        canHu: ForEachPlayer<number>;
+        doraIndicators: string;
+        prompt: null | ForEachPlayer<{ validact: string }>;
+    }
+
     export interface Init {
         action: "INIT";
         quan: number;
     }
 
-    export interface Deal extends ForEachPlayer<string> {
+    export interface Deal {
         action: "DEAL";
         tileCnt: number;
+        hand: ForEachPlayer<Mahjong.TileID[]>;
     }
 
     export interface Draw {
@@ -24,7 +31,7 @@ declare namespace DisplayLog {
         action: "PLAY";
         player: number;
         tile: Mahjong.TileID;
-        tileCnt: 79;
+        tileCnt: number;
     }
 
     export interface Chi {
@@ -32,7 +39,15 @@ declare namespace DisplayLog {
         player: number;
         tile: Mahjong.TileID;
         tileCHI: string;
-        tileCnt: 79;
+        tileCnt: number;
+    }
+
+    export interface Peng {
+        action: "PENG";
+        player: number;
+        tile: Mahjong.TileID;
+        tilePENG: string;
+        tileCnt: number;
     }
 
     export interface Lizhi {
@@ -44,7 +59,6 @@ declare namespace DisplayLog {
 
     export interface PlayerResult {
         ScoreCnt: number;
-        // action: "HU" | "ZIMO";
         fan: {
             name: string;
             value: number;
@@ -55,17 +69,25 @@ declare namespace DisplayLog {
         player: number;
     }
 
-    export interface GameResult extends ForEachPlayer<PlayerResult | null> {
-        canHu: [number, number, number, number];
+    export interface HuGameResult extends ForEachPlayer<PlayerResult | null> {
+        action: "HU";
+        score: [number, number, number, number];
+    }
+
+    export interface HuangGameResult {
+        action: "HUANG";
         score: [number, number, number, number];
     }
 }
 
-type DisplayLog =
+type DisplayLog = (
     | DisplayLog.Init
     | DisplayLog.Deal
     | DisplayLog.Draw
     | DisplayLog.Play
     | DisplayLog.Chi
+    | DisplayLog.Peng
     | DisplayLog.Lizhi
-    | DisplayLog.GameResult;
+    | DisplayLog.HuGameResult
+    | DisplayLog.HuangGameResult) &
+    DisplayLog.Base;

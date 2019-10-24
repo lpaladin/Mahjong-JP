@@ -106,8 +106,12 @@
                     return info.finishPromise.catch(function () {
                         const textDiv = document.createElement("div");
                         textDiv.className = "error";
-                        textDiv.textContent = info.description + "失败：" + JSON.stringify(arguments);
+                        textDiv.textContent = info.description + "失败：" +
+                            Array.from(arguments).map(arg => (arg && arg.stack) || arg).join('\n');
                         loadingDiv.appendChild(textDiv);
+                        infoProvider.v2.setRequestCallback(() => undefined);
+                        infoProvider.v2.setDisplayCallback(() => undefined);
+                        infoProvider.v2.notifyInitComplete();
                         return Promise.reject();
                     });
                 });

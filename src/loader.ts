@@ -31,6 +31,8 @@ declare namespace Loader {
                 window.Cubic = parent.Cubic;
                 window.Power2 = parent.Power2;
                 window.Power4 = parent.Power4;
+
+                Loader.globalTL = new TimelineMax();
             } else {
                 // 调试模式
                 const fullLog = await (await fetch("altin.json")).json();

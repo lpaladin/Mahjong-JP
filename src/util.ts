@@ -128,14 +128,17 @@ namespace Util {
         const newChild = document.createElement("div");
         newChild.className = "primary";
         newChild.innerHTML = logComposeHTML(parts, args);
-        for (const c of UI.logs.querySelectorAll(".primary")) {
+        const oldLogs = UI.logs.querySelectorAll(".primary");
+        for (let i = 0; i < oldLogs.length; i++) {
+            const c = oldLogs[i];
             TweenMax.to(c, 0.1, {
                 height: 0,
                 onComplete: () => {
                     try {
                         UI.logs.removeChild(c);
                     } catch {}
-                }
+                },
+                delay: i === oldLogs.length - 1 ? 1 : 0
             });
         }
         UI.logs.appendChild(newChild);

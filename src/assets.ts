@@ -20,9 +20,9 @@ namespace Assets {
 
     export const LoadAllTiles: Initializable = addProgress => ({
         description: "载入牌面资源",
-        totalProgress: Mahjong.TileIDs.length,
+        totalProgress: Mahjong.tileIDs.length,
         finishPromise: Promise.all(
-            Mahjong.TileIDs.map(
+            Mahjong.tileIDs.map(
                 id =>
                     new Promise<HTMLImageElement>(ac =>
                         loader.load(`Mahjong-JP/tiles/${Mahjong.tileInfo[id].imgName}`, img => {

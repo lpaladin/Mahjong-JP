@@ -33,7 +33,7 @@ declare namespace Loader {
                 window.Power4 = parent.Power4;
             } else {
                 // 调试模式
-                const fullLog = await (await fetch("in_huang.json")).json();
+                const fullLog = await (await fetch("altin.json")).json();
                 let displayCB: Function;
                 window["infoProvider"] = <any>{
                     dbgMode: true,

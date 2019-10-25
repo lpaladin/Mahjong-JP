@@ -11,8 +11,8 @@ class Tile extends THREE.Mesh implements Tickable {
     } = {} as any;
 
     private static readonly buckets: {
-        [tileID in Mahjong.TileID]: Set<Tile>;
-    } = Mahjong.TileIDs.reduce(
+        [tileID in Mahjong.LiteralID]: Set<Tile>;
+    } = Mahjong.tileIDs.reduce(
         (prev, curr) => {
             prev[Mahjong.getLiteralID(curr)] = new Set();
             return prev;
@@ -61,7 +61,8 @@ class Tile extends THREE.Mesh implements Tickable {
 
     public updateDora() {
         this.outlined =
-            (this.tileID[1] === "0" || game.doraIndicators.currentTileIDs.some(id => Mahjong.getNextID(id) === this.tileID)) &&
+            (this.tileID[1] === "0" ||
+                game.doraIndicators.currentTileIDs.some(id => Mahjong.getIndicatedDoraID(id) === this.tileID)) &&
             this.isVisibleToPlayer(game.viewPoint);
     }
 

@@ -1,5 +1,7 @@
 /// <reference path="tile.ts" />
 
+type HandCombCondition = (handTileID: Mahjong.TileID) => boolean;
+
 // 手牌（以及最新摸到的一张牌）
 class Deck extends THREE.Group {
     public static readonly GAP = 0.1;
@@ -76,7 +78,30 @@ class Deck extends THREE.Group {
         return tl;
     }
 
-    public getTilesByIds(tileIDs: Mahjong.TileID[]) {
+    public getCombinationsInHand(conditions: HandCombCondition[], includeDrawn = false): Tile[][] {
+        function* getCombinationsInHand(hand: Tile[], conditions: HandCombCondition[]): Generator<Tile[], void> {
+            if (conditions.length === 0) {
+                yield [];
+                return;
+            }
+            for (let i = 0; i < hand.length; i++) {
+                if (conditions[0](hand[i].tileID)) {
+                    const [tile] = hand.splice(i, 1);
+                    for (const comb of getCombinationsInHand(hand, conditions.slice(1))) {
+                        yield [tile, ...comb];
+                    }
+                    hand.splice(i, 0, tile);
+                }
+            }
+        }
+        const candidates = [...this.handTiles];
+        if (this.drawnTile && includeDrawn) {
+            candidates.push(this.drawnTile);
+        }
+        return [...getCombinationsInHand(candidates, conditions)];
+    }
+
+    public getTilesByIds(tileIDs: Mahjong.TileID[]): Tile[] | null {
         const candidates = [...this.handTiles];
         if (this.drawnTile) {
             candidates.push(this.drawnTile);
@@ -84,6 +109,7 @@ class Deck extends THREE.Group {
         const result: Tile[] = [];
         for (const tileID of tileIDs) {
             const idx = candidates.findIndex(t => t.tileID === tileID);
+            Util.Assert`手中有所需的每张牌：${idx >= 0}`;
             result.push(...candidates.splice(idx, 1));
         }
         return result;
@@ -254,7 +280,7 @@ class OpenTiles extends THREE.Group {
 
     public addGang(newTileID: Mahjong.TileID) {
         for (const s of this.openStacks) {
-            if (s.type == "PENG" && Mahjong.getLiteralID(s.newTile.tileID) == Mahjong.getLiteralID(newTileID)) {
+            if (s.type == "PENG" && Mahjong.eq(s.newTile.tileID, newTileID)) {
                 const tl = new TimelineMax();
                 const newTile = new Tile(newTileID, -1);
                 newTile.position.x = s.newTile.position.x;

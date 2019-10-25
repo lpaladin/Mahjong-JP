@@ -133,7 +133,7 @@ class PlayerUI implements Tickable {
         this._active = to;
         this.info.className = to ? PlayerUI.INFO_ACTIVE_CLASSNAME : PlayerUI.INFO_CLASSNAME;
         if (to) {
-            Util.PrimaryLog`${this.player.info}的回合`;
+            Util.PrimaryLog`${Util.POSITIONS[this.player.playerID]}家${this.player.info}的回合`;
         }
     }
 
@@ -183,10 +183,15 @@ class PlayerUI implements Tickable {
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);
         }
+        if (actions.length > 0) {
+            Loader.globalTL.pause();
+        }
         TweenMax.staggerFrom(this.actionButtons, 0.2, { opacity: 0, scale: 0, ease: Back.easeIn }, 0.1);
     }
 
     public onButtonClicked(action?: Mahjong.Action) {
+        Loader.globalTL.play();
+        return;
         if (this.actionButtons.length == 0) return;
         if (action) {
             this.player.doAction(action);
@@ -225,16 +230,16 @@ class DoraIndicators {
         const oldIDs = this._currentTileIDs;
         this._currentTileIDs = to;
         for (const old of oldIDs) {
-            Tile.updateDoras(Mahjong.getNextID(old));
+            Tile.updateDoras(Mahjong.getIndicatedDoraID(old));
         }
         for (const id of to) {
-            Tile.updateDoras(Mahjong.getNextID(id));
+            Tile.updateDoras(Mahjong.getIndicatedDoraID(id));
         }
     }
 
     public updateAllDoras() {
         for (const id of this.currentTileIDs) {
-            Tile.updateDoras(Mahjong.getNextID(id));
+            Tile.updateDoras(Mahjong.getIndicatedDoraID(id));
         }
     }
 
@@ -367,6 +372,11 @@ class SpectatorControl implements Tickable {
         UI.spectatorToolbar.style.display = to ? "block" : "none";
     }
     constructor() {
+        document.addEventListener("keydown", e => {
+            if (e.keyCode === 187) Loader.globalTL.timeScale(Loader.globalTL.timeScale() * 2);
+            if (e.keyCode === 189) Loader.globalTL.timeScale(Loader.globalTL.timeScale() / 2);
+        });
+
         const left = document.createElement("button");
         const toggleOpen = document.createElement("button");
         const right = document.createElement("button");

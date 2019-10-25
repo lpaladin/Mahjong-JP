@@ -50,6 +50,13 @@ declare namespace DisplayLog {
         tileCnt: number;
     }
 
+    export interface Gang {
+        action: "GANG";
+        player: number;
+        tile: Mahjong.TileID;
+        tileCnt: number;
+    }
+
     export interface Lizhi {
         action: "LIZHI";
         player: number;
@@ -80,14 +87,16 @@ declare namespace DisplayLog {
     }
 }
 
-type DisplayLog = (
+type DisplayLog =
     | DisplayLog.Init
-    | DisplayLog.Deal
-    | DisplayLog.Draw
-    | DisplayLog.Play
-    | DisplayLog.Chi
-    | DisplayLog.Peng
-    | DisplayLog.Lizhi
-    | DisplayLog.HuGameResult
-    | DisplayLog.HuangGameResult) &
-    DisplayLog.Base;
+    | (
+          | DisplayLog.Deal
+          | DisplayLog.Draw
+          | DisplayLog.Play
+          | DisplayLog.Chi
+          | DisplayLog.Peng
+          | DisplayLog.Gang
+          | DisplayLog.Lizhi
+          | DisplayLog.HuGameResult
+          | DisplayLog.HuangGameResult) &
+          DisplayLog.Base;

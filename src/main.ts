@@ -228,9 +228,20 @@ class Game implements Tickable {
     }
 
     public handleDisplayLog = (log: DisplayLog): TimelineMax => {
-        // console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
-        // console.log(log);
+        console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
+        console.log(log);
         const tl = new TimelineMax();
+        if ("prompt" in log && log.prompt) {
+            for (const p of this.players) {
+                const prompt = log.prompt[p.playerID];
+                if (prompt && prompt.validact) {
+                    const validActions = Mahjong.getValidActions(p, this.lastPlayedPlayer, this.lastPlayedTile, prompt.validact);
+                    tl.call(() => p.ui.setActionButtons(validActions));
+                } else {
+                    tl.call(() => p.ui.setActionButtons([]));
+                }
+            }
+        }
         if (log.action !== "HUANG" && log.action !== "HU") {
             if (this.lastLizhiPlayer !== -1) {
                 tl.add(game.centerScreen.putLizhiStick(this.lastLizhiPlayer));
@@ -263,17 +274,30 @@ class Game implements Tickable {
                             tile: log.tile
                         });
                         break;
+                    case "GANG":
+                        newActions.push({
+                            type: "DAMINGGANG",
+                            from: this.lastPlayedPlayer,
+                            tile: this.lastPlayedTile,
+                            existing: player.board.deck.getCombinationsInHand([
+                                t => Mahjong.eq(t, log.tile),
+                                t => Mahjong.eq(t, log.tile),
+                                t => Mahjong.eq(t, log.tile)
+                            ])[0] as [Tile, Tile, Tile]
+                        });
+                        break;
                     case "CHI":
                     case "PENG":
                     case "PLAY":
                     case "LIZHI":
                         if (log.action === "CHI" || log.action === "PENG") {
+                            const tileIDs = log["tile" + log.action].split(" ") as Mahjong.TileID[];
                             newActions.push({
                                 type: log.action,
                                 from: this.lastPlayedPlayer,
                                 tile: this.lastPlayedTile,
                                 existing: player.board.deck.getTilesByIds(
-                                    Util.LessOne(log["tile" + log.action].split(" ") as Mahjong.TileID[], this.lastPlayedTile)
+                                    log.action === "CHI" ? Util.LessOne(tileIDs, this.lastPlayedTile) : tileIDs
                                 ) as [Tile, Tile]
                             });
                         }
@@ -348,6 +372,12 @@ class Game implements Tickable {
                 });
             }
             tl.add(this.gameFinish(results), "+=0.5");
+        }
+        if ("doraIndicators" in log) {
+            const doraIndicators = log.doraIndicators.split(" ");
+            if (doraIndicators.length > this.doraIndicators.tileIDs.length) {
+                tl.add(this.doraIndicators.reveal(doraIndicators.pop() as Mahjong.TileID));
+            }
         }
         return tl;
     };

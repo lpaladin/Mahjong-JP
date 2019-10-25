@@ -47,7 +47,7 @@ namespace Mahjong {
     // };
 
     export type TileID = keyof typeof tileInfo;
-    export const TileIDs = Object.keys(tileInfo) as TileID[];
+    export const tileIDs = Object.keys(tileInfo) as TileID[];
 
     export function isSpecialActionWithNeedToPlayTile(type: ActionType) {
         return type === "CHI" || type === "PENG";
@@ -69,7 +69,7 @@ namespace Mahjong {
         NOTING: { id: "NOTING", chnName: "未听牌" }
     };
     export type ActionType = keyof typeof actionInfo;
-    export const ActionTypes = Object.keys(actionInfo) as ActionType[];
+    export const actionTypes = Object.keys(actionInfo) as ActionType[];
     export type Action =
         | {
               type: "DRAW";
@@ -220,24 +220,143 @@ namespace Mahjong {
     //     return results;
     // }
 
-    export function getLiteralID(id: TileID): Exclude<TileID, "W0" | "T0" | "B0"> {
+    export type LiteralID = Exclude<TileID, "W0" | "T0" | "B0">;
+
+    export function getLiteralID(id: TileID): LiteralID {
         if (id === "W0") return "W5";
         if (id === "T0") return "T5";
         if (id === "B0") return "B5";
         return id;
     }
 
-    export function getNextID(id: TileID): TileID {
-        if (id[0] === "W" || id[0] === "T" || id[0] === "B") {
-            return (id[0] + ((parseInt(id[1]) % 9) + 1)) as TileID;
+    export function eq(a: TileID, b: TileID) {
+        return getLiteralID(a) === getLiteralID(b);
+    }
+
+    export function lt1(a: TileID, b: TileID) {
+        a = getLiteralID(a);
+        b = getLiteralID(b);
+        return a[0] === b[0] && b.charCodeAt(1) - a.charCodeAt(1) === 1;
+    }
+
+    export function lt2(a: TileID, b: TileID) {
+        a = getLiteralID(a);
+        b = getLiteralID(b);
+        return a[0] === b[0] && b.charCodeAt(1) - a.charCodeAt(1) === 2;
+    }
+
+    export function getIndicatedDoraID(indicatorID: TileID): LiteralID {
+        indicatorID = getLiteralID(indicatorID);
+        if (indicatorID[0] === "W" || indicatorID[0] === "T" || indicatorID[0] === "B") {
+            return (indicatorID[0] + ((parseInt(indicatorID[1]) % 9) + 1)) as LiteralID;
         }
-        if (id[1] < "5") {
-            return (id[0] + ((parseInt(id[1]) % 4) + 1)) as TileID;
+        if (indicatorID[1] < "5") {
+            return (indicatorID[0] + ((parseInt(indicatorID[1]) % 4) + 1)) as LiteralID;
         }
-        if (id[1] < "5") {
-            return (id[0] + ((parseInt(id[1]) % 4) + 1)) as TileID;
+        return (indicatorID[0] + (((parseInt(indicatorID[1]) - 4) % 3) + 5)) as LiteralID;
+    }
+
+    export function getValidActions(
+        player: Player,
+        lastPlayedPlayer: number,
+        lastPlayedTile: Mahjong.TileID,
+        validact: string
+    ): Mahjong.Action[] {
+        const actions: Mahjong.Action[] = [];
+        for (const act of validact.split(",")) {
+            const [action, ...args] = act.split(" ");
+            switch (action) {
+                case "CHI":
+                    [
+                        ...player.board.deck.getCombinationsInHand([t => lt2(t, lastPlayedTile), t => lt1(t, lastPlayedTile)]),
+                        ...player.board.deck.getCombinationsInHand([t => lt1(t, lastPlayedTile), t => lt1(lastPlayedTile, t)]),
+                        ...player.board.deck.getCombinationsInHand([t => lt1(lastPlayedTile, t), t => lt2(lastPlayedTile, t)])
+                    ].forEach(tiles =>
+                        actions.push({
+                            type: "CHI",
+                            from: lastPlayedPlayer,
+                            existing: tiles as [Tile, Tile],
+                            tile: lastPlayedTile
+                        })
+                    );
+                    break;
+                case "PENG":
+                    player.board.deck
+                        .getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)])
+                        .forEach(tiles =>
+                            actions.push({
+                                type: "PENG",
+                                from: lastPlayedPlayer,
+                                existing: tiles as [Tile, Tile],
+                                tile: lastPlayedTile
+                            })
+                        );
+                    break;
+                case "GANG":
+                    player.board.deck
+                        .getCombinationsInHand([
+                            t => eq(t, lastPlayedTile),
+                            t => eq(t, lastPlayedTile),
+                            t => eq(t, lastPlayedTile)
+                        ])
+                        .forEach(tiles =>
+                            actions.push({
+                                type: "DAMINGGANG",
+                                from: lastPlayedPlayer,
+                                existing: tiles as [Tile, Tile, Tile],
+                                tile: lastPlayedTile
+                            })
+                        );
+                    break;
+                case "ANGANG":
+                    player.board.deck
+                        .getCombinationsInHand(
+                            [
+                                t => eq(t, lastPlayedTile),
+                                t => eq(t, lastPlayedTile),
+                                t => eq(t, lastPlayedTile),
+                                t => eq(t, lastPlayedTile)
+                            ],
+                            true
+                        )
+                        .forEach(tiles =>
+                            actions.push({
+                                type: "ANGANG",
+                                existing: tiles as [Tile, Tile, Tile, Tile]
+                            })
+                        );
+                    break;
+                case "BUGANG":
+                    actions.push({
+                        type: "BUGANG",
+                        existing: [player.board.deck.drawnTile]
+                    });
+                    break;
+                case "LIZHI":
+                    new Set(args).forEach(arg =>
+                        player.board.deck.getCombinationsInHand([t => eq(t, arg as TileID)], true).forEach(([tile]) =>
+                            actions.push({
+                                type: "LIZHI",
+                                tile
+                            })
+                        )
+                    );
+                    break;
+                case "RONG":
+                    actions.push({
+                        type: "HU",
+                        from: lastPlayedPlayer,
+                        tile: game.players[this.lastPlayedPlayer].board.river.latestTile
+                    });
+                    break;
+                case "TSUMO":
+                    actions.push({
+                        type: "ZIMO"
+                    });
+                    break;
+            }
         }
-        return (id[0] + (((parseInt(id[1]) - 4) % 3) + 5)) as TileID;
+        return actions;
     }
 
     interface TileInfo {

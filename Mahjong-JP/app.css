@@ -8,12 +8,12 @@ body {
     cursor: default;
 }
 
+body.landscape {
+    transform-origin: left top;
+}
+
 #background {
     position: absolute;
-    top: -2vh;
-    left: -2vw;
-    width: 104vw;
-    height: 104vh;
     background-image: url(./bkg.jpg);
     background-size: cover;
 }
@@ -266,7 +266,7 @@ button:hover {
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
     padding: 1em 0;
-    max-width: 80vw;
+    max-width: 80%;
 }
 
 .game-result header {
@@ -437,7 +437,7 @@ button.active,
 input[type="range"] {
     position: fixed;
     bottom: 1em;
-    left: 25vw;
-    right: 25vw;
-    width: 50vw;
+    left: 25%;
+    right: 25%;
+    width: 50%;
 }

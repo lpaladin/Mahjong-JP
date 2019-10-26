@@ -57,6 +57,7 @@ class Game implements Tickable {
     private _viewPoint = -1;
     private cameraKeepFocusing = false;
     private cameraUncontrolled = false;
+    private landscape = false;
     private _activePlayerId = -1;
     public get activePlayerId() {
         return this._activePlayerId;
@@ -138,7 +139,13 @@ class Game implements Tickable {
         this.setupPostProcessing();
 
         window.addEventListener("resize", () => this.initRenderer());
-        window.addEventListener("mousemove", e => this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1));
+        window.addEventListener("mousemove", e => {
+            if (this.landscape) {
+                this.mouseCoord.set((e.clientY / this.w) * 2 - 1, (e.clientX / this.h) * 2 - 1);
+            } else {
+                this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1);
+            }
+        });
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
                 if (!this.mouseRightButtonDown) {
@@ -340,7 +347,10 @@ class Game implements Tickable {
                                 type: log.action,
                                 from: this.lastPlayedPlayer,
                                 tile: this.lastPlayedTile,
-                                existing: player.board.deck.getTilesByIds(Util.LessOne(tileIDs, this.lastPlayedTile)) as [Tile, Tile]
+                                existing: player.board.deck.getTilesByIds(Util.LessOne(tileIDs, this.lastPlayedTile)) as [
+                                    Tile,
+                                    Tile
+                                ]
                             });
                         }
                         {
@@ -586,7 +596,10 @@ class Game implements Tickable {
         if (this.cameraKeepFocusing) {
             this.camera.lookAt(Util.ZERO3);
         }
-        UI.background.style.transform = `translate(${-2 * this.mouseCoord.x}vw, ${2 * this.mouseCoord.y}vh)`;
+        TweenMax.set(UI.background, {
+            x: -0.02 * this.w * this.mouseCoord.x,
+            y: 0.02 * this.h * this.mouseCoord.y
+        });
         this.composer.render(this.clock.getDelta());
         this.uiRenderer.render(this.uiScene, this.camera);
         const activePlayer = this.players.find(x => x.interactable);
@@ -596,8 +609,34 @@ class Game implements Tickable {
     }
 
     private initRenderer() {
-        this.w = window.innerWidth;
-        this.h = window.innerHeight;
+        if ((this.landscape = window.innerWidth < window.innerHeight)) {
+            // 自动横屏
+            this.h = window.innerWidth;
+            this.w = window.innerHeight;
+            document.body.className = "landscape";
+            TweenMax.set(document.body, {
+                height: this.h,
+                width: this.w,
+                x: this.h,
+                rotation: 90
+            });
+        } else {
+            this.w = window.innerWidth;
+            this.h = window.innerHeight;
+            document.body.className = "";
+            TweenMax.set(document.body, {
+                height: this.h,
+                width: this.w,
+                x: 0,
+                rotation: 0
+            });
+        }
+        TweenMax.set(UI.background, {
+            height: this.h * 1.04,
+            width: this.w * 1.04,
+            top: -this.h * 0.02,
+            left: -this.w * 0.02
+        });
         this.camera.aspect = this.w / this.h;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(this.w, this.h);

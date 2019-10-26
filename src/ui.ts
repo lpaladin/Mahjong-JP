@@ -169,16 +169,22 @@ class PlayerUI implements Tickable {
             button.textContent = Mahjong.actionInfo[a.type].chnName;
             button.addEventListener("click", () => this.onButtonClicked(a));
             button.addEventListener("mouseenter", () => {
-                if ("existing" in a)
+                if ("existing" in a) {
                     for (const t of a.existing) {
                         t.shaking = true;
                     }
+                } else if (a.type === "LIZHI") {
+                    a.tile.shaking = true;
+                }
             });
             button.addEventListener("mouseleave", () => {
-                if ("existing" in a)
+                if ("existing" in a) {
                     for (const t of a.existing) {
                         t.shaking = false;
                     }
+                } else if (a.type === "LIZHI") {
+                    a.tile.shaking = false;
+                }
             });
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);

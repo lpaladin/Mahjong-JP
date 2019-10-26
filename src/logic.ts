@@ -244,7 +244,7 @@ namespace Mahjong {
                     actions.push({
                         type: "HU",
                         from: lastPlayedPlayer,
-                        tile: game.players[this.lastPlayedPlayer].board.river.latestTile
+                        tile: game.players[lastPlayedPlayer].board.river.latestTile
                     });
                     break;
                 case "TSUMO":
@@ -274,10 +274,10 @@ namespace Mahjong {
     };
 
     export function isErrorLog(log: DisplayLog): log is DisplayLog.ErrorGameResult {
-        return "action" in log && log.action in errorAction2Chn;
+        return log.action in errorAction2Chn;
     }
 
     export function isGameEndingLog(log: DisplayLog): log is DisplayLog.GameEndingLog {
-        return isErrorLog(log) || !("action" in log) || log.action === "HUANG";
+        return isErrorLog(log) || log.action === "HU" || log.action === "HUANG";
     }
 }

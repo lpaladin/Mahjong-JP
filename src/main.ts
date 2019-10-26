@@ -344,12 +344,12 @@ class Game implements Tickable {
                 ]),
                 "+=0.5"
             );
-        } else if (!("action" in log)) {
+        } else if (log.action === "HU") {
             const results: GameResult[] = [];
             for (const p of this.players) {
                 const result: DisplayLog.PlayerResult | null = log[p.playerID];
                 const isZimo = this.lastPlayedPlayer === -1;
-                if (result) {
+                if (result && result.action) {
                     if (isZimo) {
                         tl.add(
                             p.doAction({

@@ -4,7 +4,6 @@ interface ForEachPlayer<T> {
 
 declare namespace DisplayLog {
     export interface Base {
-        canHu: ForEachPlayer<number>;
         doraIndicators: string;
         prompt: null | ForEachPlayer<{ validact: string }>;
     }
@@ -72,6 +71,7 @@ declare namespace DisplayLog {
     }
 
     export interface PlayerResult {
+        action: "HU";
         ScoreCnt: number;
         fan: {
             name: string;
@@ -87,7 +87,9 @@ declare namespace DisplayLog {
         score: [number, number, number, number];
     }
 
-    export interface HuGameResult extends ForEachPlayer<PlayerResult | null>, GameResultBase {}
+    export interface HuGameResult extends ForEachPlayer<PlayerResult | null>, GameResultBase {
+        action: "HU";
+    }
 
     export interface DrawGameResult extends GameResultBase {
         action: "HUANG";

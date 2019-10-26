@@ -6,6 +6,7 @@ class Player implements Tickable {
 
     public partialSpecialAction: Mahjong.PartialAction;
     public puttingLizhiTile = false;
+    public playDrawnTileOnly = false;
 
     private _interactable = false;
     public get interactable() {
@@ -164,6 +165,7 @@ class Player implements Tickable {
                     infoProvider.notifyPlayerMove(action.type + " " + action.existing[0].tileID);
                     break;
                 case "LIZHI":
+                    this.playDrawnTileOnly = true;
                     infoProvider.notifyPlayerMove(action.type + " " + action.tile.tileID);
                     break;
                 case "ZIMO":
@@ -173,6 +175,10 @@ class Player implements Tickable {
                 case "PASS":
                     infoProvider.notifyPlayerMove(action.type);
                     break;
+                case "PLAY":
+                    infoProvider.notifyPlayerMove("PLAY " + action.tile.tileID);
+                    Util.PrimaryLog`你已经自动摸切了${Mahjong.tileInfo[action.tile.tileID].chnName}，请等待其他玩家或裁判回应……`;
+                    return;
                 default:
                     Util.Assert`无法提交操作${false}`;
             }
@@ -196,7 +202,7 @@ class Player implements Tickable {
                 Util.PrimaryLog`你已经选择${Mahjong.actionInfo[this.partialSpecialAction.type].chnName}并打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
                 this.partialSpecialAction = null;
             } else {
-                infoProvider.notifyPlayerMove(["PLAY", playedTile].join(" "));
+                infoProvider.notifyPlayerMove("PLAY " + playedTile);
                 Util.PrimaryLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
             }
         }

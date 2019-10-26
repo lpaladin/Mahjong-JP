@@ -213,6 +213,34 @@ class Game implements Tickable {
         infoProvider.v2.setRequestCallback((request: RequestLog) => {
             if ("state" in request && "validact" in request) {
                 const mustPlay = request.state[0] === "2";
+
+                if (this.playerMe.playDrawnTileOnly) {
+                    const playDrawnTileAction: Mahjong.Action = { type: "PLAY", tile: this.playerMe.board.deck.drawnTile };
+                    if (request.validact) {
+                        const validActions = Mahjong.getValidActions(
+                            this.playerMe,
+                            this.lastPlayedPlayer,
+                            this.lastPlayedTile,
+                            request.validact
+                        );
+                        if (!mustPlay) {
+                            validActions.push({ type: "PASS" });
+                            Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
+                        } else {
+                            validActions.push(playDrawnTileAction);
+                            Util.PrimaryLog`请选择${"你"}要做出的动作或者${"打出刚刚摸到的牌"}`;
+                        }
+                        this.playerMe.ui.setActionButtons(validActions);
+                    } else {
+                        if (!mustPlay) {
+                            infoProvider.notifyPlayerMove("PASS");
+                        } else {
+                            this.playerMe.doHumanAction(playDrawnTileAction);
+                        }
+                    }
+                    return null;
+                }
+
                 this.playerMe.interactable = mustPlay;
                 if (request.validact) {
                     const validActions = Mahjong.getValidActions(

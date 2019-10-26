@@ -160,6 +160,16 @@ class PlayerUI implements Tickable {
         tickableManager.add(this);
     }
 
+    private static setRelatedTilesShaking(action: Mahjong.Action, to: boolean) {
+        if ("existing" in action) {
+            for (const t of action.existing) {
+                t.shaking = to;
+            }
+        } else if (action.type === "LIZHI") {
+            action.tile.shaking = to;
+        }
+    }
+
     public setActionButtons(actions: Mahjong.Action[]) {
         this.actionBar.innerHTML = "";
         this.actionButtons = [];
@@ -169,22 +179,10 @@ class PlayerUI implements Tickable {
             button.textContent = Mahjong.actionInfo[a.type].chnName;
             button.addEventListener("click", () => this.onButtonClicked(a));
             button.addEventListener("mouseenter", () => {
-                if ("existing" in a) {
-                    for (const t of a.existing) {
-                        t.shaking = true;
-                    }
-                } else if (a.type === "LIZHI") {
-                    a.tile.shaking = true;
-                }
+                PlayerUI.setRelatedTilesShaking(a, true);
             });
             button.addEventListener("mouseleave", () => {
-                if ("existing" in a) {
-                    for (const t of a.existing) {
-                        t.shaking = false;
-                    }
-                } else if (a.type === "LIZHI") {
-                    a.tile.shaking = false;
-                }
+                PlayerUI.setRelatedTilesShaking(a, false);
             });
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);
@@ -193,6 +191,7 @@ class PlayerUI implements Tickable {
     }
 
     public onButtonClicked(action?: Mahjong.Action) {
+        action && PlayerUI.setRelatedTilesShaking(action, false);
         if (this.actionButtons.length == 0) return;
         if (action) {
             this.player.doHumanAction(action);
@@ -377,7 +376,8 @@ class GameResultView {
     public setResult(results: GameResult[]) {
         const gameResultView = document.createElement("div");
         gameResultView.className = GameResultView.MAIN_CLASSNAME;
-        gameResultView.innerHTML = "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        gameResultView.innerHTML =
+            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
         UI.gameResultBackground.appendChild(gameResultView);
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));
@@ -442,7 +442,9 @@ class SpectatorControl implements Tickable {
                 tickableManager.add(this);
                 Loader.globalTL.play();
             });
-            this.progress.addEventListener("input", e => Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true));
+            this.progress.addEventListener("input", e =>
+                Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true)
+            );
             tickableManager.add(this);
             document.body.appendChild(this.progress);
         }

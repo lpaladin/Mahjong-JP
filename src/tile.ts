@@ -1,3 +1,86 @@
+interface PlainVector3 {
+    x?: number;
+    y?: number;
+    z?: number;
+}
+
+class OverridableEuler {
+    private static all: OverridableEuler[] = [];
+    private static _overridingEuler: PlainVector3 = {};
+    public static get overridingEuler() {
+        return this._overridingEuler;
+    }
+    public static set overridingEuler(to: PlainVector3) {
+        this._overridingEuler = to;
+        for (const euler of this.all) {
+            euler.update();
+        }
+    }
+
+    private _x: number;
+    private _y: number;
+    private _z: number;
+
+    constructor(private original: THREE.Euler) {
+        this._x = original.x;
+        this._y = original.x;
+        this._z = original.x;
+        OverridableEuler.all.push(this);
+        this.update();
+    }
+
+    private update() {
+        this.original.x = "x" in OverridableEuler._overridingEuler ? OverridableEuler._overridingEuler.x : this.x;
+        this.original.y = "y" in OverridableEuler._overridingEuler ? OverridableEuler._overridingEuler.y : this.y;
+        this.original.z = "z" in OverridableEuler._overridingEuler ? OverridableEuler._overridingEuler.z : this.z;
+    }
+
+    public get x() {
+        return this._x;
+    }
+
+    public get y() {
+        return this._y;
+    }
+
+    public get z() {
+        return this._z;
+    }
+
+    public set x(to: number) {
+        this._x = to;
+        if (!("x" in OverridableEuler._overridingEuler)) {
+            this.original.x = to;
+        }
+    }
+
+    public set y(to: number) {
+        this._y = to;
+        if (!("y" in OverridableEuler._overridingEuler)) {
+            this.original.y = to;
+        }
+    }
+
+    public set z(to: number) {
+        this._z = to;
+        if (!("z" in OverridableEuler._overridingEuler)) {
+            this.original.z = to;
+        }
+    }
+
+    public set(x: number, y: number, z: number) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public copy(other: this) {
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
+    }
+}
+
 class Tile extends THREE.Mesh implements Tickable {
     public static readonly PADDING_PERCENTAGE_W = 0.1;
     public static readonly PADDING_PERCENTAGE_H = 0.2;
@@ -61,8 +144,7 @@ class Tile extends THREE.Mesh implements Tickable {
 
     public updateDora() {
         this.outlined =
-            (this.tileID[1] === "0" ||
-                game.doraIndicators.currentTileIDs.some(id => Mahjong.getIndicatedDoraID(id) === this.tileID)) &&
+            (this.tileID[1] === "0" || game.doraIndicators.currentTileIDs.some(id => Mahjong.getIndicatedDoraID(id) === this.tileID)) &&
             this.isVisibleToPlayer(game.viewPoint);
     }
 
@@ -92,7 +174,7 @@ class Tile extends THREE.Mesh implements Tickable {
         if (this._close === to) {
             return;
         }
-        TweenMax.to(this.rotation, 0.1, {
+        TweenMax.to(this.exposedRotation, 0.1, {
             x: to ? Util.RAD90 : 0
         });
         this._close = to;
@@ -107,7 +189,7 @@ class Tile extends THREE.Mesh implements Tickable {
             return;
         }
         if (this._open !== undefined && this.parent instanceof Deck) {
-            TweenMax.to(this.rotation, 0.1, {
+            TweenMax.to(this.exposedRotation, 0.1, {
                 x: to ? -Util.RAD90 : 0
             });
         }
@@ -168,6 +250,8 @@ class Tile extends THREE.Mesh implements Tickable {
 
     private basePosition = new THREE.Vector3();
 
+    public exposedRotation: OverridableEuler;
+
     public constructor(public readonly tileID: Mahjong.TileID, public idx: number) {
         super(
             Assets.GetRoundEdgedTileGeometry(),
@@ -179,6 +263,7 @@ class Tile extends THREE.Mesh implements Tickable {
             // 	wireframe: true
             // })
         );
+        this.exposedRotation = new OverridableEuler(this.rotation);
         this.uniqueRank = Mahjong.tileInfo[tileID].relativeRank + Tile.allocatedTileCount++ / 10000;
         Tile.buckets[Mahjong.getLiteralID(this.tileID)].add(this);
         this.updateDora();

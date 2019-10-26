@@ -49,10 +49,6 @@ namespace Mahjong {
     export type TileID = keyof typeof tileInfo;
     export const tileIDs = Object.keys(tileInfo) as TileID[];
 
-    export function isSpecialActionWithNeedToPlayTile(type: ActionType) {
-        return type === "CHI" || type === "PENG";
-    }
-
     export const actionInfo = {
         DRAW: { id: "DRAW", chnName: "摸" },
         PLAY: { id: "PLAY", chnName: "打出" },
@@ -70,6 +66,12 @@ namespace Mahjong {
     };
     export type ActionType = keyof typeof actionInfo;
     export const actionTypes = Object.keys(actionInfo) as ActionType[];
+    export interface PartialAction {
+        type: "CHI" | "PENG";
+        from: number;
+        existing: [Tile, Tile]; // 自己手里的牌
+        tile: TileID; // 其他玩家提供的牌
+    }
     export type Action =
         | {
               type: "DRAW";
@@ -79,12 +81,7 @@ namespace Mahjong {
               type: "PLAY";
               tile: Tile;
           }
-        | {
-              type: "CHI" | "PENG";
-              from: number;
-              existing: [Tile, Tile]; // 自己手里的牌
-              tile: TileID; // 其他玩家提供的牌
-          }
+        | PartialAction
         | {
               type: "DAMINGGANG";
               from: number;
@@ -120,105 +117,6 @@ namespace Mahjong {
         | {
               type: "NOTING";
           };
-
-    // export function testAvailableActions(player: Player, newTile?: TileID, from = -1): Action[] {
-    //     const results: Action[] = [];
-    //     const deck = player.board.deck.handTiles;
-    //     if (!newTile) {
-    //         Util.Assert`没有新牌的时候一定是自己摸的牌：${from == -1}`;
-    //         const drawnTile = player.board.deck.drawnTile;
-    //         const drawnRank = tileInfo[drawnTile.tileID].relativeRank;
-    //         const pengs = player.board.openTiles.openStacks.filter(s => s.type == "PENG");
-    //         for (const p of pengs) {
-    //             if (drawnRank == Math.round(tileInfo[p.newTile.tileID].relativeRank))
-    //                 results.push({
-    //                     type: "BUGANG",
-    //                     existing: [drawnTile]
-    //                 });
-    //         }
-    //         for (let i = 0; i < deck.length; i++) {
-    //             const curr = Math.round(tileInfo[deck[i].tileID].relativeRank);
-    //             for (const p of pengs) {
-    //                 if (curr == Math.round(tileInfo[p.newTile.tileID].relativeRank))
-    //                     results.push({
-    //                         type: "BUGANG",
-    //                         existing: [deck[i]]
-    //                     });
-    //             }
-    //             if (i > 1) {
-    //                 const llast = Math.round(tileInfo[deck[i - 2].tileID].relativeRank);
-    //                 const last = Math.round(tileInfo[deck[i - 1].tileID].relativeRank);
-    //                 if (curr == last && curr == llast && curr == drawnRank)
-    //                     results.push({
-    //                         type: "ANGANG",
-    //                         existing: [deck[i - 2], deck[i - 1], deck[i], drawnTile]
-    //                     });
-    //                 if (i > 2) {
-    //                     const lllast = Math.round(tileInfo[deck[i - 3].tileID].relativeRank);
-    //                     if (curr == last && curr == llast && curr == lllast)
-    //                         results.push({
-    //                             type: "ANGANG",
-    //                             existing: [deck[i - 3], deck[i - 2], deck[i - 1], deck[i]]
-    //                         });
-    //                 }
-    //             }
-    //         }
-    //         if (Math.random() < 0.3) {
-    //             results.push({
-    //                 type: "ZIMO"
-    //             });
-    //         }
-    //     } else {
-    //         const newRank = tileInfo[newTile].relativeRank;
-    //         for (let i = 0; i < deck.length; i++) {
-    //             if (i > 0) {
-    //                 const lastID = deck[i - 1].tileID;
-    //                 const currID = deck[i].tileID;
-    //                 const last = Math.round(tileInfo[lastID].relativeRank);
-    //                 const curr = Math.round(tileInfo[currID].relativeRank);
-    //                 if (
-    //                     (player.playerID + 4 - from) % 4 == 1 && // 只能吃上家
-    //                     currID[0] == lastID[0] &&
-    //                     currID[0] == newTile[0] &&
-    //                     canCHIFamily[currID[0]] &&
-    //                     ((curr - last == 1 && (newRank - curr == 1 || last - newRank == 1)) ||
-    //                         (curr - newRank == 1 && newRank - last == 1))
-    //                 )
-    //                     results.push({
-    //                         type: "CHI",
-    //                         existing: [deck[i - 1], deck[i]],
-    //                         newTile,
-    //                         from
-    //                     });
-    //                 if (curr == last && curr == newRank)
-    //                     results.push({
-    //                         type: "PENG",
-    //                         existing: [deck[i - 1], deck[i]],
-    //                         newTile,
-    //                         from
-    //                     });
-    //                 if (i > 1) {
-    //                     const llast = Math.round(tileInfo[deck[i - 2].tileID].relativeRank);
-    //                     if (curr == last && curr == llast && curr == newRank)
-    //                         results.push({
-    //                             type: "DAMINGGANG",
-    //                             existing: [deck[i - 2], deck[i - 1], deck[i]],
-    //                             newTile,
-    //                             from
-    //                         });
-    //                 }
-    //             }
-    //         }
-    //         if (Math.random() < 0.3) {
-    //             results.push({
-    //                 type: "HU",
-    //                 from,
-    //                 newTile
-    //             });
-    //         }
-    //     }
-    //     return results;
-    // }
 
     export type LiteralID = Exclude<TileID, "W0" | "T0" | "B0">;
 
@@ -281,24 +179,18 @@ namespace Mahjong {
                     );
                     break;
                 case "PENG":
-                    player.board.deck
-                        .getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)])
-                        .forEach(tiles =>
-                            actions.push({
-                                type: "PENG",
-                                from: lastPlayedPlayer,
-                                existing: tiles as [Tile, Tile],
-                                tile: lastPlayedTile
-                            })
-                        );
+                    player.board.deck.getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)]).forEach(tiles =>
+                        actions.push({
+                            type: "PENG",
+                            from: lastPlayedPlayer,
+                            existing: tiles as [Tile, Tile],
+                            tile: lastPlayedTile
+                        })
+                    );
                     break;
                 case "GANG":
                     player.board.deck
-                        .getCombinationsInHand([
-                            t => eq(t, lastPlayedTile),
-                            t => eq(t, lastPlayedTile),
-                            t => eq(t, lastPlayedTile)
-                        ])
+                        .getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)])
                         .forEach(tiles =>
                             actions.push({
                                 type: "DAMINGGANG",
@@ -327,9 +219,15 @@ namespace Mahjong {
                         );
                     break;
                 case "BUGANG":
-                    actions.push({
-                        type: "BUGANG",
-                        existing: [player.board.deck.drawnTile]
+                    player.board.openTiles.openStacks.forEach(stack => {
+                        if (stack.type === "PENG") {
+                            player.board.deck.getCombinationsInHand([t => eq(t, stack.newTile.tileID)], true).forEach(combination =>
+                                actions.push({
+                                    type: "BUGANG",
+                                    existing: combination as [Tile]
+                                })
+                            );
+                        }
                     });
                     break;
                 case "LIZHI":
@@ -365,5 +263,21 @@ namespace Mahjong {
         chnName: string;
         availableCount: number;
         relativeRank: number;
+    }
+
+    export const errorAction2Chn: { [action in DisplayLog.ErrorAction]: string } = {
+        TLE: "超时",
+        WA: "非法动作",
+        MLE: "内存爆炸",
+        RE: "程序崩溃",
+        ERR: "奇妙的错误，请联系管理员"
+    };
+
+    export function isErrorLog(log: DisplayLog): log is DisplayLog.ErrorGameResult {
+        return "action" in log && log.action in errorAction2Chn;
+    }
+
+    export function isGameEndingLog(log: DisplayLog): log is DisplayLog.GameEndingLog {
+        return isErrorLog(log) || !("action" in log) || log.action === "HUANG";
     }
 }

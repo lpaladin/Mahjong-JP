@@ -4,7 +4,7 @@ class Player implements Tickable {
     public readonly board = new PlayerArea(this);
     public readonly shout = new PlayerShout(this);
 
-    public partialSpecialAction: Mahjong.Action;
+    public partialSpecialAction: Mahjong.PartialAction;
     public puttingLizhiTile = false;
 
     private _interactable = false;
@@ -54,16 +54,10 @@ class Player implements Tickable {
             } else {
                 if (action.type !== "DRAW") {
                     if (action.type === "LIZHI") {
-                        tl.call(
-                            () => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`,
-                            null,
-                            null,
-                            1
-                        );
+                        tl.call(() => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
                     } else {
                         tl.call(
-                            () =>
-                                Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
                             null,
                             null,
                             1
@@ -90,7 +84,7 @@ class Player implements Tickable {
                     1
                 );
                 tl.fromTo(
-                    t.rotation,
+                    t.exposedRotation,
                     0.2,
                     { x: 0 },
                     {
@@ -152,6 +146,60 @@ class Player implements Tickable {
                 break;
         }
         return tl;
+    }
+
+    public doHumanAction(action: Mahjong.Action) {
+        if (action.type === "CHI" || action.type === "PENG") {
+            this.partialSpecialAction = action;
+            this.interactable = true;
+            Util.PrimaryLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
+        } else {
+            this.interactable = false;
+            switch (action.type) {
+                case "DAMINGGANG":
+                    infoProvider.notifyPlayerMove("GANG");
+                    break;
+                case "ANGANG":
+                case "BUGANG":
+                    infoProvider.notifyPlayerMove(action.type + " " + action.existing[0].tileID);
+                    break;
+                case "LIZHI":
+                    infoProvider.notifyPlayerMove(action.type + " " + action.tile.tileID);
+                    break;
+                case "ZIMO":
+                    infoProvider.notifyPlayerMove("HU");
+                    break;
+                case "HU":
+                case "PASS":
+                    infoProvider.notifyPlayerMove(action.type);
+                    break;
+                default:
+                    Util.Assert`无法提交操作${false}`;
+            }
+            Util.PrimaryLog`你已经选择${Mahjong.actionInfo[action.type].chnName}，请等待其他玩家或裁判回应……`;
+        }
+    }
+
+    public onClick() {
+        if (this.interactable && this.board.hoveredTile) {
+            this.interactable = false;
+            const playedTile = this.board.hoveredTile.tileID;
+            if (this.partialSpecialAction) {
+                infoProvider.notifyPlayerMove(
+                    [
+                        this.partialSpecialAction.type,
+                        this.partialSpecialAction.tile,
+                        ...this.partialSpecialAction.existing.map(t => t.tileID),
+                        playedTile
+                    ].join(" ")
+                );
+                Util.PrimaryLog`你已经选择${Mahjong.actionInfo[this.partialSpecialAction.type].chnName}并打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
+                this.partialSpecialAction = null;
+            } else {
+                infoProvider.notifyPlayerMove(["PLAY", playedTile].join(" "));
+                Util.PrimaryLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
+            }
+        }
     }
 
     public onTick() {

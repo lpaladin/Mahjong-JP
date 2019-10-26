@@ -183,23 +183,13 @@ class PlayerUI implements Tickable {
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);
         }
-        if (actions.length > 0) {
-            Loader.globalTL.pause();
-        }
         TweenMax.staggerFrom(this.actionButtons, 0.2, { opacity: 0, scale: 0, ease: Back.easeIn }, 0.1);
     }
 
     public onButtonClicked(action?: Mahjong.Action) {
-        Loader.globalTL.play();
-        return;
         if (this.actionButtons.length == 0) return;
         if (action) {
-            this.player.doAction(action);
-            if (Mahjong.isSpecialActionWithNeedToPlayTile(action.type)) {
-                this.player.partialSpecialAction = action;
-                this.player.interactable = true;
-                Util.PrimaryLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
-            }
+            this.player.doHumanAction(action);
         }
         this.actionButtons.forEach(b => b.remove());
         this.actionButtons = [];
@@ -266,7 +256,7 @@ class DoraIndicators {
 
 type GameResult =
     | {
-          huer: Player;
+          player: Player;
           newTile: Mahjong.TileID;
           from: number;
           type: "ZIMO" | "HU";
@@ -275,8 +265,14 @@ type GameResult =
           fu: number;
       }
     | {
-          huer: Player;
+          player: Player;
           type: "DRAW";
+          reason: string;
+          score: number;
+      }
+    | {
+          player: Player;
+          type: "ERROR";
           reason: string;
           score: number;
       };
@@ -291,11 +287,31 @@ class GameResultView {
             <div class="result">
                 <div class="result-upper">
                     <div class="player">
-                        <img class="avatar" src="${result.huer.info.imgid}" />
-                        <span class="position">${Util.POSITIONS[result.huer.playerID]}家</span>
-                        <span class="name">${result.huer.info.name}</span>
+                        <img class="avatar" src="${result.player.info.imgid}" />
+                        <span class="position">${Util.POSITIONS[result.player.playerID]}家</span>
+                        <span class="name">${result.player.info.name}</span>
                     </div>
                     <div class="draw">流局</div>
+                </div>
+                <div class="fan">
+                    <label>原因</label>
+                    <span>${result.reason}</span>
+                    <label>得分</label>
+                    <span>${result.score}</span>
+                </div>
+            </div>
+            `;
+        }
+        if (result.type === "ERROR") {
+            return `
+            <div class="result">
+                <div class="result-upper">
+                    <div class="player">
+                        <img class="avatar" src="${result.player.info.imgid}" />
+                        <span class="position">${Util.POSITIONS[result.player.playerID]}家</span>
+                        <span class="name">${result.player.info.name}</span>
+                    </div>
+                    <div class="draw">错误</div>
                 </div>
                 <div class="fan">
                     <label>原因</label>
@@ -310,9 +326,9 @@ class GameResultView {
         <div class="result">
             <div class="result-upper">
                 <div class="player">
-                    <img class="avatar" src="${result.huer.info.imgid}" />
-                    <span class="position">${Util.POSITIONS[result.huer.playerID]}家</span>
-                    <span class="name">${result.huer.info.name}</span>
+                    <img class="avatar" src="${result.player.info.imgid}" />
+                    <span class="position">${Util.POSITIONS[result.player.playerID]}家</span>
+                    <span class="name">${result.player.info.name}</span>
                 </div>
                 <div class="hu">
                     <span class="type">${Mahjong.actionInfo[result.type].chnName}</span>
@@ -320,12 +336,21 @@ class GameResultView {
                 </div>
             </div>
             <div class="deck">
-                ${[...result.huer.board.deck.handTiles.map(t => t.tileID), result.newTile]
+                ${[
+                    result.player.board.deck.handTiles.map(t => t.tileID),
+                    ...result.player.board.openTiles.openStacks.map(s => s.tiles.map(t => t.tileID)),
+                    [result.newTile]
+                ]
                     .map(
-                        t =>
-                            `<div class="${DoraIndicators.OPEN_TILE_CLASSNAME}">
-                                <img src="${Assets.loadedImages[t].src}" />
-                            </div>`
+                        tileGroup =>
+                            `<div class="group">${tileGroup
+                                .map(
+                                    t =>
+                                        `<div class="${DoraIndicators.OPEN_TILE_CLASSNAME}">
+                                            <img src="${Assets.loadedImages[t].src}" />
+                                        </div>`
+                                )
+                                .join("")}</div>`
                     )
                     .join("")}
             </div>
@@ -346,8 +371,7 @@ class GameResultView {
     public setResult(results: GameResult[]) {
         const gameResultView = document.createElement("div");
         gameResultView.className = GameResultView.MAIN_CLASSNAME;
-        gameResultView.innerHTML =
-            "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
+        gameResultView.innerHTML = "<header><span>本局结果</span><hr /></header>" + results.map(GameResultView.getHTMLForResult).join("");
         UI.gameResultBackground.appendChild(gameResultView);
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));
@@ -355,12 +379,12 @@ class GameResultView {
         tl.add(Util.BiDirectionConstantSet(UI.gameResultBackground, "className", GameResultView.ACTIVE_CLASSNAME));
         tl.set(gameResultView, { display: "block", immediateRender: false }, 1);
         tl.fromTo(gameResultView, 0.5, { y: "50vh" }, { y: 0, immediateRender: false, ease: Back.easeOut });
-        tl.from(gameResultView.querySelector("header"), 0.3, { y: "-100%", opacity: 0 });
+        tl.from(gameResultView.querySelector("header"), 0.1, { y: "-100%", opacity: 0 });
         for (const element of gameResultView.querySelectorAll(".result")) {
-            tl.from(element.querySelector(".result-upper > .player"), 0.2, { opacity: 0 });
-            tl.from(element.querySelector(".result-upper > :not(.player)"), 0.2, { x: "-100%", opacity: 0 }, "-=0.1");
-            tl.staggerFrom(element.querySelectorAll(".deck > *"), 0.2, { y: "100%", opacity: 0 }, 0.05);
-            tl.staggerFrom(element.querySelectorAll(".fan > *, .score > *"), 0.3, { x: "-100%", opacity: 0 }, 0.1);
+            tl.from(element.querySelector(".result-upper > .player"), 0.1, { opacity: 0 });
+            tl.from(element.querySelector(".result-upper > :not(.player)"), 0.1, { x: "-100%", opacity: 0 }, "-=0.1");
+            tl.staggerFrom(element.querySelectorAll(".deck .tile"), 0.2, { y: "100%", opacity: 0 }, 0.05);
+            tl.staggerFrom(element.querySelectorAll(".fan > *, .score > *"), 0.3, { x: "-100%", opacity: 0 }, 0.02);
         }
         return tl;
     }
@@ -372,11 +396,6 @@ class SpectatorControl implements Tickable {
         UI.spectatorToolbar.style.display = to ? "block" : "none";
     }
     constructor() {
-        document.addEventListener("keydown", e => {
-            if (e.keyCode === 187) Loader.globalTL.timeScale(Loader.globalTL.timeScale() * 2);
-            if (e.keyCode === 189) Loader.globalTL.timeScale(Loader.globalTL.timeScale() / 2);
-        });
-
         const left = document.createElement("button");
         const toggleOpen = document.createElement("button");
         const right = document.createElement("button");
@@ -386,8 +405,8 @@ class SpectatorControl implements Tickable {
         });
         toggleOpen.textContent = "亮牌";
         toggleOpen.addEventListener("click", () => {
-            const shouldOpen = !game.players[0].board.openDeck;
-            for (const p of game.players) p.board.openDeck = shouldOpen;
+            const shouldOpen = toggleOpen.className !== "active";
+            OverridableEuler.overridingEuler = shouldOpen ? { x: -Util.RAD90 } : {};
             toggleOpen.className = shouldOpen ? "active" : "";
         });
         right.textContent = "下家视角";
@@ -399,6 +418,11 @@ class SpectatorControl implements Tickable {
         UI.spectatorToolbar.appendChild(right);
 
         if (infoProvider["dbgMode"]) {
+            document.addEventListener("keydown", e => {
+                if (e.keyCode === 187) Loader.globalTL.timeScale(Loader.globalTL.timeScale() * 2);
+                if (e.keyCode === 189) Loader.globalTL.timeScale(Loader.globalTL.timeScale() / 2);
+            });
+
             this.progress = document.createElement("input");
             this.progress.type = "range";
             this.progress.max = "1";
@@ -412,9 +436,7 @@ class SpectatorControl implements Tickable {
                 tickableManager.add(this);
                 Loader.globalTL.play();
             });
-            this.progress.addEventListener("input", e =>
-                Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true)
-            );
+            this.progress.addEventListener("input", e => Loader.globalTL.progress(parseFloat((e.target as HTMLInputElement).value), true));
             tickableManager.add(this);
             document.body.appendChild(this.progress);
         }

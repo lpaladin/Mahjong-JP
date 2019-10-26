@@ -138,9 +138,7 @@ class Game implements Tickable {
         this.setupPostProcessing();
 
         window.addEventListener("resize", () => this.initRenderer());
-        window.addEventListener("mousemove", e =>
-            this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1)
-        );
+        window.addEventListener("mousemove", e => this.mouseCoord.set((e.clientX / this.w) * 2 - 1, -(e.clientY / this.h) * 2 + 1));
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
                 if (!this.mouseRightButtonDown) {
@@ -168,12 +166,8 @@ class Game implements Tickable {
             }
         });
         UI.mainCanvas.addEventListener("click", () => {
-            if (infoProvider.getPlayerID() !== -1 && this.playerMe.interactable) {
-                const playedTile = this.playerMe.board.hoveredTile.tileID;
-                const preAction = this.playerMe.partialSpecialAction;
-                infoProvider.notifyPlayerMove((preAction ? preAction.type : "PLAY") + " " + playedTile);
-                this.playerMe.interactable = false;
-                Util.PrimaryLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
+            if (infoProvider.getPlayerID() !== -1) {
+                this.playerMe.onClick();
             }
         });
 
@@ -216,33 +210,49 @@ class Game implements Tickable {
         //new THREE['OrbitControls'](this.camera, UI.mainCanvas);
 
         infoProvider.v2.setDisplayCallback(this.handleDisplayLog);
-        infoProvider.v2.setRequestCallback(() => {
-            this.playerMe.interactable = true;
-            Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`; // TODO or action
-            const tl = new TimelineMax();
-            tl.call(() => (this.activePlayerId = infoProvider.getPlayerID()));
-            return tl;
+        infoProvider.v2.setRequestCallback((request: RequestLog) => {
+            if ("state" in request && "validact" in request) {
+                const mustPlay = request.state[0] === "2";
+                this.playerMe.interactable = mustPlay;
+                if (request.validact) {
+                    const validActions = Mahjong.getValidActions(
+                        this.playerMe,
+                        this.lastPlayedPlayer,
+                        this.lastPlayedTile,
+                        request.validact
+                    );
+                    if (!mustPlay) {
+                        validActions.push({ type: "PASS" });
+                        Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
+                    } else {
+                        this.activePlayerId = infoProvider.getPlayerID();
+                        Util.PrimaryLog`${"你"}的回合，请选择要做出的动作或要打出的牌`;
+                    }
+                    this.playerMe.ui.setActionButtons(validActions);
+                } else {
+                    this.playerMe.ui.setActionButtons([]);
+                    if (!mustPlay) {
+                        infoProvider.notifyPlayerMove("PASS");
+                        return null;
+                    } else {
+                        this.activePlayerId = infoProvider.getPlayerID();
+                        Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`;
+                    }
+                }
+            } else {
+                infoProvider.notifyPlayerMove("PASS");
+            }
+            return null;
         });
 
         Util.Log`初始化完成`;
     }
 
     public handleDisplayLog = (log: DisplayLog): TimelineMax => {
-        console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
-        console.log(log);
+        // console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
+        // console.log(log);
         const tl = new TimelineMax();
-        if ("prompt" in log && log.prompt) {
-            for (const p of this.players) {
-                const prompt = log.prompt[p.playerID];
-                if (prompt && prompt.validact) {
-                    const validActions = Mahjong.getValidActions(p, this.lastPlayedPlayer, this.lastPlayedTile, prompt.validact);
-                    tl.call(() => p.ui.setActionButtons(validActions));
-                } else {
-                    tl.call(() => p.ui.setActionButtons([]));
-                }
-            }
-        }
-        if (log.action !== "HUANG" && log.action !== "HU") {
+        if (!Mahjong.isGameEndingLog(log)) {
             if (this.lastLizhiPlayer !== -1) {
                 tl.add(game.centerScreen.putLizhiStick(this.lastLizhiPlayer));
                 this.lastLizhiPlayer = -1;
@@ -286,6 +296,12 @@ class Game implements Tickable {
                             ])[0] as [Tile, Tile, Tile]
                         });
                         break;
+                    case "BUGANG":
+                        newActions.push({
+                            type: "BUGANG",
+                            existing: player.board.deck.getCombinationsInHand([t => Mahjong.eq(t, log.tile)], true)[0] as [Tile]
+                        });
+                        break;
                     case "CHI":
                     case "PENG":
                     case "PLAY":
@@ -296,9 +312,7 @@ class Game implements Tickable {
                                 type: log.action,
                                 from: this.lastPlayedPlayer,
                                 tile: this.lastPlayedTile,
-                                existing: player.board.deck.getTilesByIds(
-                                    log.action === "CHI" ? Util.LessOne(tileIDs, this.lastPlayedTile) : tileIDs
-                                ) as [Tile, Tile]
+                                existing: player.board.deck.getTilesByIds(Util.LessOne(tileIDs, this.lastPlayedTile)) as [Tile, Tile]
                             });
                         }
                         {
@@ -318,7 +332,19 @@ class Game implements Tickable {
                     tl.add(player.doAction(action));
                 }
             }
-        } else if (log.action === "HU") {
+        } else if (Mahjong.isErrorLog(log)) {
+            tl.add(
+                this.gameFinish([
+                    {
+                        type: "ERROR",
+                        player: this.players[log.player],
+                        reason: Mahjong.errorAction2Chn[log.action],
+                        score: log.score[log.player]
+                    }
+                ]),
+                "+=0.5"
+            );
+        } else if (!("action" in log)) {
             const results: GameResult[] = [];
             for (const p of this.players) {
                 const result: DisplayLog.PlayerResult | null = log[p.playerID];
@@ -343,7 +369,7 @@ class Game implements Tickable {
                     }
                     results.push({
                         type: isZimo ? "ZIMO" : "HU",
-                        huer: p,
+                        player: p,
                         from: isZimo ? p.playerID : this.lastPlayedPlayer,
                         newTile: isZimo ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
                         fan: result.fan.map(f => `${f.name} - ${f.value}番`),
@@ -366,7 +392,7 @@ class Game implements Tickable {
                 );
                 results.push({
                     type: "DRAW",
-                    huer: p,
+                    player: p,
                     score: log.score[p.playerID],
                     reason: "荒牌流局"
                 });
@@ -487,8 +513,10 @@ class Game implements Tickable {
         const tl = new TimelineMax();
         if (results.every(r => r.type === "DRAW")) {
             tl.call(() => Util.PrimaryLog`本局游戏结束，流局`);
+        } else if (results.every(r => r.type === "HU" || r.type === "ZIMO")) {
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player.info)}胡了`);
         } else {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.huer.info)}胡了`);
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player.info)}出错`);
         }
         tl.add(game.gameResultView.setResult(results));
         return tl;

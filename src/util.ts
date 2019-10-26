@@ -99,7 +99,7 @@ namespace Util {
     }
 
     function playerInfoToHTML(x: PlayerInfo) {
-        return `<img src="${x.imgid}" /><span>${neutralize(x.name)}</span>`;
+        return ` <img src="${x.imgid}" /><span>${neutralize(x.name)}</span>`;
     }
 
     function logComposeHTML(parts: TemplateStringsArray, args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {

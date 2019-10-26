@@ -14,27 +14,27 @@ declare namespace DisplayLog {
         quan: number;
     }
 
-    export interface Deal {
+    export interface Deal extends Base {
         action: "DEAL";
         tileCnt: number;
         hand: ForEachPlayer<Mahjong.TileID[]>;
     }
 
-    export interface Draw {
+    export interface Draw extends Base {
         action: "DRAW";
         player: number;
         tile: Mahjong.TileID;
         tileCnt: number;
     }
 
-    export interface Play {
+    export interface Play extends Base {
         action: "PLAY";
         player: number;
         tile: Mahjong.TileID;
         tileCnt: number;
     }
 
-    export interface Chi {
+    export interface Chi extends Base {
         action: "CHI";
         player: number;
         tile: Mahjong.TileID;
@@ -42,7 +42,7 @@ declare namespace DisplayLog {
         tileCnt: number;
     }
 
-    export interface Peng {
+    export interface Peng extends Base {
         action: "PENG";
         player: number;
         tile: Mahjong.TileID;
@@ -50,14 +50,21 @@ declare namespace DisplayLog {
         tileCnt: number;
     }
 
-    export interface Gang {
+    export interface Gang extends Base {
         action: "GANG";
         player: number;
         tile: Mahjong.TileID;
         tileCnt: number;
     }
 
-    export interface Lizhi {
+    export interface BuGang extends Base {
+        action: "BUGANG";
+        player: number;
+        tile: Mahjong.TileID;
+        tileCnt: number;
+    }
+
+    export interface Lizhi extends Base {
         action: "LIZHI";
         player: number;
         tile: Mahjong.TileID;
@@ -76,27 +83,41 @@ declare namespace DisplayLog {
         player: number;
     }
 
-    export interface HuGameResult extends ForEachPlayer<PlayerResult | null> {
-        action: "HU";
+    interface GameResultBase extends Base {
         score: [number, number, number, number];
     }
 
-    export interface HuangGameResult {
+    export interface HuGameResult extends ForEachPlayer<PlayerResult | null>, GameResultBase {}
+
+    export interface DrawGameResult extends GameResultBase {
         action: "HUANG";
-        score: [number, number, number, number];
+    }
+
+    export type ErrorAction = "TLE" | "WA" | "MLE" | "RE" | "ERR";
+
+    export type GameEndingLog = HuGameResult | DrawGameResult | ErrorGameResult;
+
+    export interface ErrorGameResult extends GameResultBase {
+        action: ErrorAction;
+        player: number;
     }
 }
 
 type DisplayLog =
     | DisplayLog.Init
-    | (
-          | DisplayLog.Deal
-          | DisplayLog.Draw
-          | DisplayLog.Play
-          | DisplayLog.Chi
-          | DisplayLog.Peng
-          | DisplayLog.Gang
-          | DisplayLog.Lizhi
-          | DisplayLog.HuGameResult
-          | DisplayLog.HuangGameResult) &
-          DisplayLog.Base;
+    | DisplayLog.Deal
+    | DisplayLog.Draw
+    | DisplayLog.Play
+    | DisplayLog.Chi
+    | DisplayLog.Peng
+    | DisplayLog.Gang
+    | DisplayLog.BuGang
+    | DisplayLog.Lizhi
+    | DisplayLog.HuGameResult
+    | DisplayLog.DrawGameResult
+    | DisplayLog.ErrorGameResult;
+
+interface RequestLog {
+    state: string;
+    validact: string | null;
+}

@@ -354,8 +354,13 @@ button:hover {
     padding: 0 1em;
 }
 
-.game-result .deck .tile:last-child {
-    margin-left: 3em;
+.game-result .deck .group {
+    margin-left: 1em;
+    display: inline-block;
+}
+
+.game-result .deck .group:first-child {
+    margin-left: 0;
 }
 
 .game-result .fan,
@@ -412,7 +417,7 @@ button:hover {
 
 #spectatorToolbar {
     position: fixed;
-    bottom: 1em;
+    bottom: 2em;
     left: 0;
     right: 0;
     text-align: center;

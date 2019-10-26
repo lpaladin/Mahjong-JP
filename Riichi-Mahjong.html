@@ -1,182 +1,203 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta charset="utf-8" />
-    <title>F**k Mahjong</title>
-    <style>
-        body {
-            font-size: 0.7em;
-        }
-
-        #loadingContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: black;
-        }
-
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-        }
-
-        #loading .entry {
-            margin: 1em;
-        }
-
-        #loading .status {
-            margin-left: 1em;
-        }
-
-        #loading .status.running {
-            margin-left: 1em;
-            color: yellow;
-        }
-
-        #loading .status.finished {
-            color: lightgreen;
-        }
-
-        #loading .error {
-            color: lightcoral;
-        }
-    </style>
-    <script src="player_api.js"></script>
-    <script>
-        if (window.parent === window) {
-            // 调试环境下先'''同步'''加载一个TweenMax
-            document.write('<script src="node_modules/gsap/src/minified/TweenMax.min.js"><\/script>');
-        } else {
-            infoProvider.v2.setMinSize(0, 600);
-            infoProvider.v2.setSeekCallbackSuppressable();
-        }
-    </script>
-</head>
-
-<body>
-    <div id="game">
-        <div id="background"></div>
-        <canvas id="mainCanvas"></canvas>
-        <div id="cssRenderOverlay"></div>
-        <div id="doraIndicators"></div>
-        <div id="spectatorToolbar"></div>
-    </div>
-    <div id="gameResultBackground"></div>
-    <div id="logs"></div>
-    <div id="loadingContainer">
-        <div id="loading"></div>
-    </div>
-
-    <script>
-        let loadingPromise = Promise.resolve();
-        const loadingDiv = document.getElementById('loading');
-        const Loader = window.Loader = {
-            addInitializable(initializable) {
-                const loadingEntry = document.createElement('div');
-                loadingEntry.className = "entry";
-                const progressBar = document.createElement('progress');
-                progressBar.min = 0;
-                progressBar.value = 0;
-                const status = document.createElement('span');
-                status.className = "status";
-                status.textContent = "<步骤尚未开始>";
-                loadingEntry.appendChild(progressBar);
-                loadingEntry.appendChild(status);
-                loadingDiv.appendChild(loadingEntry);
-
-                let progress = 0;
-
-                loadingPromise = loadingPromise.then(() => {
-                    const info = initializable(() => setTimeout(() => {
-                        const newProgress = progressBar.value = ++progress;
-                        if (newProgress == info.totalProgress) {
-                            status.textContent = info.description + "完成";
-                            status.className = "status finished";
-                        } else {
-                            status.textContent = info.description + " (" + newProgress + " / " + info.totalProgress + ")";
-                        }
-                    }, 1));
-                    progressBar.max = info.totalProgress;
-                    progressBar.removeAttribute("value");
-                    status.className = "status running";
-                    status.textContent = info.description + " (0 / " + info.totalProgress + ")";
-                    return info.finishPromise.catch(function () {
-                        const textDiv = document.createElement("div");
-                        textDiv.className = "error";
-                        textDiv.textContent = info.description + "失败：" +
-                            Array.from(arguments).map(arg => (arg && arg.stack) || arg).join('\n');
-                        loadingDiv.appendChild(textDiv);
-                        infoProvider.v2.setRequestCallback(() => undefined);
-                        infoProvider.v2.setDisplayCallback(() => undefined);
-                        infoProvider.v2.notifyInitComplete();
-                        return Promise.reject();
-                    });
-                });
-            },
-            loadScripts(scripts, description) {
-                return addProgress => {
-                    const promises = scripts.map(
-                        src =>
-                            new Promise((ac, rej) => {
-                                const script = document.createElement("script");
-                                script.src = src;
-                                script.addEventListener("load", () => {
-                                    addProgress();
-                                    ac();
-                                });
-                                script.addEventListener("error", rej);
-                                document.body.appendChild(script);
-                            })
-                    );
-                    return {
-                        totalProgress: scripts.length,
-                        description: description,
-                        finishPromise: Promise.all(promises)
-                    };
-                };
-            },
-            loadCSS(addProgress) {
-                return {
-                    totalProgress: 1,
-                    description: "加载样式",
-                    finishPromise: new Promise((ac, rej) => {
-                        const css = document.createElement("link");
-                        css.rel = "stylesheet";
-                        css.href = "Mahjong-JP/app.css"
-                        css.addEventListener("load", () => {
-                            addProgress();
-                            ac();
-                        });
-                        css.addEventListener("error", rej);
-                        document.body.appendChild(css);
-                    })
-                };
+    <head>
+        <meta charset="utf-8" />
+        <title>F**k Mahjong</title>
+        <style>
+            body {
+                font-size: 0.7em;
             }
-        };
 
-        Loader.addInitializable(Loader.loadScripts([
-            "Mahjong-JP/three.min.js",
-        ], "加载图形库"));
+            #loadingContainer {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: black;
+            }
 
-        Loader.addInitializable(Loader.loadScripts([
-            "Mahjong-JP/postprocessing.min.js",
-            "Mahjong-JP/CSS3DRenderer.js"
-        ], "加载后期处理和 CSS 渲染器"));
+            #loading {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-weight: bold;
+            }
 
-        Loader.addInitializable(Loader.loadCSS);
+            #loading .entry {
+                margin: 0.5em 0;
+                padding: 0.5em 1em;
+                transition: background-color 0.3s;
+            }
 
-        Loader.addInitializable(Loader.loadScripts([
-            "Mahjong-JP/app.js"
-        ], "加载主程序"));
-    </script>
-</body>
+            #loading .entry.active {
+                background-color: white;
+            }
 
+            #loading .status {
+                margin-left: 1em;
+            }
+
+            #loading .status.running {
+                margin-left: 1em;
+                color: darkblue;
+            }
+
+            #loading .status.finished {
+                color: lightgreen;
+            }
+
+            #loading .error {
+                color: darkorchid;
+            }
+
+            #loadingContainer .version {
+                position: absolute;
+                right: 1em;
+                bottom: 1em;
+                font-weight: normal;
+                text-align: right;
+                font-size: 1.2em;
+                color: gray;
+            }
+        </style>
+        <script src="player_api.js"></script>
+        <script>
+            if (window.parent === window) {
+                // 调试环境下先'''同步'''加载一个TweenMax
+                document.write('<script src="node_modules/gsap/src/minified/TweenMax.min.js"><\/script>');
+            } else {
+                infoProvider.v2.setMinSize(0, 600);
+                infoProvider.v2.setSeekCallbackSuppressable();
+            }
+        </script>
+    </head>
+
+    <body>
+        <div id="game">
+            <div id="background"></div>
+            <canvas id="mainCanvas"></canvas>
+            <div id="cssRenderOverlay"></div>
+            <div id="doraIndicators"></div>
+            <div id="spectatorToolbar"></div>
+        </div>
+        <div id="gameResultBackground"></div>
+        <div id="logs"></div>
+        <div id="loadingContainer">
+            <div id="loading"></div>
+            <div class="version">
+                Botzone 立直麻将展示界面<br />
+                by Zhouhy
+            </div>
+        </div>
+
+        <script>
+            let loadingPromise = Promise.resolve();
+            const loadingDiv = document.getElementById("loading");
+            const Loader = (window.Loader = {
+                addInitializable(initializable) {
+                    const loadingEntry = document.createElement("div");
+                    loadingEntry.className = "entry";
+                    const progressBar = document.createElement("progress");
+                    progressBar.min = 0;
+                    progressBar.value = 0;
+                    const status = document.createElement("span");
+                    status.className = "status";
+                    status.textContent = "<步骤尚未开始>";
+                    loadingEntry.appendChild(progressBar);
+                    loadingEntry.appendChild(status);
+                    loadingDiv.appendChild(loadingEntry);
+
+                    let progress = 0;
+
+                    loadingPromise = loadingPromise.then(() => {
+                        const info = initializable(() =>
+                            setTimeout(() => {
+                                const newProgress = (progressBar.value = ++progress);
+                                if (newProgress == info.totalProgress) {
+                                    status.textContent = info.description + "完成";
+                                    status.className = "status finished";
+                                    loadingEntry.className = "entry";
+                                } else {
+                                    status.textContent = info.description + " (" + newProgress + " / " + info.totalProgress + ")";
+                                }
+                            }, 1)
+                        );
+                        progressBar.max = info.totalProgress;
+                        progressBar.removeAttribute("value");
+                        status.className = "status running";
+                        loadingEntry.className = "entry active";
+                        status.textContent = info.description + " (0 / " + info.totalProgress + ")";
+                        return info.finishPromise.catch(function() {
+                            const textDiv = document.createElement("div");
+                            textDiv.className = "error";
+                            textDiv.textContent =
+                                info.description +
+                                "失败：" +
+                                Array.from(arguments)
+                                    .map(arg => (arg && arg.stack) || arg)
+                                    .join("\n");
+                            loadingDiv.appendChild(textDiv);
+                            infoProvider.v2.setRequestCallback(() => undefined);
+                            infoProvider.v2.setDisplayCallback(() => undefined);
+                            infoProvider.v2.notifyInitComplete();
+                            return Promise.reject();
+                        });
+                    });
+                },
+                loadScripts(scripts, description) {
+                    return addProgress => {
+                        const promises = scripts.map(
+                            src =>
+                                new Promise((ac, rej) => {
+                                    const script = document.createElement("script");
+                                    script.src = src;
+                                    script.addEventListener("load", () => {
+                                        addProgress();
+                                        ac();
+                                    });
+                                    script.addEventListener("error", rej);
+                                    document.body.appendChild(script);
+                                })
+                        );
+                        return {
+                            totalProgress: scripts.length,
+                            description: description,
+                            finishPromise: Promise.all(promises)
+                        };
+                    };
+                },
+                loadCSS(addProgress) {
+                    return {
+                        totalProgress: 1,
+                        description: "加载样式",
+                        finishPromise: new Promise((ac, rej) => {
+                            const css = document.createElement("link");
+                            css.rel = "stylesheet";
+                            css.href = "Mahjong-JP/app.css";
+                            css.addEventListener("load", () => {
+                                addProgress();
+                                ac();
+                            });
+                            css.addEventListener("error", rej);
+                            document.body.appendChild(css);
+                        })
+                    };
+                }
+            });
+
+            Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/three.min.js"], "加载图形库"));
+
+            Loader.addInitializable(
+                Loader.loadScripts(["Mahjong-JP/postprocessing.min.js", "Mahjong-JP/CSS3DRenderer.js"], "加载后期处理和 CSS 渲染器")
+            );
+
+            Loader.addInitializable(Loader.loadCSS);
+
+            Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/app.js"], "加载主程序"));
+        </script>
+    </body>
 </html>

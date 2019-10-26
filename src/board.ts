@@ -79,15 +79,15 @@ class Deck extends THREE.Group {
     }
 
     public getCombinationsInHand(conditions: HandCombCondition[], includeDrawn = false): Tile[][] {
-        function* getCombinationsInHand(hand: Tile[], conditions: HandCombCondition[]): Generator<Tile[], void> {
+        function* getCombinationsInHand(handIdx: number, hand: Tile[], conditions: HandCombCondition[]) {
             if (conditions.length === 0) {
                 yield [];
                 return;
             }
-            for (let i = 0; i < hand.length; i++) {
+            for (let i = handIdx; i < hand.length; i++) {
                 if (conditions[0](hand[i].tileID)) {
                     const [tile] = hand.splice(i, 1);
-                    for (const comb of getCombinationsInHand(hand, conditions.slice(1))) {
+                    for (const comb of getCombinationsInHand(i, hand, conditions.slice(1))) {
                         yield [tile, ...comb];
                     }
                     hand.splice(i, 0, tile);
@@ -98,7 +98,7 @@ class Deck extends THREE.Group {
         if (this.drawnTile && includeDrawn) {
             candidates.push(this.drawnTile);
         }
-        return [...getCombinationsInHand(candidates, conditions)];
+        return [...getCombinationsInHand(0, candidates, conditions)];
     }
 
     public getTilesByIds(tileIDs: Mahjong.TileID[]): Tile[] | null {
@@ -190,7 +190,7 @@ class River extends THREE.Group {
             { ...targetPos, immediateRender: false },
             "-=0.2"
         );
-        tl.fromTo(newTile.rotation, 0.2, { x: 0 }, { x: -Util.RAD90, immediateRender: false }, "-=0.2");
+        tl.fromTo(newTile.exposedRotation, 0.2, { x: 0 }, { x: -Util.RAD90, immediateRender: false }, "-=0.2");
         tl.add(Util.BiDirectionConstantSet(newTile, "shaking", true));
         return tl;
     }
@@ -241,7 +241,7 @@ class River extends THREE.Group {
                     ease: Expo.easeIn
                 }
             );
-            tl.fromTo(latestTile.rotation, 0.45, { z: 0 }, { z: Util.RAD90 * 5, immediateRender: false }, 0);
+            tl.fromTo(latestTile.exposedRotation, 0.45, { z: 0 }, { z: Util.RAD90 * 5, immediateRender: false }, 0);
             tl.call(game.cameraShake, [0.5, 6, 0.2], game);
             this.nextXOffset = this.riverTiles.length % River.LINE_SIZE ? this.nextXOffset + Tile.HEIGHT : 0;
         } else {
@@ -270,6 +270,7 @@ interface OpenTileStack {
     tiles: Tile[];
     type: OpenTileType | "BUGANG";
     newTile: Tile;
+    newTileTargetX: number;
 }
 
 class OpenTiles extends THREE.Group {
@@ -283,9 +284,9 @@ class OpenTiles extends THREE.Group {
             if (s.type == "PENG" && Mahjong.eq(s.newTile.tileID, newTileID)) {
                 const tl = new TimelineMax();
                 const newTile = new Tile(newTileID, -1);
-                newTile.position.x = s.newTile.position.x;
+                newTile.position.x = s.newTileTargetX;
                 newTile.position.y = s.newTile.position.y;
-                newTile.rotation.copy(s.newTile.rotation);
+                newTile.exposedRotation.copy(s.newTile.exposedRotation);
                 this.add(newTile);
                 newTile.open = true;
                 const z = s.newTile.position.z - Tile.WIDTH;
@@ -294,18 +295,13 @@ class OpenTiles extends THREE.Group {
                 s.tiles.push(s.newTile);
                 s.newTile = newTile;
                 s.type = "BUGANG";
-                return;
+                return tl;
             }
         }
         Util.Assert`找不到可以补杠的牌(${false})`;
     }
 
-    public addStack(
-        type: OpenTileType,
-        existingTilesID: Mahjong.TileID[],
-        newTileID: Mahjong.TileID = null,
-        fromPlayerRelative = 0
-    ) {
+    public addStack(type: OpenTileType, existingTilesID: Mahjong.TileID[], newTileID: Mahjong.TileID = null, fromPlayerRelative = 0) {
         const tl = new TimelineMax();
         let tiles = existingTilesID.map(t => new Tile(t, -1));
         if (type == "ANGANG") {
@@ -315,26 +311,27 @@ class OpenTiles extends THREE.Group {
                 tl.fromTo(tiles[i].position, 0.2, { x: x - 1 }, { x, immediateRender: false }, 0);
                 tl.add(Util.MeshOpacityFromTo(tiles[i], 0.2, 0, 1), 0);
                 this.leftBound -= Tile.WIDTH;
-                tiles[i].rotation.x = i == 3 || i == 0 ? Util.RAD90 : -Util.RAD90;
+                tiles[i].exposedRotation.x = i == 3 || i == 0 ? Util.RAD90 : -Util.RAD90;
             }
-            this.openStacks.push({ type, tiles, newTile: null });
+            this.openStacks.push({ type, tiles, newTile: null, newTileTargetX: 0 });
             this.add(...tiles);
         } else {
             const newTile = new Tile(newTileID, -1);
             const targetTilePos = type == "DAMINGGANG" && fromPlayerRelative == 1 ? 3 : fromPlayerRelative + 1;
             tiles.splice(targetTilePos, 0, newTile);
+            let newTileX = 0;
             for (let i = tiles.length - 1; i >= 0; i--) {
                 let x: number;
                 if (i == targetTilePos) {
                     // 是要横过来的牌
-                    x = this.leftBound - Tile.HEIGHT / 2;
+                    newTileX = x = this.leftBound - Tile.HEIGHT / 2;
                     tiles[i].position.z = (Tile.HEIGHT - Tile.WIDTH) / 2;
                     this.leftBound -= Tile.HEIGHT;
-                    tiles[i].rotation.set(-Util.RAD90, 0, Util.RAD90);
+                    tiles[i].exposedRotation.set(-Util.RAD90, 0, Util.RAD90);
                 } else {
                     x = this.leftBound - Tile.WIDTH / 2;
                     this.leftBound -= Tile.WIDTH;
-                    tiles[i].rotation.x = -Util.RAD90;
+                    tiles[i].exposedRotation.x = -Util.RAD90;
                 }
                 tl.fromTo(tiles[i].position, 0.2, { x: x - 1 }, { x, immediateRender: false }, 0);
                 tl.add(Util.MeshOpacityFromTo(tiles[i], 0.2, 0, 1), 0);
@@ -342,7 +339,8 @@ class OpenTiles extends THREE.Group {
             this.openStacks.push({
                 type,
                 tiles,
-                newTile
+                newTile,
+                newTileTargetX: newTileX
             });
             this.add(...tiles, newTile);
             newTile.open = true;
@@ -358,10 +356,7 @@ class PlayerArea extends THREE.Group {
     public static readonly BOARD_GAP = 0.5;
     public hoveredTile: Tile;
     public readonly deck = new Deck(this.player);
-    public readonly background = new THREE.Mesh(
-        Assets.GetBoardGeometry(),
-        new THREE.MeshLambertMaterial({ color: Colors.TileBackColor })
-    );
+    public readonly background = new THREE.Mesh(Assets.GetBoardGeometry(), new THREE.MeshLambertMaterial({ color: Colors.TileBackColor }));
     public readonly river = new River(this.player);
     public readonly openTiles = new OpenTiles();
     public readonly playerUIAnchor = new THREE.Object3D();

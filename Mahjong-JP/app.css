@@ -142,7 +142,7 @@ button:hover {
     transition: background-color 0.2s;
 }
 
-.center-info {
+.center-info-wrapper {
     height: 160px;
     width: 160px;
     font-size: 1.2em;
@@ -151,16 +151,22 @@ button:hover {
     text-align: center;
 }
 
+.center-info {
+    position: absolute;
+    width: 160px;
+    transform: translate(-50%, -50%);
+    top: 40%;
+    left: 50%;
+}
+
 .center-info > * {
-    transform-origin: top center;
-    transform: scaleY(2);
-    margin-bottom: 2em;
     color: darkgreen;
+    transform: scaleY(2);
 }
 
 .center-info hr {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
     border-bottom: 1px solid darkgreen;
 }
 

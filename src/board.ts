@@ -301,7 +301,12 @@ class OpenTiles extends THREE.Group {
         Util.Assert`找不到可以补杠的牌(${false})`;
     }
 
-    public addStack(type: OpenTileType, existingTilesID: Mahjong.TileID[], newTileID: Mahjong.TileID = null, fromPlayerRelative = 0) {
+    public addStack(
+        type: OpenTileType,
+        existingTilesID: Mahjong.TileID[],
+        newTileID: Mahjong.TileID = null,
+        fromPlayerRelative = 0
+    ) {
         const tl = new TimelineMax();
         let tiles = existingTilesID.map(t => new Tile(t, -1));
         if (type == "ANGANG") {
@@ -356,7 +361,10 @@ class PlayerArea extends THREE.Group {
     public static readonly BOARD_GAP = 0.5;
     public hoveredTile: Tile;
     public readonly deck = new Deck(this.player);
-    public readonly background = new THREE.Mesh(Assets.GetBoardGeometry(), new THREE.MeshLambertMaterial({ color: Colors.TileBackColor }));
+    public readonly background = new THREE.Mesh(
+        Assets.GetBoardGeometry(),
+        new THREE.MeshLambertMaterial({ color: Colors.TileBackColor })
+    );
     public readonly river = new River(this.player);
     public readonly openTiles = new OpenTiles();
     public readonly playerUIAnchor = new THREE.Object3D();
@@ -456,7 +464,7 @@ class CenterScreen extends THREE.Mesh {
 
     private readonly textUIAnchor = new THREE.Object3D();
     private readonly textUI = new CenterInfo();
-    public readonly textCSSObj = new THREEx.CSS3DObject(this.textUI.container);
+    public readonly textCSSObj = new THREEx.CSS3DObject(this.textUI.wrapper);
     private lizhiSticks: THREE.Mesh[] = [];
 
     private _roundWind = 0;

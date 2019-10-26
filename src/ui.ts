@@ -13,10 +13,12 @@ const UI = {
 for (const id of Object.keys(UI)) UI[id] = document.getElementById(id);
 
 class CenterInfo {
+    private static readonly WRAPPER_CLASSNAME = "center-info-wrapper";
     private static readonly CONTAINER_CLASSNAME = "center-info";
     private static readonly ROUNDWIND_CLASSNAME = "round-wind";
     private static readonly TILELEFT_CLASSNAME = "tile-left";
-    public readonly container: HTMLDivElement;
+    public readonly wrapper: HTMLDivElement;
+    private _container: HTMLDivElement;
     private _roundWind: HTMLDivElement;
     private _tileLeft: HTMLDivElement;
 
@@ -35,15 +37,18 @@ class CenterInfo {
     }
 
     constructor() {
-        this.container = document.createElement("div");
-        this.container.className = CenterInfo.CONTAINER_CLASSNAME;
+        this.wrapper = document.createElement("div");
+        this.wrapper.className = CenterInfo.WRAPPER_CLASSNAME;
+        this._container = document.createElement("div");
+        this._container.className = CenterInfo.CONTAINER_CLASSNAME;
         this._roundWind = document.createElement("div");
         this._roundWind.className = CenterInfo.ROUNDWIND_CLASSNAME;
         this._tileLeft = document.createElement("div");
         this._tileLeft.className = CenterInfo.TILELEFT_CLASSNAME;
-        this.container.appendChild(this._roundWind);
-        this.container.appendChild(document.createElement("hr"));
-        this.container.appendChild(this._tileLeft);
+        this._container.appendChild(this._roundWind);
+        this._container.appendChild(document.createElement("hr"));
+        this._container.appendChild(this._tileLeft);
+        this.wrapper.appendChild(this._container);
     }
 }
 
@@ -384,7 +389,7 @@ class GameResultView {
         tl.add(Util.BiDirectionConstantSet(UI.game, "className", GameResultView.BLUR_CLASSNAME));
         tl.add(Util.BiDirectionConstantSet(UI.gameResultBackground, "className", GameResultView.ACTIVE_CLASSNAME));
         tl.set(gameResultView, { display: "block", immediateRender: false }, 1);
-        tl.fromTo(gameResultView, 0.5, { y: "50vh" }, { y: 0, immediateRender: false, ease: Back.easeOut });
+        tl.fromTo(gameResultView, 0.5, { y: 300 }, { y: 0, immediateRender: false, ease: Back.easeOut });
         tl.from(gameResultView.querySelector("header"), 0.1, { y: "-100%", opacity: 0 });
         for (const element of gameResultView.querySelectorAll(".result")) {
             tl.from(element.querySelector(".result-upper > .player"), 0.1, { opacity: 0 });

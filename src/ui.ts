@@ -217,7 +217,6 @@ class DoraIndicators {
     public static readonly DORA_COUNT = 5;
     private static readonly NORMAL_CONTAINER_CLASSNAME = "normal";
     private static readonly HIDDEN_CONTAINER_CLASSNAME = "hidden";
-    private static readonly HIDDEN_ACTIVE_CONTAINER_CLASSNAME = "hidden active";
     private static readonly TILE_CLASSNAME = "tile";
     public static readonly OPEN_TILE_CLASSNAME = "tile open";
     public static readonly OPEN_DORA_TILE_CLASSNAME = "tile open dora";
@@ -263,7 +262,7 @@ class DoraIndicators {
         }
         this.hiddenContainer = document.createElement("div");
         this.hiddenContainer.className = DoraIndicators.HIDDEN_CONTAINER_CLASSNAME;
-        this.hiddenContainer.innerHTML = "<header><hr /><span>里宝牌</span><hr /></header>";
+        this.hiddenContainer.innerHTML = "<header><hr /><span>里宝牌指示牌</span><hr /></header>";
         UI.doraIndicators.appendChild(this.hiddenContainer);
         for (let i = 0; i < DoraIndicators.DORA_COUNT; i++) {
             const tile = document.createElement("div");
@@ -296,10 +295,19 @@ class DoraIndicators {
             display: "block",
             immediateRender: false
         });
-        tl.set(this.hiddenContainer, {
-            className: DoraIndicators.HIDDEN_ACTIVE_CONTAINER_CLASSNAME,
-            immediateRender: false
-        });
+        tl.fromTo(
+            this.hiddenContainer,
+            0.3,
+            {
+                y: "-100%",
+                opacity: 0
+            },
+            {
+                y: "0%",
+                opacity: 1,
+                immediateRender: false
+            }
+        );
         return tl;
     }
 }
@@ -397,7 +405,9 @@ class GameResultView {
                                 .map(t => {
                                     const isDora =
                                         t[1] === "0" ||
-                                        game.doraIndicators.tileIDs.some(id => Mahjong.getIndicatedDoraID(id) === t);
+                                        [...game.doraIndicators.tileIDs, ...game.doraIndicators.hiddenTileIDs].some(
+                                            id => Mahjong.getIndicatedDoraID(id) === t
+                                        );
                                     return `<div class="${
                                         isDora ? DoraIndicators.OPEN_DORA_TILE_CLASSNAME : DoraIndicators.OPEN_TILE_CLASSNAME
                                     }">

@@ -203,18 +203,10 @@ button:hover {
     display: none;
     position: absolute;
     top: 100%;
-    left: -1px;
-    right: -1px;
+    left: 0;
+    right: 0;
     background-color: rgb(92, 92, 92);
     padding: 0.1em 0.3em;
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: opacity 0.5s, transform 0.5s;
-}
-
-#doraIndicators .hidden.active {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 #doraIndicators .hidden header {

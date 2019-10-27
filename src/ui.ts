@@ -217,6 +217,7 @@ class DoraIndicators {
     public static readonly DORA_COUNT = 5;
     private static readonly TILE_CLASSNAME = "tile";
     public static readonly OPEN_TILE_CLASSNAME = "tile open";
+    public static readonly OPEN_DORA_TILE_CLASSNAME = "tile open dora";
     private tiles: HTMLDivElement[] = [];
     public readonly tileIDs: Mahjong.TileID[] = [];
     private _currentTileIDs: Mahjong.TileID[] = [];
@@ -354,12 +355,16 @@ class GameResultView {
                     .map(
                         tileGroup =>
                             `<div class="group">${tileGroup
-                                .map(
-                                    t =>
-                                        `<div class="${DoraIndicators.OPEN_TILE_CLASSNAME}">
-                                            <img src="${Assets.loadedImages[t].src}" />
-                                        </div>`
-                                )
+                                .map(t => {
+                                    const isDora =
+                                        t[1] === "0" ||
+                                        game.doraIndicators.tileIDs.some(id => Mahjong.getIndicatedDoraID(id) === t);
+                                    return `<div class="${
+                                        isDora ? DoraIndicators.OPEN_DORA_TILE_CLASSNAME : DoraIndicators.OPEN_TILE_CLASSNAME
+                                    }">
+                                        <img src="${Assets.loadedImages[t].src}" />
+                                    </div>`;
+                                })
                                 .join("")}</div>`
                     )
                     .join("")}

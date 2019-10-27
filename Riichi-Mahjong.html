@@ -179,7 +179,7 @@
                     finishPromise: new Promise((ac, rej) => {
                         const css = document.createElement("link");
                         css.rel = "stylesheet";
-                        css.href = "Mahjong-JP/app.css";
+                        css.href = "Mahjong-JP/app.css?191027";
                         css.addEventListener("load", () => {
                             addProgress();
                             ac();
@@ -199,7 +199,7 @@
 
         Loader.addInitializable(Loader.loadCSS);
 
-        Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/app.js?!"], "加载主程序"));
+        Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/app.js?191027"], "加载主程序"));
     </script>
 </body>
 

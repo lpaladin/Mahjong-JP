@@ -211,6 +211,10 @@ button:hover {
     box-shadow: 3px -4px #0c8f5d;
 }
 
+.tile.open.dora {
+    animation: show-tile 0.3s, dora-tile 1s infinite alternate;
+}
+
 .tile img {
     position: absolute;
     top: 50%;
@@ -223,6 +227,16 @@ button:hover {
 .tile.open img {
     transition: visibility 0s 0.09s;
     visibility: visible;
+}
+
+@keyframes dora-tile {
+    0% {
+        box-shadow: 3px -4px #0c8f5d, 3px -4px 2px 2px white;
+    }
+
+    100% {
+        box-shadow: 3px -4px #0c8f5d, 3px -4px 2px 2px rgba(255, 255, 255, 0.342);
+    }
 }
 
 @keyframes show-tile {

@@ -88,6 +88,7 @@ declare namespace DisplayLog {
     }
 
     export interface HuGameResult extends ForEachPlayer<PlayerResult | null>, GameResultBase {
+        hiddenDoraIndicators?: string;
         action: "HU";
     }
 

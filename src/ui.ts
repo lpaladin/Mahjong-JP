@@ -215,10 +215,17 @@ class PlayerUI implements Tickable {
 
 class DoraIndicators {
     public static readonly DORA_COUNT = 5;
+    private static readonly NORMAL_CONTAINER_CLASSNAME = "normal";
+    private static readonly HIDDEN_CONTAINER_CLASSNAME = "hidden";
+    private static readonly HIDDEN_ACTIVE_CONTAINER_CLASSNAME = "hidden active";
     private static readonly TILE_CLASSNAME = "tile";
     public static readonly OPEN_TILE_CLASSNAME = "tile open";
     public static readonly OPEN_DORA_TILE_CLASSNAME = "tile open dora";
+    private normalContainer: HTMLDivElement;
+    private hiddenContainer: HTMLDivElement;
     private tiles: HTMLDivElement[] = [];
+    private hiddenTiles: HTMLDivElement[] = [];
+    public readonly hiddenTileIDs: Mahjong.TileID[] = [];
     public readonly tileIDs: Mahjong.TileID[] = [];
     private _currentTileIDs: Mahjong.TileID[] = [];
     public get currentTileIDs() {
@@ -245,11 +252,24 @@ class DoraIndicators {
     }
 
     constructor() {
+        this.normalContainer = document.createElement("div");
+        this.normalContainer.className = DoraIndicators.NORMAL_CONTAINER_CLASSNAME;
+        UI.doraIndicators.appendChild(this.normalContainer);
         for (let i = 0; i < DoraIndicators.DORA_COUNT; i++) {
             const tile = document.createElement("div");
             tile.className = DoraIndicators.TILE_CLASSNAME;
-            UI.doraIndicators.appendChild(tile);
+            this.normalContainer.appendChild(tile);
             this.tiles.push(tile);
+        }
+        this.hiddenContainer = document.createElement("div");
+        this.hiddenContainer.className = DoraIndicators.HIDDEN_CONTAINER_CLASSNAME;
+        this.hiddenContainer.innerHTML = "<header><hr /><span>里宝牌</span><hr /></header>";
+        UI.doraIndicators.appendChild(this.hiddenContainer);
+        for (let i = 0; i < DoraIndicators.DORA_COUNT; i++) {
+            const tile = document.createElement("div");
+            tile.className = DoraIndicators.TILE_CLASSNAME;
+            this.hiddenContainer.appendChild(tile);
+            this.hiddenTiles.push(tile);
         }
     }
 
@@ -261,6 +281,25 @@ class DoraIndicators {
         const tl = new TimelineMax();
         tl.add(Util.BiDirectionConstantSet(tile, "className", DoraIndicators.OPEN_TILE_CLASSNAME));
         tl.add(Util.BiDirectionConstantSet(this, "currentTileIDs", [...this.tileIDs]));
+        return tl;
+    }
+
+    public revealHidden(tileIDs: Mahjong.TileID[]) {
+        for (let i = 0; i < tileIDs.length; i++) {
+            const tile = this.hiddenTiles[i];
+            tile.className = DoraIndicators.OPEN_TILE_CLASSNAME;
+            tile.appendChild(Assets.loadedImages[tileIDs[i]].cloneNode());
+            this.hiddenTileIDs.push(tileIDs[i]);
+        }
+        const tl = new TimelineMax();
+        tl.set(this.hiddenContainer.style, {
+            display: "block",
+            immediateRender: false
+        });
+        tl.set(this.hiddenContainer, {
+            className: DoraIndicators.HIDDEN_ACTIVE_CONTAINER_CLASSNAME,
+            immediateRender: false
+        });
         return tl;
     }
 }

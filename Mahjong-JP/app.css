@@ -89,17 +89,15 @@ body.landscape {
     top: 0;
 }
 
-#game .player > * {
-    display: inline-block;
-}
-
 #game .player .info {
     background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
     position: relative;
-    display: flex;
+    transform: translateX(-50%);
+    display: inline-flex;
     align-items: center;
+    margin-bottom: 1em;
     transition: background-color 0.2s, border-color 0.2s;
 }
 
@@ -127,12 +125,13 @@ body.landscape {
 }
 
 .actions {
-    text-align: center;
+    transform: translateX(-50%);
+    max-width: 50%;
 }
 
 button {
     padding: 0.3em 1em;
-    margin: 0.8em 0.5em;
+    margin: 0.2em 0.5em;
     background-color: rgba(255, 255, 255, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
@@ -189,10 +188,49 @@ button:hover {
     pointer-events: none;
     top: 1em;
     right: 1em;
+}
+
+#doraIndicators .normal {
+    position: relative;
     background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
     padding: 0.1em 0.3em;
+    z-index: 1;
+}
+
+#doraIndicators .hidden {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    right: -1px;
+    background-color: rgb(92, 92, 92);
+    padding: 0.1em 0.3em;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+#doraIndicators .hidden.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#doraIndicators .hidden header {
+    display: flex;
+    align-items: center;
+}
+
+#doraIndicators .hidden header hr {
+    flex-grow: 1;
+    border: 1px solid rgb(255, 255, 255);
+    border-bottom-style: none;
+}
+
+#doraIndicators .hidden header span {
+    padding: 0.5em;
+    color: white;
 }
 
 .tile {

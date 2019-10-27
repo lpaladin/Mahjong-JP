@@ -330,6 +330,7 @@ class Game implements Tickable {
                                 t => Mahjong.eq(t, log.tile)
                             ])[0] as [Tile, Tile, Tile]
                         });
+                        this.lastPlayedPlayer = -1;
                         break;
                     case "BUGANG":
                         newActions.push({
@@ -416,6 +417,10 @@ class Game implements Tickable {
                     });
                 }
             }
+            if ("hiddenDoraIndicators" in log) {
+                const hiddenDoraIndicators = log.hiddenDoraIndicators.split(" ");
+                tl.add(this.doraIndicators.revealHidden(hiddenDoraIndicators as Mahjong.TileID[]), "+=0.5");
+            }
             tl.add(this.gameFinish(results), "+=0.5");
         } else {
             const results: GameResult[] = [];
@@ -445,30 +450,6 @@ class Game implements Tickable {
         }
         return tl;
     };
-
-    // public nextPlayer(setTo = -1) {
-    //     if (setTo != -1) this.currPlayerID = setTo;
-    //     else if (++this.currPlayerID == 4) {
-    //         this.round++;
-    //         this.currPlayerID = 0;
-    //     }
-    //     const player = this.currPlayer;
-    //     const tl = new TimelineMax();
-    //     tl.call((r, n) => Util.PrimaryLog`当前是第${r + 1}巡，${n}的回合`, [this.round, this.players[this.currPlayerID].info]);
-    //     if (setTo == -1) tl.add(player.board.deck.drawTile(Util.RandInArray(Mahjong.TileIDs)));
-    //     if (this.currPlayerID == infoProvider.getPlayerID()) {
-    //         player.interactable = true;
-    //         if (setTo == -1) player.ui.setActionButtons(Mahjong.testAvailableActions(player));
-    //     } else {
-    //         const newTile = Util.RandInArray(player.board.deck.handTiles);
-    //         tl.add(player.playTile(newTile), "+=1");
-    //         const myActions = Mahjong.testAvailableActions(this.playerMe, newTile.tileID, this.currPlayerID);
-    //         myActions.push({ type: "PASS", from: this.currPlayerID });
-    //         if (myActions.length > 1) this.playerMe.ui.setActionButtons(myActions);
-    //         else tl.add(this.playerMe.doAction(myActions[0]));
-    //     }
-    //     return tl;
-    // }
 
     public focusAndWave(target: THREE.Mesh) {
         const lastCameraRotation = Util.ToPlain(this.camera.rotation);

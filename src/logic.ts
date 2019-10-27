@@ -179,18 +179,24 @@ namespace Mahjong {
                     );
                     break;
                 case "PENG":
-                    player.board.deck.getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)]).forEach(tiles =>
-                        actions.push({
-                            type: "PENG",
-                            from: lastPlayedPlayer,
-                            existing: tiles as [Tile, Tile],
-                            tile: lastPlayedTile
-                        })
-                    );
+                    player.board.deck
+                        .getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)])
+                        .forEach(tiles =>
+                            actions.push({
+                                type: "PENG",
+                                from: lastPlayedPlayer,
+                                existing: tiles as [Tile, Tile],
+                                tile: lastPlayedTile
+                            })
+                        );
                     break;
                 case "GANG":
                     player.board.deck
-                        .getCombinationsInHand([t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile), t => eq(t, lastPlayedTile)])
+                        .getCombinationsInHand([
+                            t => eq(t, lastPlayedTile),
+                            t => eq(t, lastPlayedTile),
+                            t => eq(t, lastPlayedTile)
+                        ])
                         .forEach(tiles =>
                             actions.push({
                                 type: "DAMINGGANG",
@@ -221,17 +227,19 @@ namespace Mahjong {
                 case "BUGANG":
                     player.board.openTiles.openStacks.forEach(stack => {
                         if (stack.type === "PENG") {
-                            player.board.deck.getCombinationsInHand([t => eq(t, stack.newTile.tileID)], true).forEach(combination =>
-                                actions.push({
-                                    type: "BUGANG",
-                                    existing: combination as [Tile]
-                                })
-                            );
+                            player.board.deck
+                                .getCombinationsInHand([t => eq(t, stack.newTile.tileID)], true)
+                                .forEach(combination =>
+                                    actions.push({
+                                        type: "BUGANG",
+                                        existing: combination as [Tile]
+                                    })
+                                );
                         }
                     });
                     break;
                 case "LIZHI":
-                    new Set(args).forEach(arg =>
+                    new Set(args.map((t: Mahjong.TileID) => Mahjong.getLiteralID(t))).forEach(arg =>
                         player.board.deck.getCombinationsInHand([t => eq(t, arg as TileID)], true).forEach(([tile]) =>
                             actions.push({
                                 type: "LIZHI",

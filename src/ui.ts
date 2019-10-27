@@ -138,7 +138,7 @@ class PlayerUI implements Tickable {
         this._active = to;
         this.info.className = to ? PlayerUI.INFO_ACTIVE_CLASSNAME : PlayerUI.INFO_CLASSNAME;
         if (to) {
-            Util.PrimaryLog`${Util.POSITIONS[this.player.playerID]}家${this.player.info}的回合`;
+            Util.PrimaryLog`${this.player}的回合`;
         }
     }
 

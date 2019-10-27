@@ -98,11 +98,11 @@ namespace Util {
         //     });
     }
 
-    function playerInfoToHTML(x: PlayerInfo) {
-        return ` <img src="${x.imgid}" /><span>${neutralize(x.name)}</span>`;
+    function playerInfoToHTML(x: Player) {
+        return `<span>${POSITIONS[x.playerID]}</span>家 <img src="${x.info.imgid}" /><span>${neutralize(x.info.name)}</span>`;
     }
 
-    function logComposeHTML(parts: TemplateStringsArray, args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
+    function logComposeHTML(parts: TemplateStringsArray, args: Array<number | string | Player | Array<Player>>) {
         return parts.reduce((prev, curr, i) => {
             const arg = args[i - 1];
             if (Array.isArray(arg)) {
@@ -115,7 +115,7 @@ namespace Util {
         });
     }
 
-    export function Log(parts: TemplateStringsArray, ...args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
+    export function Log(parts: TemplateStringsArray, ...args: Array<number | string | Player | Array<Player>>) {
         const newChild = document.createElement("div");
         newChild.innerHTML = logComposeHTML(parts, args);
         UI.logs.appendChild(newChild);
@@ -124,7 +124,7 @@ namespace Util {
         tl.to(newChild, 0.1, { height: 0, onComplete: () => UI.logs.removeChild(newChild) }, 2);
     }
 
-    export function PrimaryLog(parts: TemplateStringsArray, ...args: Array<number | string | PlayerInfo | Array<PlayerInfo>>) {
+    export function PrimaryLog(parts: TemplateStringsArray, ...args: Array<number | string | Player | Array<Player>>) {
         const newChild = document.createElement("div");
         newChild.className = "primary";
         newChild.innerHTML = logComposeHTML(parts, args);

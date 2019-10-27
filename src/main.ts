@@ -552,9 +552,9 @@ class Game implements Tickable {
         if (results.every(r => r.type === "DRAW")) {
             tl.call(() => Util.PrimaryLog`本局游戏结束，流局`);
         } else if (results.every(r => r.type === "HU" || r.type === "ZIMO")) {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player.info)}胡了`);
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}胡了`);
         } else {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player.info)}出错`);
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}出错`);
         }
         tl.add(game.gameResultView.setResult(results));
         return tl;

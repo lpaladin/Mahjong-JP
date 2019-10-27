@@ -38,16 +38,19 @@ body.landscape {
 }
 
 #logs img {
-    height: 1em;
-    width: 1em;
+    height: 1.6em;
+    width: 1.6em;
+    vertical-align: top;
 }
 
 #logs > * {
-    padding: 0.1em 0.5em;
+    padding: 0 0.5em;
+    height: 1.6em;
+    line-height: 1.6em;
     overflow: hidden;
     background-image: linear-gradient(to right, skyblue, transparent 50%);
     color: white;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 #logs > .primary {

@@ -125,9 +125,9 @@ class Deck extends THREE.Group {
         tl.add(Util.MeshOpacityFromTo(t, 0.2, 0, 1));
         tl.call(() => {
             if (this.player.playerID === game.viewPoint) {
-                Util.Log`${this.player.info}摸到了一张${Mahjong.tileInfo[tileID].chnName}`;
+                Util.Log`${this.player}摸到了一张${Mahjong.tileInfo[tileID].chnName}`;
             } else {
-                Util.Log`${this.player.info}摸了一张牌`;
+                Util.Log`${this.player}摸了一张牌`;
             }
         });
         return tl;

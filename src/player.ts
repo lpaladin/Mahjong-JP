@@ -44,7 +44,9 @@ class Player implements Tickable {
             if ("from" in action) {
                 tl.call(
                     () =>
-                        Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了${game.players[action.from].info}的${Mahjong.tileInfo[tileId].chnName}`,
+                        Util.Log`${this}${Mahjong.actionInfo[action.type].chnName}了${game.players[action.from]}的${
+                            Mahjong.tileInfo[tileId].chnName
+                        }`,
                     null,
                     null,
                     1
@@ -55,10 +57,11 @@ class Player implements Tickable {
             } else {
                 if (action.type !== "DRAW") {
                     if (action.type === "LIZHI") {
-                        tl.call(() => Util.Log`${this.info}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
+                        tl.call(() => Util.Log`${this}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
                     } else {
                         tl.call(
-                            () => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            () =>
+                                Util.Log`${this}${Mahjong.actionInfo[action.type].chnName}了一张${Mahjong.tileInfo[tileId].chnName}`,
                             null,
                             null,
                             1
@@ -67,7 +70,7 @@ class Player implements Tickable {
                 }
             }
         } else {
-            tl.call(() => Util.Log`${this.info}${Mahjong.actionInfo[action.type].chnName}了`, null, null, 1);
+            tl.call(() => Util.Log`${this}${Mahjong.actionInfo[action.type].chnName}了`, null, null, 1);
         }
         if ("existing" in action)
             action.existing.forEach(t => {

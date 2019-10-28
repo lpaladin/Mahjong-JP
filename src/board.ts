@@ -72,6 +72,9 @@ class Deck extends THREE.Group {
         this.handTiles
             .sort((a, b) => a.uniqueRank - b.uniqueRank)
             .forEach((t, i) => {
+                if (t.idx === i) {
+                    return;
+                }
                 tl.to(t.position, 0.2, { x: this.getTilePosition(i), immediateRender: false }, 0);
                 t.idx = i;
             });

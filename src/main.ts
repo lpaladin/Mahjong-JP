@@ -55,6 +55,7 @@ class Game implements Tickable {
     private light: THREE.DirectionalLight;
     private currPlayerID = -1;
     private _viewPoint = -1;
+    private _openAll = false;
     private cameraKeepFocusing = false;
     private cameraUncontrolled = false;
     private landscape = false;
@@ -114,6 +115,19 @@ class Game implements Tickable {
             this.camera.lookAt(Util.ZERO3);
             this.cameraKeepFocusing = this.cameraUncontrolled = false;
         });
+        this.doraIndicators.updateAllDoras();
+    }
+
+    public get openAll() {
+        return this._openAll;
+    }
+
+    public set openAll(to: boolean) {
+        if (this._openAll === to) {
+            return;
+        }
+        this._openAll = to;
+        OverridableEuler.overridingEuler = to ? { x: -Util.RAD90 } : {};
         this.doraIndicators.updateAllDoras();
     }
 
@@ -429,7 +443,7 @@ class Game implements Tickable {
             for (const p of this.players) {
                 tl.add(
                     p.doAction({
-                        type: "NOTING"
+                        type: log.details[p.playerID]
                     }),
                     baseTime
                 );
@@ -437,7 +451,7 @@ class Game implements Tickable {
                     type: "DRAW",
                     player: p,
                     score: log.score[p.playerID],
-                    reason: "荒牌流局"
+                    reason: "荒牌流局 - " + Mahjong.actionInfo[log.details[p.playerID]].chnName
                 });
             }
             tl.add(this.gameFinish(results), "+=0.5");

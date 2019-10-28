@@ -404,7 +404,7 @@ class GameResultView {
                             `<div class="group">${tileGroup
                                 .map(t => {
                                     const isDora =
-                                        t[1] === "0" ||
+                                        Mahjong.isFixedDora(t) ||
                                         [...game.doraIndicators.tileIDs, ...game.doraIndicators.hiddenTileIDs].some(
                                             id => Mahjong.getIndicatedDoraID(id) === t
                                         );
@@ -456,6 +456,7 @@ class GameResultView {
 }
 
 class SpectatorControl implements Tickable {
+    private static ACTIVE_CLASSNAME = "active";
     private progress: HTMLInputElement;
     public set visible(to: boolean) {
         UI.spectatorToolbar.style.display = to ? "block" : "none";
@@ -470,9 +471,9 @@ class SpectatorControl implements Tickable {
         });
         toggleOpen.textContent = "亮牌";
         toggleOpen.addEventListener("click", () => {
-            const shouldOpen = toggleOpen.className !== "active";
-            OverridableEuler.overridingEuler = shouldOpen ? { x: -Util.RAD90 } : {};
-            toggleOpen.className = shouldOpen ? "active" : "";
+            const shouldOpen = !game.openAll;
+            game.openAll = shouldOpen;
+            toggleOpen.className = shouldOpen ? SpectatorControl.ACTIVE_CLASSNAME : "";
         });
         right.textContent = "下家视角";
         right.addEventListener("click", () => {

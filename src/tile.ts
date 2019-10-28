@@ -93,6 +93,8 @@ class Tile extends THREE.Mesh implements Tickable {
         [id in Mahjong.TileID]: THREE.Texture;
     } = {} as any;
 
+    private static readonly fixedDoras: Tile[] = [];
+
     private static readonly buckets: {
         [tileID in Mahjong.LiteralID]: Set<Tile>;
     } = Mahjong.tileIDs.reduce(
@@ -118,7 +120,7 @@ class Tile extends THREE.Mesh implements Tickable {
         Tile._highlightingTileID = to;
         if (to)
             for (const x of Tile.buckets[Mahjong.getLiteralID(to)]) {
-                x.highlighted = x.isVisibleToPlayer(game.viewPoint);
+                x.highlighted = x.isVisibleToUser();
             }
     }
 
@@ -144,12 +146,16 @@ class Tile extends THREE.Mesh implements Tickable {
 
     public updateDora() {
         this.outlined =
-            (this.tileID[1] === "0" || game.doraIndicators.currentTileIDs.some(id => Mahjong.getIndicatedDoraID(id) === this.tileID)) &&
-            this.isVisibleToPlayer(game.viewPoint);
+            (Mahjong.isFixedDora(this.tileID) ||
+                game.doraIndicators.currentTileIDs.some(id => Mahjong.getIndicatedDoraID(id) === this.tileID)) &&
+            this.isVisibleToUser();
     }
 
-    public static updateDoras(tileID: Mahjong.TileID) {
+    public static updateDoras(tileID: Mahjong.LiteralID) {
         for (const tile of Tile.buckets[tileID]) {
+            tile.updateDora();
+        }
+        for (const tile of Tile.fixedDoras) {
             tile.updateDora();
         }
     }
@@ -197,8 +203,8 @@ class Tile extends THREE.Mesh implements Tickable {
         this.updateDora();
     }
 
-    public isVisibleToPlayer(playerID = -1) {
-        return this.open || (playerID !== -1 && this.parent === game.players[playerID].board.deck);
+    public isVisibleToUser() {
+        return this.open || game.openAll || (game.viewPoint !== -1 && this.parent === game.players[game.viewPoint].board.deck);
     }
 
     private _shaking = false;
@@ -266,6 +272,9 @@ class Tile extends THREE.Mesh implements Tickable {
         this.exposedRotation = new OverridableEuler(this.rotation);
         this.uniqueRank = Mahjong.tileInfo[tileID].relativeRank + Tile.allocatedTileCount++ / 10000;
         Tile.buckets[Mahjong.getLiteralID(this.tileID)].add(this);
+        if (Mahjong.isFixedDora(this.tileID)) {
+            Tile.fixedDoras.push(this);
+        }
         this.updateDora();
         this.visible = false;
         this.castShadow = true;

@@ -143,6 +143,10 @@ namespace Mahjong {
         return a[0] === b[0] && b.charCodeAt(1) - a.charCodeAt(1) === 2;
     }
 
+    export function isFixedDora(t: TileID): t is "B0" | "T0" | "W0" {
+        return t[1] === "0";
+    }
+
     export function getIndicatedDoraID(indicatorID: TileID): LiteralID {
         indicatorID = getLiteralID(indicatorID);
         if (indicatorID[0] === "W" || indicatorID[0] === "T" || indicatorID[0] === "B") {

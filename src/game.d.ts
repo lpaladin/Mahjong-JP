@@ -94,6 +94,7 @@ declare namespace DisplayLog {
 
     export interface DrawGameResult extends GameResultBase {
         action: "HUANG";
+        details: ForEachPlayer<"TING" | "NOTING">;
     }
 
     export type ErrorAction = "TLE" | "WA" | "MLE" | "RE" | "ERR";

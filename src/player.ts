@@ -57,7 +57,12 @@ class Player implements Tickable {
             } else {
                 if (action.type !== "DRAW") {
                     if (action.type === "LIZHI") {
-                        tl.call(() => Util.Log`${this}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`, null, null, 1);
+                        tl.call(
+                            () => Util.Log`${this}${"立直"}并打出了一张${Mahjong.tileInfo[tileId].chnName}`,
+                            null,
+                            null,
+                            1
+                        );
                     } else {
                         tl.call(
                             () =>
@@ -145,8 +150,12 @@ class Player implements Tickable {
             case "TING":
                 tl.add(Util.BiDirectionConstantSet(this.board, "openDeck", true));
                 break;
+            case "NOLIUMAN":
             case "NOTING":
                 tl.add(Util.BiDirectionConstantSet(this.board, "closeDeck", true));
+                break;
+            case "LIUMAN":
+                tl.add(this.board.river.hooray());
                 break;
         }
         return tl;

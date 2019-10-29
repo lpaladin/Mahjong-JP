@@ -19,7 +19,13 @@ namespace Mahjong {
         T7: { id: "T7", relativeRank: 15, imgName: "Sou7.png", chnName: "七条", availableCount: 4 } as TileInfo,
         T8: { id: "T8", relativeRank: 16, imgName: "Sou8.png", chnName: "八条", availableCount: 4 } as TileInfo,
         T9: { id: "T9", relativeRank: 17, imgName: "Sou9.png", chnName: "九条", availableCount: 4 } as TileInfo,
-        T0: { id: "T0", relativeRank: 12.9, imgName: "Sou5-Dora.png", chnName: "红五条", availableCount: 1 } as TileInfo,
+        T0: {
+            id: "T0",
+            relativeRank: 12.9,
+            imgName: "Sou5-Dora.png",
+            chnName: "红五条",
+            availableCount: 1
+        } as TileInfo,
         B1: { id: "B1", relativeRank: 18, imgName: "Pin1.png", chnName: "一筒", availableCount: 4 } as TileInfo,
         B2: { id: "B2", relativeRank: 19, imgName: "Pin2.png", chnName: "二筒", availableCount: 4 } as TileInfo,
         B3: { id: "B3", relativeRank: 20, imgName: "Pin3.png", chnName: "三筒", availableCount: 4 } as TileInfo,
@@ -29,7 +35,13 @@ namespace Mahjong {
         B7: { id: "B7", relativeRank: 24, imgName: "Pin7.png", chnName: "七筒", availableCount: 4 } as TileInfo,
         B8: { id: "B8", relativeRank: 25, imgName: "Pin8.png", chnName: "八筒", availableCount: 4 } as TileInfo,
         B9: { id: "B9", relativeRank: 26, imgName: "Pin9.png", chnName: "九筒", availableCount: 4 } as TileInfo,
-        B0: { id: "B0", relativeRank: 21.9, imgName: "Pin5-Dora.png", chnName: "红五筒", availableCount: 1 } as TileInfo,
+        B0: {
+            id: "B0",
+            relativeRank: 21.9,
+            imgName: "Pin5-Dora.png",
+            chnName: "红五筒",
+            availableCount: 1
+        } as TileInfo,
         Z1: { id: "Z1", relativeRank: 27, imgName: "Ton.png", chnName: "东", availableCount: 4 } as TileInfo,
         Z2: { id: "Z2", relativeRank: 28, imgName: "Nan.png", chnName: "南", availableCount: 4 } as TileInfo,
         Z3: { id: "Z3", relativeRank: 29, imgName: "Shaa.png", chnName: "西", availableCount: 4 } as TileInfo,
@@ -62,7 +74,9 @@ namespace Mahjong {
         ZIMO: { id: "ZIMO", chnName: "自摸" },
         PASS: { id: "PASS", chnName: "过" },
         TING: { id: "TING", chnName: "听牌" },
-        NOTING: { id: "NOTING", chnName: "未听牌" }
+        NOTING: { id: "NOTING", chnName: "未听牌" },
+        LIUMAN: { id: "LIUMAN", chnName: "流局满贯" },
+        NOLIUMAN: { id: "NOLIUMAN", chnName: "未流局满贯" }
     };
     export type ActionType = keyof typeof actionInfo;
     export const actionTypes = Object.keys(actionInfo) as ActionType[];
@@ -116,6 +130,12 @@ namespace Mahjong {
           }
         | {
               type: "NOTING";
+          }
+        | {
+              type: "LIUMAN";
+          }
+        | {
+              type: "NOLIUMAN";
           };
 
     export type LiteralID = Exclude<TileID, "W0" | "T0" | "B0">;
@@ -170,9 +190,18 @@ namespace Mahjong {
             switch (action) {
                 case "CHI":
                     [
-                        ...player.board.deck.getCombinationsInHand([t => lt2(t, lastPlayedTile), t => lt1(t, lastPlayedTile)]),
-                        ...player.board.deck.getCombinationsInHand([t => lt1(t, lastPlayedTile), t => lt1(lastPlayedTile, t)]),
-                        ...player.board.deck.getCombinationsInHand([t => lt1(lastPlayedTile, t), t => lt2(lastPlayedTile, t)])
+                        ...player.board.deck.getCombinationsInHand([
+                            t => lt2(t, lastPlayedTile),
+                            t => lt1(t, lastPlayedTile)
+                        ]),
+                        ...player.board.deck.getCombinationsInHand([
+                            t => lt1(t, lastPlayedTile),
+                            t => lt1(lastPlayedTile, t)
+                        ]),
+                        ...player.board.deck.getCombinationsInHand([
+                            t => lt1(lastPlayedTile, t),
+                            t => lt2(lastPlayedTile, t)
+                        ])
                     ].forEach(tiles =>
                         actions.push({
                             type: "CHI",
@@ -290,6 +319,6 @@ namespace Mahjong {
     }
 
     export function isGameEndingLog(log: DisplayLog): log is DisplayLog.GameEndingLog {
-        return isErrorLog(log) || log.action === "HU" || log.action === "HUANG";
+        return isErrorLog(log) || log.action === "HU" || log.action === "HUANG" || log.action === "SAN";
     }
 }

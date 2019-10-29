@@ -87,6 +87,7 @@ body.landscape {
     position: absolute;
     left: 0;
     top: 0;
+    width: 100%;
 }
 
 #game .player .info {
@@ -126,7 +127,8 @@ body.landscape {
 
 .actions {
     transform: translateX(-50%);
-    max-width: 50%;
+    width: 50%;
+    text-align: center;
 }
 
 button {
@@ -137,6 +139,7 @@ button {
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
     -webkit-appearance: none;
     outline: 0;
+    display: inline-block;
 }
 
 button:hover {

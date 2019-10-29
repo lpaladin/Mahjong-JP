@@ -153,7 +153,7 @@ class Game implements Tickable {
         this.setupPostProcessing();
 
         window.addEventListener("resize", () => this.initRenderer());
-        window.addEventListener("mousemove", e => {
+        UI.mainCanvas.addEventListener("mousemove", e => {
             if (this.landscape) {
                 this.mouseCoord.set((e.clientY / this.w) * 2 - 1, (e.clientX / this.h) * 2 - 1);
             } else {
@@ -236,7 +236,10 @@ class Game implements Tickable {
                 const mustPlay = request.state[0] === "2";
 
                 if (this.playerMe.playDrawnTileOnly) {
-                    const playDrawnTileAction: Mahjong.Action = { type: "PLAY", tile: this.playerMe.board.deck.drawnTile };
+                    const playDrawnTileAction: Mahjong.Action = {
+                        type: "PLAY",
+                        tile: this.playerMe.board.deck.drawnTile
+                    };
                     if (request.validact) {
                         const validActions = Mahjong.getValidActions(
                             this.playerMe,
@@ -349,7 +352,10 @@ class Game implements Tickable {
                     case "BUGANG":
                         newActions.push({
                             type: "BUGANG",
-                            existing: player.board.deck.getCombinationsInHand([t => Mahjong.eq(t, log.tile)], true)[0] as [Tile]
+                            existing: player.board.deck.getCombinationsInHand(
+                                [t => Mahjong.eq(t, log.tile)],
+                                true
+                            )[0] as [Tile]
                         });
                         break;
                     case "CHI":
@@ -362,14 +368,13 @@ class Game implements Tickable {
                                 type: log.action,
                                 from: this.lastPlayedPlayer,
                                 tile: this.lastPlayedTile,
-                                existing: player.board.deck.getTilesByIds(Util.LessOne(tileIDs, this.lastPlayedTile)) as [
-                                    Tile,
-                                    Tile
-                                ]
+                                existing: player.board.deck.getTilesByIds(
+                                    Util.LessOne(tileIDs, this.lastPlayedTile)
+                                ) as [Tile, Tile]
                             });
                         }
                         {
-                            const tile = player.board.deck.getTilesByIds([log.tile])[0];
+                            const tile = player.board.deck.getTilesByIds([log.tile], true)[0];
                             Util.Assert`打出的一定是手中的牌：${!!tile}`;
                             newActions.push({
                                 type: log.action === "LIZHI" ? "LIZHI" : "PLAY",
@@ -436,23 +441,44 @@ class Game implements Tickable {
                 tl.add(this.doraIndicators.revealHidden(hiddenDoraIndicators as Mahjong.TileID[]), "+=0.5");
             }
             tl.add(this.gameFinish(results), "+=0.5");
+        } else if (log.action === "SAN") {
+            const results: GameResult[] = [];
+            tl.add(this.players[this.lastPlayedPlayer].board.river.finalizeLatestTile(), "+=0.5");
+            for (const p of this.players) {
+                results.push({
+                    type: "DRAW",
+                    player: p,
+                    score: log.score[p.playerID],
+                    reason: "四杠散了"
+                });
+            }
+            tl.add(this.gameFinish(results), "+=0.5");
         } else {
             const results: GameResult[] = [];
             tl.add(this.players[this.lastPlayedPlayer].board.river.finalizeLatestTile(), "+=0.5");
             const baseTime = tl.duration();
             for (const p of this.players) {
+                const type = log.details[p.playerID];
                 tl.add(
                     p.doAction({
-                        type: log.details[p.playerID]
+                        type
                     }),
                     baseTime
                 );
-                results.push({
-                    type: "DRAW",
-                    player: p,
-                    score: log.score[p.playerID],
-                    reason: "荒牌流局 - " + Mahjong.actionInfo[log.details[p.playerID]].chnName
-                });
+                if (type === "LIUMAN") {
+                    results.push({
+                        type,
+                        player: p,
+                        score: log.score[p.playerID]
+                    });
+                } else if (type !== "NOLIUMAN") {
+                    results.push({
+                        type: "DRAW",
+                        player: p,
+                        score: log.score[p.playerID],
+                        reason: "荒牌流局 - " + Mahjong.actionInfo[log.details[p.playerID]].chnName
+                    });
+                }
             }
             tl.add(this.gameFinish(results), "+=0.5");
         }
@@ -546,6 +572,8 @@ class Game implements Tickable {
         const tl = new TimelineMax();
         if (results.every(r => r.type === "DRAW")) {
             tl.call(() => Util.PrimaryLog`本局游戏结束，流局`);
+        } else if (results.every(r => r.type === "LIUMAN")) {
+            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}流局满贯`);
         } else if (results.every(r => r.type === "HU" || r.type === "ZIMO")) {
             tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}胡了`);
         } else {

@@ -330,6 +330,11 @@ type GameResult =
       }
     | {
           player: Player;
+          type: "LIUMAN";
+          score: number;
+      }
+    | {
+          player: Player;
           type: "ERROR";
           reason: string;
           score: number;
@@ -340,6 +345,24 @@ class GameResultView {
     private static readonly ACTIVE_CLASSNAME = "active";
     private static readonly BLUR_CLASSNAME = "blur";
     private static getHTMLForResult(result: GameResult) {
+        if (result.type === "LIUMAN") {
+            return `
+            <div class="result">
+                <div class="result-upper">
+                    <div class="player">
+                        <img class="avatar" src="${result.player.info.imgid}" />
+                        <span class="position">${Util.POSITIONS[result.player.playerID]}家</span>
+                        <span class="name">${result.player.info.name}</span>
+                    </div>
+                    <div class="hu">流局满贯</div>
+                </div>
+                <div class="fan">
+                    <label>得分</label>
+                    <span>${result.score}</span>
+                </div>
+            </div>
+            `;
+        }
         if (result.type === "DRAW") {
             return `
             <div class="result">
@@ -409,7 +432,9 @@ class GameResultView {
                                             id => Mahjong.getIndicatedDoraID(id) === t
                                         );
                                     return `<div class="${
-                                        isDora ? DoraIndicators.OPEN_DORA_TILE_CLASSNAME : DoraIndicators.OPEN_TILE_CLASSNAME
+                                        isDora
+                                            ? DoraIndicators.OPEN_DORA_TILE_CLASSNAME
+                                            : DoraIndicators.OPEN_TILE_CLASSNAME
                                     }">
                                         <img src="${Assets.loadedImages[t].src}" />
                                     </div>`;

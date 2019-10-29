@@ -104,10 +104,13 @@ class Deck extends THREE.Group {
         return [...getCombinationsInHand(0, candidates, conditions)];
     }
 
-    public getTilesByIds(tileIDs: Mahjong.TileID[]): Tile[] | null {
-        const candidates = [...this.handTiles];
+    public getTilesByIds(tileIDs: Mahjong.TileID[], reverse = false): Tile[] | null {
+        let candidates = [...this.handTiles];
         if (this.drawnTile) {
             candidates.push(this.drawnTile);
+        }
+        if (reverse) {
+            candidates = candidates.reverse();
         }
         const result: Tile[] = [];
         for (const tileID of tileIDs) {
@@ -161,6 +164,20 @@ class River extends THREE.Group {
 
     public get latestTile(): Tile {
         return this.riverTiles[this.riverTiles.length - 1];
+    }
+
+    public hooray() {
+        const tl = new TimelineMax();
+        for (let i = 0; i < this.riverTiles.length; i++) {
+            tl.fromTo(
+                this.riverTiles[i],
+                0.2,
+                { y: -(Tile.HEIGHT - Tile.DEPTH) / 2 },
+                { y: Tile.DEPTH * 2, yoyo: true, ease: Power2.easeOut },
+                i * 0.05
+            );
+        }
+        return tl;
     }
 
     public getLatestTileTargetPos() {

@@ -94,12 +94,16 @@ declare namespace DisplayLog {
 
     export interface DrawGameResult extends GameResultBase {
         action: "HUANG";
-        details: ForEachPlayer<"TING" | "NOTING">;
+        details: ForEachPlayer<"TING" | "NOTING"> | ForEachPlayer<"LIUMAN" | "NOLIUMAN">;
+    }
+
+    export interface FourGangDrawGameResult extends GameResultBase {
+        action: "SAN";
     }
 
     export type ErrorAction = "TLE" | "WA" | "MLE" | "RE" | "ERR";
 
-    export type GameEndingLog = HuGameResult | DrawGameResult | ErrorGameResult;
+    export type GameEndingLog = HuGameResult | DrawGameResult | FourGangDrawGameResult | ErrorGameResult;
 
     export interface ErrorGameResult extends GameResultBase {
         action: ErrorAction;
@@ -119,6 +123,7 @@ type DisplayLog =
     | DisplayLog.Lizhi
     | DisplayLog.HuGameResult
     | DisplayLog.DrawGameResult
+    | DisplayLog.FourGangDrawGameResult
     | DisplayLog.ErrorGameResult;
 
 interface RequestLog {

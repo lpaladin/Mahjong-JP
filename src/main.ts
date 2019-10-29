@@ -41,6 +41,7 @@ class Game implements Tickable {
     public readonly centerScreen = new CenterScreen();
     public readonly gameResultView = new GameResultView();
     public readonly spectatorControl = new SpectatorControl();
+    public readonly actionSubmissionEffect = new ActionSubmissionEffect();
     public readonly mouseCoord = new THREE.Vector2();
     public readonly raycaster = new THREE.Raycaster();
     public pause = false;
@@ -144,6 +145,19 @@ class Game implements Tickable {
         this.composer.addPass(smaaPass);
     }
 
+    public getLeftTopRelatedXY(e: MouseEvent) {
+        if (this.landscape) {
+            return {
+                x: e.clientY,
+                y: this.h - e.clientX
+            };
+        }
+        return {
+            x: e.clientX,
+            y: e.clientY
+        };
+    }
+
     constructor() {
         Util.Log`资源就绪，开始初始化`;
 
@@ -169,6 +183,7 @@ class Game implements Tickable {
             }
         });
         window.addEventListener("contextmenu", e => {
+            this.actionSubmissionEffect.showAt(Util.RandInArray(["checkmark", "playtile"]), e);
             e.preventDefault();
             return false;
         });
@@ -186,9 +201,9 @@ class Game implements Tickable {
                 }
             }
         });
-        UI.mainCanvas.addEventListener("click", () => {
+        UI.mainCanvas.addEventListener("click", e => {
             if (infoProvider.getPlayerID() !== -1) {
-                this.playerMe.onClick();
+                this.playerMe.onClick(e);
             }
         });
 

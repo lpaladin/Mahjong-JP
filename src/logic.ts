@@ -167,6 +167,10 @@ namespace Mahjong {
         return t[1] === "0";
     }
 
+    export function needPlayTile(action: Mahjong.Action) {
+        return action.type === "CHI" || action.type === "PENG";
+    }
+
     export function getIndicatedDoraID(indicatorID: TileID): LiteralID {
         indicatorID = getLiteralID(indicatorID);
         if (indicatorID[0] === "W" || indicatorID[0] === "T" || indicatorID[0] === "B") {
@@ -272,14 +276,22 @@ namespace Mahjong {
                     });
                     break;
                 case "LIZHI":
-                    new Set(args.map((t: Mahjong.TileID) => Mahjong.getLiteralID(t))).forEach(arg =>
-                        player.board.deck.getCombinationsInHand([t => eq(t, arg as TileID)], true).forEach(([tile]) =>
-                            actions.push({
-                                type: "LIZHI",
-                                tile
-                            })
-                        )
-                    );
+                    {
+                        const uniqueLiteralIDs = new Set(args.map((t: Mahjong.TileID) => Mahjong.getLiteralID(t)));
+                        const sortedLiteralIDs = Array.from(uniqueLiteralIDs).sort(
+                            (a, b) => Mahjong.tileInfo[a].relativeRank - Mahjong.tileInfo[b].relativeRank
+                        );
+                        sortedLiteralIDs.forEach(arg =>
+                            player.board.deck
+                                .getCombinationsInHand([t => eq(t, arg as TileID)], true)
+                                .forEach(([tile]) =>
+                                    actions.push({
+                                        type: "LIZHI",
+                                        tile
+                                    })
+                                )
+                        );
+                    }
                     break;
                 case "RONG":
                     actions.push({

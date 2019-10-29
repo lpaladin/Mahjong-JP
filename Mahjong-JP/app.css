@@ -497,3 +497,32 @@ input[type="range"] {
     right: 25%;
     width: 50%;
 }
+
+.mouse-effect {
+    position: fixed;
+    left: 0;
+    top: 0;
+    font-size: 4em;
+    font-weight: bold;
+    display: none;
+}
+
+.mouse-effect::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+}
+
+.mouse-effect.checkmark::before {
+    content: "✓";
+    color: lightgreen;
+    text-shadow: green 0 1px, green 1px 0, green -1px 0, green 0 -1px, green 0 0 1em;
+}
+
+.mouse-effect.should-then-play-tile::before {
+    content: "请出牌";
+    color: coral;
+    text-shadow: white 0 1px, white 1px 0, white -1px 0, white 0 -1px, white 0 0 1em;
+}

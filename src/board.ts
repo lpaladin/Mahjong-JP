@@ -170,10 +170,10 @@ class River extends THREE.Group {
         const tl = new TimelineMax();
         for (let i = 0; i < this.riverTiles.length; i++) {
             tl.fromTo(
-                this.riverTiles[i],
+                this.riverTiles[i].position,
                 0.2,
                 { y: -(Tile.HEIGHT - Tile.DEPTH) / 2 },
-                { y: Tile.DEPTH * 2, yoyo: true, ease: Power2.easeOut },
+                { y: Tile.DEPTH * 2, yoyo: true, repeat: 1, ease: Power2.easeOut, immediateRender: false },
                 i * 0.05
             );
         }
@@ -469,6 +469,9 @@ class PlayerArea extends THREE.Group {
                 tile = intersections.length > 0 && intersections[0].object instanceof Tile && intersections[0].object;
             }
             if (this.hoveredTile && this.hoveredTile != tile) this.hoveredTile.hovered = false;
+            if (tile && tile.disabled) {
+                tile = null;
+            }
             this.hoveredTile = tile;
             if (tile) tile.hovered = true;
         }

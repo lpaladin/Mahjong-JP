@@ -160,6 +160,18 @@ class Tile extends THREE.Mesh implements Tickable {
         }
     }
 
+    private _disabled = false;
+    public get disabled() {
+        return this._disabled;
+    }
+    public set disabled(to: boolean) {
+        if (this._disabled === to) {
+            return;
+        }
+        (this.material as THREE.MeshLambertMaterial).color = new THREE.Color(to ? Colors.LightGray : Colors.White);
+        this._disabled = to;
+    }
+
     private _highlighted = false;
     public get highlighted() {
         return this._highlighted;
@@ -204,7 +216,11 @@ class Tile extends THREE.Mesh implements Tickable {
     }
 
     public isVisibleToUser() {
-        return this.open || game.openAll || (game.viewPoint !== -1 && this.parent === game.players[game.viewPoint].board.deck);
+        return (
+            this.open ||
+            game.openAll ||
+            (game.viewPoint !== -1 && this.parent === game.players[game.viewPoint].board.deck)
+        );
     }
 
     private _shaking = false;

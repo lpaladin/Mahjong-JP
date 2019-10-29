@@ -15,6 +15,14 @@ class Player implements Tickable {
     public set interactable(to: boolean) {
         if (to != this._interactable) {
             this._interactable = to;
+
+            for (const t of this.board.deck.handTiles) {
+                t.highlighted = t.disabled = false;
+            }
+            if (this.board.deck.drawnTile) {
+                this.board.deck.drawnTile.highlighted = this.board.deck.drawnTile.disabled = false;
+            }
+
             if (to) tickableManager.add(this);
             else tickableManager.delete(this);
         }
@@ -36,7 +44,12 @@ class Player implements Tickable {
 
     public doAction(action: Mahjong.Action) {
         const tl = new TimelineMax();
-        if (action.type !== "DRAW" && action.type !== "PLAY" && action.type !== "NOTING") {
+        if (
+            action.type !== "DRAW" &&
+            action.type !== "PLAY" &&
+            action.type !== "NOTING" &&
+            action.type !== "NOLIUMAN"
+        ) {
             tl.call(this.shout.shout, [Mahjong.actionInfo[action.type].chnName], this.shout);
         }
         if ("tile" in action) {
@@ -165,6 +178,12 @@ class Player implements Tickable {
         if (action.type === "CHI" || action.type === "PENG") {
             this.partialSpecialAction = action;
             this.interactable = true;
+            this.board.deck
+                .getCombinationsInHand([t => Mahjong.eq(t, action.tile)])
+                .forEach(comb => comb.forEach(t => (t.disabled = true)));
+            for (const t of action.existing) {
+                t.disabled = true;
+            }
             Util.PrimaryLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
         } else {
             this.interactable = false;
@@ -198,9 +217,10 @@ class Player implements Tickable {
         }
     }
 
-    public onClick() {
+    public onClick(e: MouseEvent) {
         if (this.interactable && this.board.hoveredTile) {
             this.interactable = false;
+            game.actionSubmissionEffect.showAt("checkmark", e);
             const playedTile = this.board.hoveredTile.tileID;
             if (this.partialSpecialAction) {
                 infoProvider.notifyPlayerMove(

@@ -165,13 +165,13 @@ class PlayerUI implements Tickable {
         tickableManager.add(this);
     }
 
-    private static setRelatedTilesShaking(action: Mahjong.Action, to: boolean) {
+    private static setRelatedTilesEffect(action: Mahjong.Action, to: boolean) {
         if ("existing" in action) {
             for (const t of action.existing) {
-                t.shaking = to;
+                t.shaking = t.highlighted = to;
             }
         } else if (action.type === "LIZHI") {
-            action.tile.shaking = to;
+            action.tile.shaking = action.tile.highlighted = to;
         }
     }
 
@@ -182,12 +182,12 @@ class PlayerUI implements Tickable {
             const button = document.createElement("button");
             button.className = `${PlayerUI.ACTIONBUTTON_CLASSNAME} ${PlayerUI.ACTIONBUTTON_CLASSNAME}-${a.type}`;
             button.textContent = Mahjong.actionInfo[a.type].chnName;
-            button.addEventListener("click", () => this.onButtonClicked(a));
+            button.addEventListener("click", e => this.onButtonClicked(e, a));
             button.addEventListener("mouseenter", () => {
-                PlayerUI.setRelatedTilesShaking(a, true);
+                PlayerUI.setRelatedTilesEffect(a, true);
             });
             button.addEventListener("mouseleave", () => {
-                PlayerUI.setRelatedTilesShaking(a, false);
+                PlayerUI.setRelatedTilesEffect(a, false);
             });
             this.actionBar.appendChild(button);
             this.actionButtons.push(button);
@@ -195,8 +195,11 @@ class PlayerUI implements Tickable {
         TweenMax.staggerFrom(this.actionButtons, 0.2, { opacity: 0, scale: 0, ease: Back.easeIn }, 0.1);
     }
 
-    public onButtonClicked(action?: Mahjong.Action) {
-        action && PlayerUI.setRelatedTilesShaking(action, false);
+    public onButtonClicked();
+    public onButtonClicked(e: MouseEvent, action: Mahjong.Action);
+    public onButtonClicked(e?: MouseEvent, action?: Mahjong.Action) {
+        e && game.actionSubmissionEffect.showAt(Mahjong.needPlayTile(action) ? "playtile" : "checkmark", e);
+        action && PlayerUI.setRelatedTilesEffect(action, false);
         if (this.actionButtons.length == 0) return;
         if (action) {
             this.player.doHumanAction(action);
@@ -477,6 +480,33 @@ class GameResultView {
             tl.staggerFrom(element.querySelectorAll(".fan > *, .score > *"), 0.3, { x: "-100%", opacity: 0 }, 0.02);
         }
         return tl;
+    }
+}
+
+class ActionSubmissionEffect {
+    private static CHECKMARK_CLASSNAME = "mouse-effect checkmark";
+    private static SHOULDTHENPLAYTILE_CLASSNAME = "mouse-effect should-then-play-tile";
+    private checkmark: HTMLDivElement;
+    private shouldThenPlayTile: HTMLDivElement;
+    constructor() {
+        this.checkmark = document.createElement("div");
+        this.checkmark.className = ActionSubmissionEffect.CHECKMARK_CLASSNAME;
+        this.shouldThenPlayTile = document.createElement("div");
+        this.shouldThenPlayTile.className = ActionSubmissionEffect.SHOULDTHENPLAYTILE_CLASSNAME;
+        UI.game.appendChild(this.checkmark);
+        UI.game.appendChild(this.shouldThenPlayTile);
+    }
+
+    public showAt(type: "checkmark" | "playtile", e: MouseEvent) {
+        const tl = new TimelineMax();
+        const element = type === "checkmark" ? this.checkmark : this.shouldThenPlayTile;
+        element.style.opacity = "0";
+        element.style.display = "block";
+        tl.set(element, game.getLeftTopRelatedXY(e));
+        tl.fromTo(element, 0.1, { opacity: 0 }, { opacity: 0.3 });
+        tl.fromTo(element, 0.3, { scale: 3 }, { opacity: 1, scale: 1, ease: Expo.easeIn });
+        tl.to(element, 0.6, { opacity: 0 }, "+=0.3");
+        tl.set(element, { display: "none" });
     }
 }
 

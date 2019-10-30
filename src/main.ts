@@ -245,6 +245,10 @@ class Game implements Tickable {
         this.initRenderer();
         //new THREE['OrbitControls'](this.camera, UI.mainCanvas);
 
+        infoProvider.v2.setGameOverCallback(() => {
+            this.spectatorControl.visible = true;
+            return null;
+        });
         infoProvider.v2.setDisplayCallback(this.handleDisplayLog);
         infoProvider.v2.setRequestCallback((request: RequestLog) => {
             if ("state" in request && "validact" in request) {

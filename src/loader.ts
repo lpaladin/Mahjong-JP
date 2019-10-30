@@ -50,6 +50,7 @@ declare namespace Loader {
                         setRenderTickCallback: (cb: Function) => TweenMax.ticker.addEventListener("tick", cb),
                         setDisplayCallback: (cb: Function) => (displayCB = cb),
                         setRequestCallback: Util.IDENTITY,
+                        setGameOverCallback: Util.IDENTITY,
                         notifyInitComplete: (tl: TimelineMax) => {
                             Loader.globalTL = tl = tl || new TimelineMax();
                             for (const l of fullLog.log) {

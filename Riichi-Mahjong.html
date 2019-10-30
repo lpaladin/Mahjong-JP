@@ -56,7 +56,7 @@
             color: darkorchid;
         }
 
-        #loadingContainer .version {
+        .version {
             position: absolute;
             right: 1em;
             bottom: 1em;
@@ -84,6 +84,10 @@
         <canvas id="mainCanvas"></canvas>
         <div id="cssRenderOverlay"></div>
         <div id="spectatorToolbar"></div>
+        <div class="version">
+            Botzone 立直麻将展示界面<br />
+            版本 <span id="js-version"></span> / <span id="css-version"></span>
+        </div>
     </div>
     <div id="gameResultBackground"></div>
     <div id="logs"></div>
@@ -164,6 +168,8 @@
                                 });
                                 script.addEventListener("error", rej);
                                 document.body.appendChild(script);
+                                const version = src.match(/app\.js\?(.*)$/);
+                                version && (document.getElementById('js-version').textContent = version[1]);
                             })
                     );
                     return {
@@ -180,13 +186,15 @@
                     finishPromise: new Promise((ac, rej) => {
                         const css = document.createElement("link");
                         css.rel = "stylesheet";
-                        css.href = "Mahjong-JP/app.css?191030";
+                        css.href = "Mahjong-JP/app.css?191030-1";
                         css.addEventListener("load", () => {
                             addProgress();
                             ac();
                         });
                         css.addEventListener("error", rej);
                         document.body.appendChild(css);
+                        const version = css.href.match(/app\.css\?(.*)$/);
+                        document.getElementById('css-version').textContent = version[1];
                     })
                 };
             }
@@ -203,7 +211,7 @@
 
         Loader.addInitializable(Loader.loadCSS);
 
-        Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/app.js?191030-5"], "加载主程序"));
+        Loader.addInitializable(Loader.loadScripts(["Mahjong-JP/app.js?191030-9"], "加载主程序"));
     </script>
 </body>
 

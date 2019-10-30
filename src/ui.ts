@@ -470,6 +470,12 @@ class GameResultView {
         tl.add(Util.BiDirectionConstantSet(game, "pause", true));
         tl.add(Util.BiDirectionConstantSet(UI.game, "className", GameResultView.BLUR_CLASSNAME));
         tl.add(Util.BiDirectionConstantSet(UI.gameResultBackground, "className", GameResultView.ACTIVE_CLASSNAME));
+        tl.fromTo(
+            UI.gameResultBackground,
+            0.2,
+            { opacity: 0 },
+            { opacity: 1, ease: Linear.easeNone, immediateRender: false }
+        );
         tl.set(gameResultView, { display: "block", immediateRender: false }, 1);
         tl.fromTo(gameResultView, 0.5, { y: 300 }, { y: 0, immediateRender: false, ease: Back.easeOut });
         tl.from(gameResultView.querySelector("header"), 0.1, { y: "-100%", opacity: 0 });
@@ -549,6 +555,7 @@ class SpectatorControl implements Tickable {
                 if (e.keyCode === 189) Loader.globalTL.timeScale(Loader.globalTL.timeScale() / 2);
             });
 
+            UI.spectatorToolbar.style.bottom = "2em";
             this.progress = document.createElement("input");
             this.progress.type = "range";
             this.progress.max = "1";

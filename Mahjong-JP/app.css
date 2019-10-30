@@ -305,7 +305,6 @@ button:hover {
     right: 0;
     bottom: 0;
     opacity: 0;
-    transition: opacity 0.8s;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -313,7 +312,6 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 1;
 }
 
 #gameResultBackground .game-result {
@@ -473,7 +471,7 @@ button:hover {
 
 #spectatorToolbar {
     position: fixed;
-    bottom: 2em;
+    bottom: 1em;
     left: 0;
     right: 0;
     text-align: center;

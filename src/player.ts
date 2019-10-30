@@ -127,6 +127,7 @@ class Player implements Tickable {
             case "LIZHI":
                 if (action.type === "LIZHI") {
                     this.puttingLizhiTile = true;
+                    this.playDrawnTileOnly = true;
                 }
                 tl.add(this.playTile(action.tile));
                 break;
@@ -196,7 +197,6 @@ class Player implements Tickable {
                     infoProvider.notifyPlayerMove(action.type + " " + action.existing[0].tileID);
                     break;
                 case "LIZHI":
-                    this.playDrawnTileOnly = true;
                     infoProvider.notifyPlayerMove(action.type + " " + action.tile.tileID);
                     break;
                 case "ZIMO":

@@ -360,7 +360,7 @@ class GameResultView {
                     <div class="hu">流局满贯</div>
                 </div>
                 <div class="fan">
-                    <label>得分</label>
+                    <label>当前得分</label>
                     <span>${result.score}</span>
                 </div>
             </div>
@@ -380,7 +380,7 @@ class GameResultView {
                 <div class="fan">
                     <label>原因</label>
                     <span>${result.reason}</span>
-                    <label>得分</label>
+                    <label>当前得分</label>
                     <span>${result.score}</span>
                 </div>
             </div>
@@ -400,7 +400,7 @@ class GameResultView {
                 <div class="fan">
                     <label>原因</label>
                     <span>${result.reason}</span>
-                    <label>得分</label>
+                    <label>当前得分</label>
                     <span>${result.score}</span>
                 </div>
             </div>
@@ -451,8 +451,8 @@ class GameResultView {
                 ${result.fan.map(f => `<span>${f}</span>`).join("")}
             </div>
             <div class="score">
-                <label>得分</label>
-                <span>${result.score}</span>
+                <label>胡牌得分</label>
+                <span>+${result.score}</span>
                 <label>符数</label>
                 <span>${result.fu}</span>
             </div>
@@ -503,9 +503,14 @@ class ActionSubmissionEffect {
         element.style.opacity = "0";
         element.style.display = "block";
         tl.set(element, game.getLeftTopRelatedXY(e));
-        tl.fromTo(element, 0.1, { opacity: 0 }, { opacity: 0.3 });
-        tl.fromTo(element, 0.3, { scale: 3 }, { opacity: 1, scale: 1, ease: Expo.easeIn });
-        tl.to(element, 0.6, { opacity: 0 }, "+=0.3");
+        if (type === "checkmark") {
+            tl.fromTo(element, 0.1, { opacity: 0 }, { opacity: 0.3 });
+            tl.fromTo(element, 0.3, { scale: 3 }, { opacity: 1, scale: 1, ease: Expo.easeIn });
+            tl.to(element, 0.6, { opacity: 0 }, "+=0.3");
+        } else {
+            tl.fromTo(element, 0.1, { opacity: 0, scale: 0 }, { opacity: 0.5, scale: 1 });
+            tl.to(element, 0.3, { opacity: 0, scale: 3, ease: Expo.easeIn });
+        }
         tl.set(element, { display: "none" });
     }
 }

@@ -19,55 +19,44 @@ declare namespace DisplayLog {
         hand: ForEachPlayer<Mahjong.TileID[]>;
     }
 
-    export interface Draw extends Base {
+    export interface ActionBase extends Base {
+        player: number;
+        tile: Mahjong.TileID;
+        tileCnt: number;
+    }
+
+    export interface Draw extends ActionBase {
         action: "DRAW";
-        player: number;
-        tile: Mahjong.TileID;
-        tileCnt: number;
     }
 
-    export interface Play extends Base {
+    export interface Play extends ActionBase {
         action: "PLAY";
-        player: number;
-        tile: Mahjong.TileID;
-        tileCnt: number;
     }
 
-    export interface Chi extends Base {
+    export interface Chi extends ActionBase {
         action: "CHI";
-        player: number;
-        tile: Mahjong.TileID;
         tileCHI: string;
-        tileCnt: number;
     }
 
-    export interface Peng extends Base {
+    export interface Peng extends ActionBase {
         action: "PENG";
-        player: number;
-        tile: Mahjong.TileID;
         tilePENG: string;
-        tileCnt: number;
     }
 
-    export interface Gang extends Base {
+    export interface Gang extends ActionBase {
         action: "GANG";
-        player: number;
-        tile: Mahjong.TileID;
-        tileCnt: number;
     }
 
-    export interface BuGang extends Base {
+    export interface AnGang extends ActionBase {
+        action: "ANGANG";
+    }
+
+    export interface BuGang extends ActionBase {
         action: "BUGANG";
-        player: number;
-        tile: Mahjong.TileID;
-        tileCnt: number;
     }
 
-    export interface Lizhi extends Base {
+    export interface Lizhi extends ActionBase {
         action: "LIZHI";
-        player: number;
-        tile: Mahjong.TileID;
-        tileCnt: number;
     }
 
     export interface PlayerResult {
@@ -119,6 +108,7 @@ type DisplayLog =
     | DisplayLog.Chi
     | DisplayLog.Peng
     | DisplayLog.Gang
+    | DisplayLog.AnGang
     | DisplayLog.BuGang
     | DisplayLog.Lizhi
     | DisplayLog.HuGameResult

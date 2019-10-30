@@ -183,7 +183,7 @@ class Game implements Tickable {
             }
         });
         window.addEventListener("contextmenu", e => {
-            this.actionSubmissionEffect.showAt(Util.RandInArray(["checkmark", "playtile"]), e);
+            // this.actionSubmissionEffect.showAt(Util.RandInArray(["checkmark", "playtile"]), e);
             e.preventDefault();
             return false;
         });
@@ -363,6 +363,20 @@ class Game implements Tickable {
                             ])[0] as [Tile, Tile, Tile]
                         });
                         this.lastPlayedPlayer = -1;
+                        break;
+                    case "ANGANG":
+                        newActions.push({
+                            type: "ANGANG",
+                            existing: player.board.deck.getCombinationsInHand(
+                                [
+                                    t => Mahjong.eq(t, log.tile),
+                                    t => Mahjong.eq(t, log.tile),
+                                    t => Mahjong.eq(t, log.tile),
+                                    t => Mahjong.eq(t, log.tile)
+                                ],
+                                true
+                            )[0] as [Tile, Tile, Tile, Tile]
+                        });
                         break;
                     case "BUGANG":
                         newActions.push({

@@ -244,22 +244,19 @@ namespace Mahjong {
                         );
                     break;
                 case "ANGANG":
-                    player.board.deck
-                        .getCombinationsInHand(
-                            [
-                                t => eq(t, lastPlayedTile),
-                                t => eq(t, lastPlayedTile),
-                                t => eq(t, lastPlayedTile),
-                                t => eq(t, lastPlayedTile)
-                            ],
-                            true
-                        )
-                        .forEach(tiles =>
-                            actions.push({
-                                type: "ANGANG",
-                                existing: tiles as [Tile, Tile, Tile, Tile]
-                            })
-                        );
+                    new Set(player.board.deck.handTiles.map(t => t.tileID)).forEach(tileID =>
+                        player.board.deck
+                            .getCombinationsInHand(
+                                [t => eq(t, tileID), t => eq(t, tileID), t => eq(t, tileID), t => eq(t, tileID)],
+                                true
+                            )
+                            .forEach(tiles =>
+                                actions.push({
+                                    type: "ANGANG",
+                                    existing: tiles as [Tile, Tile, Tile, Tile]
+                                })
+                            )
+                    );
                     break;
                 case "BUGANG":
                     player.board.openTiles.openStacks.forEach(stack => {

@@ -185,6 +185,7 @@ namespace Mahjong {
     export function getValidActions(
         player: Player,
         lastPlayedPlayer: number,
+        lastAnyGangPlayer: number,
         lastPlayedTile: Mahjong.TileID,
         validact: string
     ): Mahjong.Action[] {
@@ -291,11 +292,20 @@ namespace Mahjong {
                     }
                     break;
                 case "RONG":
-                    actions.push({
-                        type: "HU",
-                        from: lastPlayedPlayer,
-                        tile: game.players[lastPlayedPlayer].board.river.latestTile
-                    });
+                    if (lastAnyGangPlayer != -1) {
+                        // 抢杠
+                        actions.push({
+                            type: "HU",
+                            from: lastAnyGangPlayer,
+                            tile: game.players[lastAnyGangPlayer].board.openTiles.lastGangTile
+                        });
+                    } else {
+                        actions.push({
+                            type: "HU",
+                            from: lastPlayedPlayer,
+                            tile: game.players[lastPlayedPlayer].board.river.latestTile
+                        });
+                    }
                     break;
                 case "TSUMO":
                     actions.push({

@@ -48,6 +48,7 @@ class Game implements Tickable {
 
     private lastPlayedPlayer = -1;
     private lastLizhiPlayer = -1;
+    private lastAnyGangPlayer = -1;
     private lastPlayedTile: Mahjong.TileID;
     private w = 0;
     private h = 0;
@@ -263,6 +264,7 @@ class Game implements Tickable {
                         const validActions = Mahjong.getValidActions(
                             this.playerMe,
                             this.lastPlayedPlayer,
+                            this.lastAnyGangPlayer,
                             this.lastPlayedTile,
                             request.validact
                         );
@@ -289,6 +291,7 @@ class Game implements Tickable {
                     const validActions = Mahjong.getValidActions(
                         this.playerMe,
                         this.lastPlayedPlayer,
+                        this.lastAnyGangPlayer,
                         this.lastPlayedTile,
                         request.validact
                     );
@@ -350,6 +353,7 @@ class Game implements Tickable {
                             tl.add(game.players[this.lastPlayedPlayer].board.river.finalizeLatestTile());
                             this.lastPlayedPlayer = -1;
                         }
+                        this.lastAnyGangPlayer = -1;
                         newActions.push({
                             type: "DRAW",
                             tile: log.tile
@@ -366,6 +370,7 @@ class Game implements Tickable {
                                 t => Mahjong.eq(t, log.tile)
                             ])[0] as [Tile, Tile, Tile]
                         });
+                        this.lastAnyGangPlayer = log.player;
                         this.lastPlayedPlayer = -1;
                         break;
                     case "ANGANG":
@@ -390,6 +395,7 @@ class Game implements Tickable {
                                 true
                             )[0] as [Tile]
                         });
+                        this.lastAnyGangPlayer = log.player;
                         break;
                     case "CHI":
                     case "PENG":
@@ -439,34 +445,56 @@ class Game implements Tickable {
             const results: GameResult[] = [];
             for (const p of this.players) {
                 const result: DisplayLog.PlayerResult | null = log[p.playerID];
-                const isZimo = this.lastPlayedPlayer === -1;
+                const isZimo = this.lastPlayedPlayer === -1 && this.lastAnyGangPlayer === -1;
                 if (result && result.action) {
-                    if (isZimo) {
-                        tl.add(
-                            p.doAction({
-                                type: "ZIMO"
-                            }),
-                            "+=1"
-                        );
-                    } else {
+                    if (this.lastAnyGangPlayer !== -1) {
+                        // 抢杠
+                        const tile = game.players[this.lastAnyGangPlayer].board.openTiles.lastGangTile;
                         tl.add(
                             p.doAction({
                                 type: "HU",
-                                from: this.lastPlayedPlayer,
-                                tile: this.players[this.lastPlayedPlayer].board.river.latestTile
+                                from: this.lastAnyGangPlayer,
+                                tile
                             }),
                             "+=1"
                         );
+                        results.push({
+                            type: "HU",
+                            player: p,
+                            from: this.lastAnyGangPlayer,
+                            newTile: tile.tileID,
+                            fan: result.fan.map(f => `${f.name} - ${f.value}番`),
+                            fu: result.fuCnt,
+                            score: result.ScoreCnt
+                        });
+                    } else {
+                        if (isZimo) {
+                            tl.add(
+                                p.doAction({
+                                    type: "ZIMO"
+                                }),
+                                "+=1"
+                            );
+                        } else {
+                            tl.add(
+                                p.doAction({
+                                    type: "HU",
+                                    from: this.lastPlayedPlayer,
+                                    tile: this.players[this.lastPlayedPlayer].board.river.latestTile
+                                }),
+                                "+=1"
+                            );
+                        }
+                        results.push({
+                            type: isZimo ? "ZIMO" : "HU",
+                            player: p,
+                            from: isZimo ? p.playerID : this.lastPlayedPlayer,
+                            newTile: isZimo ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
+                            fan: result.fan.map(f => `${f.name} - ${f.value}番`),
+                            fu: result.fuCnt,
+                            score: result.ScoreCnt
+                        });
                     }
-                    results.push({
-                        type: isZimo ? "ZIMO" : "HU",
-                        player: p,
-                        from: isZimo ? p.playerID : this.lastPlayedPlayer,
-                        newTile: isZimo ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
-                        fan: result.fan.map(f => `${f.name} - ${f.value}番`),
-                        fu: result.fuCnt,
-                        score: result.ScoreCnt
-                    });
                 }
             }
             if ("hiddenDoraIndicators" in log) {

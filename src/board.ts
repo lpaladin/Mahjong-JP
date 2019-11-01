@@ -297,13 +297,15 @@ class OpenTiles extends THREE.Group {
     public static readonly GAP = 0.1;
 
     public readonly openStacks: OpenTileStack[] = [];
+
+    public lastGangTile: Tile;
     private leftBound = 0;
 
     public addGang(newTileID: Mahjong.TileID) {
         for (const s of this.openStacks) {
             if (s.type == "PENG" && Mahjong.eq(s.newTile.tileID, newTileID)) {
                 const tl = new TimelineMax();
-                const newTile = new Tile(newTileID, -1);
+                const newTile = (this.lastGangTile = new Tile(newTileID, -1));
                 newTile.position.x = s.newTileTargetX;
                 newTile.position.y = s.newTile.position.y;
                 newTile.exposedRotation.copy(s.newTile.exposedRotation);
@@ -360,6 +362,9 @@ class OpenTiles extends THREE.Group {
                 }
                 tl.fromTo(tiles[i].position, 0.2, { x: x - 1 }, { x, immediateRender: false }, 0);
                 tl.add(Util.MeshOpacityFromTo(tiles[i], 0.2, 0, 1), 0);
+            }
+            if (type === "DAMINGGANG") {
+                this.lastGangTile = newTile;
             }
             this.openStacks.push({
                 type,

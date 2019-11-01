@@ -155,7 +155,7 @@ class Player implements Tickable {
                 if (action.type === "ZIMO") {
                     tile = this.board.deck.drawnTile;
                 } else {
-                    tile = game.players[action.from].board.river.latestTile;
+                    tile = action.tile;
                 }
                 tl.add(Util.BiDirectionConstantSet(tile, "shaking", true));
                 tl.call(game.focusAndWave, [tile], game);

@@ -338,7 +338,11 @@ class OpenTiles extends THREE.Group {
                 tl.fromTo(tiles[i].position, 0.2, { x: x - 1 }, { x, immediateRender: false }, 0);
                 tl.add(Util.MeshOpacityFromTo(tiles[i], 0.2, 0, 1), 0);
                 this.leftBound -= Tile.WIDTH;
-                tiles[i].exposedRotation.x = i == 3 || i == 0 ? Util.RAD90 : -Util.RAD90;
+                if (i == 0 || i == 3) {
+                    tiles[i].close = true;
+                } else {
+                    tiles[i].open = true;
+                }
             }
             this.openStacks.push({ type, tiles, newTile: null, newTileTargetX: 0 });
             this.add(...tiles);
@@ -374,8 +378,8 @@ class OpenTiles extends THREE.Group {
             });
             this.add(...tiles, newTile);
             newTile.open = true;
+            tiles.forEach(t => (t.open = true));
         }
-        tiles.forEach(t => (t.open = true));
         this.leftBound -= Tile.WIDTH / 4;
         return tl;
     }
@@ -493,12 +497,12 @@ class CenterScreen extends THREE.Mesh {
     private readonly textUIAnchor = new THREE.Object3D();
     private readonly textUI = new CenterInfo();
     public readonly textCSSObj = new THREEx.CSS3DObject(this.textUI.wrapper);
+    public viewPointRotation = 0;
     private lizhiSticks: THREE.Mesh[] = [];
 
     private _roundWind = 0;
     private _tileLeft = -1;
     private _viewPoint = 0;
-    private viewPointRotation = 0;
 
     public get roundWind() {
         return this._roundWind;

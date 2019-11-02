@@ -5,6 +5,15 @@ namespace Util {
     export const DIR_X = [0, 1, 0, -1];
     export const DIR_Z = [1, 0, -1, 0];
     export const POSITIONS = "东南西北";
+    export function FanToChn(x: number) {
+        if (x === 26) {
+            return "两倍役满";
+        }
+        if (x === 13) {
+            return "役满";
+        }
+        return x + "番";
+    }
     export function IDENTITY<T>(x: T) {
         return x;
     }
@@ -26,7 +35,17 @@ namespace Util {
         return array[Math.floor(Math.random() * array.length)];
     }
 
-    export function ToPlain(v: THREE.Vector3 | THREE.Euler) {
+    export function ToPlain(v: THREE.Quaternion): Pick<THREE.Quaternion, "x" | "y" | "z" | "w">;
+    export function ToPlain(v: THREE.Vector3 | THREE.Euler): Pick<THREE.Vector3, "x" | "y" | "z">;
+    export function ToPlain(v: THREE.Vector3 | THREE.Euler | THREE.Quaternion) {
+        if ("w" in v) {
+            return {
+                x: v.x,
+                y: v.y,
+                z: v.z,
+                w: v.w
+            };
+        }
         return {
             x: v.x,
             y: v.y,
@@ -99,7 +118,9 @@ namespace Util {
     }
 
     function playerInfoToHTML(x: Player) {
-        return `<span>${POSITIONS[x.playerID]}</span>家 <img src="${x.info.imgid}" /><span>${neutralize(x.info.name)}</span>`;
+        return `<span>${POSITIONS[x.playerID]}</span>家 <img src="${x.info.imgid}" /><span>${neutralize(
+            x.info.name
+        )}</span>`;
     }
 
     function logComposeHTML(parts: TemplateStringsArray, args: Array<number | string | Player | Array<Player>>) {

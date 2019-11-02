@@ -182,11 +182,18 @@ class PlayerUI implements Tickable {
             const button = document.createElement("button");
             button.className = `${PlayerUI.ACTIONBUTTON_CLASSNAME} ${PlayerUI.ACTIONBUTTON_CLASSNAME}-${a.type}`;
             button.textContent = Mahjong.actionInfo[a.type].chnName;
-            button.addEventListener("click", e => this.onButtonClicked(e, a));
+            let isHovered = false;
+            button.addEventListener("click", e => {
+                if (isHovered) {
+                    this.onButtonClicked(e, a);
+                }
+            });
             button.addEventListener("mouseenter", () => {
+                setTimeout(() => (isHovered = true), 1);
                 PlayerUI.setRelatedTilesEffect(a, true);
             });
             button.addEventListener("mouseleave", () => {
+                isHovered = false;
                 PlayerUI.setRelatedTilesEffect(a, false);
             });
             this.actionBar.appendChild(button);
@@ -220,7 +227,7 @@ class DoraIndicators {
     public static readonly DORA_COUNT = 5;
     private static readonly NORMAL_CONTAINER_CLASSNAME = "normal";
     private static readonly HIDDEN_CONTAINER_CLASSNAME = "hidden";
-    private static readonly TILE_CLASSNAME = "tile";
+    public static readonly TILE_CLASSNAME = "tile";
     public static readonly OPEN_TILE_CLASSNAME = "tile open";
     public static readonly OPEN_DORA_TILE_CLASSNAME = "tile open dora";
     private normalContainer: HTMLDivElement;
@@ -422,13 +429,16 @@ class GameResultView {
             <div class="deck">
                 ${[
                     result.player.board.deck.handTiles.map(t => t.tileID),
-                    ...result.player.board.openTiles.openStacks.map(s => s.tiles.map(t => t.tileID)),
+                    ...result.player.board.openTiles.openStacks.map(s => s.tiles.map(t => (t.close ? null : t.tileID))),
                     [result.newTile]
                 ]
                     .map(
                         tileGroup =>
                             `<div class="group">${tileGroup
                                 .map(t => {
+                                    if (!t) {
+                                        return `<div class="${DoraIndicators.TILE_CLASSNAME}"></div>`;
+                                    }
                                     const isDora =
                                         Mahjong.isFixedDora(t) ||
                                         [...game.doraIndicators.tileIDs, ...game.doraIndicators.hiddenTileIDs].some(
@@ -453,8 +463,7 @@ class GameResultView {
             <div class="score">
                 <label>胡牌得分</label>
                 <span>+${result.score}</span>
-                <label>符数</label>
-                <span>${result.fu}</span>
+                ${result.fu ? `<label>符数</label><span>${result.fu}</span>` : ""}
             </div>
         </div>
         `;
@@ -524,12 +533,17 @@ class ActionSubmissionEffect {
 class SpectatorControl implements Tickable {
     private static ACTIVE_CLASSNAME = "active";
     private progress: HTMLInputElement;
+    private toggleTopView: HTMLButtonElement;
     public set visible(to: boolean) {
         UI.spectatorToolbar.style.display = to ? "block" : "none";
+    }
+    public set isTopViewing(to: boolean) {
+        this.toggleTopView.className = to ? SpectatorControl.ACTIVE_CLASSNAME : "";
     }
     constructor() {
         const left = document.createElement("button");
         const toggleOpen = document.createElement("button");
+        this.toggleTopView = document.createElement("button");
         const right = document.createElement("button");
         left.textContent = "上家视角";
         left.addEventListener("click", () => {
@@ -541,12 +555,17 @@ class SpectatorControl implements Tickable {
             game.openAll = shouldOpen;
             toggleOpen.className = shouldOpen ? SpectatorControl.ACTIVE_CLASSNAME : "";
         });
+        this.toggleTopView.textContent = "俯瞰";
+        this.toggleTopView.addEventListener("click", () => {
+            game.topView = !game.topView;
+        });
         right.textContent = "下家视角";
         right.addEventListener("click", () => {
             game.viewPoint = (game.viewPoint + 1) % 4;
         });
         UI.spectatorToolbar.appendChild(left);
         UI.spectatorToolbar.appendChild(toggleOpen);
+        UI.spectatorToolbar.appendChild(this.toggleTopView);
         UI.spectatorToolbar.appendChild(right);
 
         if (infoProvider["dbgMode"]) {

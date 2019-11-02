@@ -16,12 +16,10 @@ class Player implements Tickable {
         if (to != this._interactable) {
             this._interactable = to;
 
-            for (const t of this.board.deck.handTiles) {
-                t.highlighted = t.disabled = false;
+            for (const t of [...this.board.deck.handTiles, this.board.deck.drawnTile]) {
+                t.highlighted = t.disabled = t.hovered = false;
             }
-            if (this.board.deck.drawnTile) {
-                this.board.deck.drawnTile.highlighted = this.board.deck.drawnTile.disabled = false;
-            }
+            this.board.hoveredTile = null;
 
             if (to) tickableManager.add(this);
             else tickableManager.delete(this);
@@ -219,9 +217,9 @@ class Player implements Tickable {
 
     public onClick(e: MouseEvent) {
         if (this.interactable && this.board.hoveredTile) {
-            this.interactable = false;
             game.actionSubmissionEffect.showAt("checkmark", e);
             const playedTile = this.board.hoveredTile.tileID;
+            this.interactable = false;
             if (this.partialSpecialAction) {
                 infoProvider.notifyPlayerMove(
                     [

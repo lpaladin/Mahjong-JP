@@ -86,9 +86,9 @@ class Tile extends THREE.Mesh implements Tickable {
     public static readonly PADDING_PERCENTAGE_H = 0.2;
     public static readonly SIDE_COLOR_PERCENTAGE = 0.2;
     public static readonly CORNER_RADIUS = 0.2;
-    public static readonly DEPTH = 2;
-    public static readonly WIDTH = 3;
-    public static readonly HEIGHT = 4;
+    public static readonly DEPTH = 2 * 0.9;
+    public static readonly WIDTH = 3 * 0.9;
+    public static readonly HEIGHT = 4 * 0.9;
     public static readonly TEXTURES: {
         [id in Mahjong.TileID]: THREE.Texture;
     } = {} as any;
@@ -192,9 +192,13 @@ class Tile extends THREE.Mesh implements Tickable {
         if (this._close === to) {
             return;
         }
-        TweenMax.to(this.exposedRotation, 0.1, {
-            x: to ? Util.RAD90 : 0
-        });
+        if (this.parent instanceof Deck) {
+            TweenMax.to(this.exposedRotation, 0.1, {
+                x: to ? Util.RAD90 : 0
+            });
+        } else {
+            this.exposedRotation.x = to ? Util.RAD90 : 0;
+        }
         this._close = to;
     }
 
@@ -210,6 +214,8 @@ class Tile extends THREE.Mesh implements Tickable {
             TweenMax.to(this.exposedRotation, 0.1, {
                 x: to ? -Util.RAD90 : 0
             });
+        } else {
+            this.exposedRotation.x = to ? -Util.RAD90 : 0;
         }
         this._open = to;
         this.updateDora();
@@ -228,7 +234,15 @@ class Tile extends THREE.Mesh implements Tickable {
         return this._shaking;
     }
     public set shaking(to: boolean) {
-        if (this._shaking != to) {
+        if (this._shaking !== to) {
+            // Very dirty. Fuck
+            if (
+                window.parent["Botzone"] &&
+                window.parent["Botzone"].rootTimeline.isActive() &&
+                this.parent instanceof Deck
+            ) {
+                return;
+            }
             this._shaking = to;
             if (!to) {
                 this.position.set(this.basePosition.x, this.basePosition.y, this.basePosition.z);
@@ -257,10 +271,10 @@ class Tile extends THREE.Mesh implements Tickable {
         TweenMax.to(this.position, 0.1, { y: to ? 0.5 : 0 });
     }
 
-    private tickCD = 5;
+    private tickCD = 3;
     public onTick() {
         if (--this.tickCD) return;
-        this.tickCD = 5;
+        this.tickCD = 3;
         if (this.shaking) {
             this.position.set(
                 this.basePosition.x + (Math.random() - 0.5) / 5,

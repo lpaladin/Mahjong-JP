@@ -140,11 +140,12 @@ button {
     -webkit-appearance: none;
     outline: 0;
     display: inline-block;
+    transition: background-color 0.2s;
 }
 
 button:hover {
     background-color: rgba(255, 255, 255, 0.6);
-    transition: background-color 0.2s;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
 }
 
 .center-info-wrapper {

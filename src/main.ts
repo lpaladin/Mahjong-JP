@@ -25,6 +25,7 @@ class TickableManager extends Set<Tickable> implements Tickable {
 class Game implements Tickable {
     public readonly scene = new THREE.Scene();
     public readonly camera = new THREE.PerspectiveCamera(35, 1, 0.1, 1000);
+    private readonly topViewCamera = new THREE.OrthographicCamera(0, 0, 0, 0);
     private readonly clock = new THREE.Clock();
     private readonly renderer = new THREE.WebGLRenderer({
         canvas: UI.mainCanvas,
@@ -53,15 +54,25 @@ class Game implements Tickable {
     private w = 0;
     private h = 0;
     private cameraPositionBase = new THREE.Vector3();
-    private mouseRightButtonDown = false;
     private light: THREE.DirectionalLight;
     private currPlayerID = -1;
     private _viewPoint = -1;
     private _openAll = false;
+    private _topView = false;
     private cameraKeepFocusing = false;
     private cameraUncontrolled = false;
     private landscape = false;
     private _activePlayerId = -1;
+
+    public get topView() {
+        return this._topView;
+    }
+
+    public set topView(to: boolean) {
+        this._topView = to;
+        this.spectatorControl.isTopViewing = to;
+    }
+
     public get activePlayerId() {
         return this._activePlayerId;
     }
@@ -94,6 +105,7 @@ class Game implements Tickable {
         if (this._viewPoint === to) {
             return;
         }
+
         this._viewPoint = to;
         this.cameraKeepFocusing = this.cameraUncontrolled = true;
         this.cameraPositionBase.set(Util.DIR_X[to] * 70, 35, Util.DIR_Z[to] * 70);
@@ -103,6 +115,15 @@ class Game implements Tickable {
             x: this.cameraPositionBase.x,
             ease: to % 2 ? Sine.easeOut : Sine.easeIn
         });
+        tl.to(
+            this.topViewCamera.rotation,
+            0.3,
+            {
+                z: this.centerScreen.viewPointRotation,
+                ease: Linear.easeNone
+            },
+            0
+        );
         tl.to(
             this.camera.position,
             0.3,
@@ -177,29 +198,18 @@ class Game implements Tickable {
         });
         window.addEventListener("mousedown", e => {
             if (e.button == 2) {
-                if (!this.mouseRightButtonDown) {
-                    this.mouseRightButtonDown = true;
-                    // for (const p of this.players) p.board.openDeck = true;
-                }
+                this.topView = true;
             }
         });
         window.addEventListener("contextmenu", e => {
-            // this.actionSubmissionEffect.showAt(Util.RandInArray(["checkmark", "playtile"]), e);
             e.preventDefault();
             return false;
         });
         window.addEventListener("mouseup", e => {
             if (e.button == 2) {
-                if (this.mouseRightButtonDown) {
-                    this.mouseRightButtonDown = false;
-                    document.body.style.cursor = "help"; // ?
-                    setTimeout(() => (document.body.style.cursor = ""), 1000);
-                    // this.doraIndicators.reveal(Util.RandInArray(Mahjong.TileIDs));
-                    // for (const p of this.players) p.board.openDeck = false;
-                    // const activeTile = this.playerMe.board.hoveredTile;
-                    // activeTile && this.focusAndWave(activeTile);
-                    // this.viewPoint = (this.viewPoint + 1) % 4;
-                }
+                this.topView = false;
+                document.body.style.cursor = "help"; // ?
+                setTimeout(() => (document.body.style.cursor = ""), 1000);
             }
         });
         UI.mainCanvas.addEventListener("click", e => {
@@ -251,42 +261,20 @@ class Game implements Tickable {
             return null;
         });
         infoProvider.v2.setDisplayCallback(this.handleDisplayLog);
-        infoProvider.v2.setRequestCallback((request: RequestLog) => {
-            if ("state" in request && "validact" in request) {
-                const mustPlay = request.state[0] === "2";
+        infoProvider.v2.setRequestCallback(this.handleRequest);
 
-                if (this.playerMe.playDrawnTileOnly) {
-                    const playDrawnTileAction: Mahjong.Action = {
-                        type: "PLAY",
-                        tile: this.playerMe.board.deck.drawnTile
-                    };
-                    if (request.validact) {
-                        const validActions = Mahjong.getValidActions(
-                            this.playerMe,
-                            this.lastPlayedPlayer,
-                            this.lastAnyGangPlayer,
-                            this.lastPlayedTile,
-                            request.validact
-                        );
-                        if (!mustPlay) {
-                            validActions.push({ type: "PASS" });
-                            Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
-                        } else {
-                            validActions.push(playDrawnTileAction);
-                            Util.PrimaryLog`请选择${"你"}要做出的动作或者${"打出刚刚摸到的牌"}`;
-                        }
-                        this.playerMe.ui.setActionButtons(validActions);
-                    } else {
-                        if (!mustPlay) {
-                            infoProvider.notifyPlayerMove("PASS");
-                        } else {
-                            this.playerMe.doHumanAction(playDrawnTileAction);
-                        }
-                    }
-                    return null;
-                }
+        Util.Log`初始化完成`;
+    }
 
-                this.playerMe.interactable = mustPlay;
+    public handleRequest = (request: RequestLog): TimelineMax => {
+        if ("state" in request && "validact" in request) {
+            const mustPlay = request.state[0] === "2";
+
+            if (this.playerMe.playDrawnTileOnly) {
+                const playDrawnTileAction: Mahjong.Action = {
+                    type: "PLAY",
+                    tile: this.playerMe.board.deck.drawnTile
+                };
                 if (request.validact) {
                     const validActions = Mahjong.getValidActions(
                         this.playerMe,
@@ -299,28 +287,50 @@ class Game implements Tickable {
                         validActions.push({ type: "PASS" });
                         Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
                     } else {
-                        this.activePlayerId = infoProvider.getPlayerID();
-                        Util.PrimaryLog`${"你"}的回合，请选择要做出的动作或要打出的牌`;
+                        validActions.push(playDrawnTileAction);
+                        Util.PrimaryLog`请选择${"你"}要做出的动作或者${"打出刚刚摸到的牌"}`;
                     }
                     this.playerMe.ui.setActionButtons(validActions);
                 } else {
-                    this.playerMe.ui.setActionButtons([]);
                     if (!mustPlay) {
                         infoProvider.notifyPlayerMove("PASS");
-                        return null;
                     } else {
-                        this.activePlayerId = infoProvider.getPlayerID();
-                        Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`;
+                        this.playerMe.doHumanAction(playDrawnTileAction);
                     }
                 }
-            } else {
-                infoProvider.notifyPlayerMove("PASS");
+                return;
             }
-            return null;
-        });
 
-        Util.Log`初始化完成`;
-    }
+            this.playerMe.interactable = mustPlay;
+            if (request.validact) {
+                const validActions = Mahjong.getValidActions(
+                    this.playerMe,
+                    this.lastPlayedPlayer,
+                    this.lastAnyGangPlayer,
+                    this.lastPlayedTile,
+                    request.validact
+                );
+                if (!mustPlay) {
+                    validActions.push({ type: "PASS" });
+                    Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
+                } else {
+                    this.activePlayerId = infoProvider.getPlayerID();
+                    Util.PrimaryLog`${"你"}的回合，请选择要做出的动作或要打出的牌`;
+                }
+                this.playerMe.ui.setActionButtons(validActions);
+            } else {
+                this.playerMe.ui.setActionButtons([]);
+                if (!mustPlay) {
+                    infoProvider.notifyPlayerMove("PASS");
+                } else {
+                    this.activePlayerId = infoProvider.getPlayerID();
+                    Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`;
+                }
+            }
+        } else {
+            infoProvider.notifyPlayerMove("PASS");
+        }
+    };
 
     public handleDisplayLog = (log: DisplayLog): TimelineMax => {
         // console.log(this.players.map(p => p.board.deck.handTiles.map(t => t.tileID).join(" ")).join("\n"));
@@ -463,7 +473,7 @@ class Game implements Tickable {
                             player: p,
                             from: this.lastAnyGangPlayer,
                             newTile: tile.tileID,
-                            fan: result.fan.map(f => `${f.name} - ${f.value}番`),
+                            fan: result.fan.map(f => `${f.name} - ${Util.FanToChn(f.value)}`),
                             fu: result.fuCnt,
                             score: result.ScoreCnt
                         });
@@ -490,7 +500,7 @@ class Game implements Tickable {
                             player: p,
                             from: isZimo ? p.playerID : this.lastPlayedPlayer,
                             newTile: isZimo ? p.board.deck.drawnTile.tileID : this.lastPlayedTile,
-                            fan: result.fan.map(f => `${f.name} - ${f.value}番`),
+                            fan: result.fan.map(f => `${f.name} - ${Util.FanToChn(f.value)}`),
                             fu: result.fuCnt,
                             score: result.ScoreCnt
                         });
@@ -553,12 +563,12 @@ class Game implements Tickable {
     };
 
     public focusAndWave(target: THREE.Mesh) {
-        const lastCameraRotation = Util.ToPlain(this.camera.rotation);
+        const lastCameraQuaternion = Util.ToPlain(this.camera.quaternion);
         const lastCameraPosition = Util.ToPlain(this.camera.position);
         target.updateMatrixWorld();
         const targetAbsolutePos = target.getWorldPosition(new THREE.Vector3());
         this.camera.lookAt(targetAbsolutePos);
-        const targetCameraRotation = Util.ToPlain(this.camera.rotation);
+        const targetCameraQuaternion = Util.ToPlain(this.camera.quaternion);
         const targetCameraPosition = Util.ToPlain(
             targetAbsolutePos.clone().add(
                 this.camera.position
@@ -567,10 +577,16 @@ class Game implements Tickable {
                     .multiplyScalar(0.6)
             )
         );
+        this.camera.quaternion.set(
+            lastCameraQuaternion.x,
+            lastCameraQuaternion.y,
+            lastCameraQuaternion.z,
+            lastCameraQuaternion.w
+        );
         const subTL = new TimelineMax();
         subTL.pause();
-        subTL.fromTo(this.camera.rotation, 1, lastCameraRotation, {
-            ...targetCameraRotation,
+        subTL.fromTo(this.camera.quaternion, 1, lastCameraQuaternion, {
+            ...targetCameraQuaternion,
             ease: Power4.easeOut,
             immediateRender: false
         });
@@ -684,8 +700,13 @@ class Game implements Tickable {
             x: -0.02 * this.w * this.mouseCoord.x,
             y: 0.02 * this.h * this.mouseCoord.y
         });
-        this.composer.render(this.clock.getDelta());
-        this.uiRenderer.render(this.uiScene, this.camera);
+        if (this.topView) {
+            this.renderer.render(this.scene, this.topViewCamera);
+            this.uiRenderer.render(this.uiScene, this.topViewCamera);
+        } else {
+            this.composer.render(this.clock.getDelta());
+            this.uiRenderer.render(this.uiScene, this.camera);
+        }
         const activePlayer = this.players.find(x => x.interactable);
         if (activePlayer) {
             this.raycaster.setFromCamera(this.mouseCoord, this.camera);
@@ -723,6 +744,15 @@ class Game implements Tickable {
         });
         this.camera.aspect = this.w / this.h;
         this.camera.updateProjectionMatrix();
+        this.topViewCamera.rotation.x = -Util.RAD90;
+        this.topViewCamera.position.y = 20;
+        this.topViewCamera.near = 10;
+        this.topViewCamera.far = 30;
+        this.topViewCamera.top = PlayerArea.HEIGHT * 1.3;
+        this.topViewCamera.left = (-PlayerArea.HEIGHT * 1.3 * this.w) / this.h;
+        this.topViewCamera.right = (PlayerArea.HEIGHT * 1.3 * this.w) / this.h;
+        this.topViewCamera.bottom = -PlayerArea.HEIGHT * 1.3;
+        this.topViewCamera.updateProjectionMatrix();
         this.renderer.setSize(this.w, this.h);
         this.uiRenderer.setSize(this.w, this.h);
         this.renderer.shadowMap.enabled = true;

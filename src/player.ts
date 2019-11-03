@@ -17,7 +17,9 @@ class Player implements Tickable {
             this._interactable = to;
 
             for (const t of [...this.board.deck.handTiles, this.board.deck.drawnTile]) {
-                t.highlighted = t.disabled = t.hovered = false;
+                if (t) {
+                    t.highlighted = t.disabled = t.hovered = false;
+                }
             }
             this.board.hoveredTile = null;
 

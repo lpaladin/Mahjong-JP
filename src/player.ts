@@ -30,16 +30,13 @@ class Player implements Tickable {
 
     constructor(public readonly playerID: number) {}
 
-    public playTile(tile: Tile | number) {
+    public playTile(tile: Tile) {
         this.ui.onButtonClicked();
-        if (typeof tile === "number") {
-            tile = this.board.deck.handTiles[tile];
-        }
         if (tile == this.board.hoveredTile) {
             this.board.hoveredTile.hovered = false;
             this.board.hoveredTile = null;
         }
-        return this.board.river.addTile(tile);
+        return this.board.river.addTile(tile, tile === this.board.deck.drawnTile);
     }
 
     public doAction(action: Mahjong.Action) {

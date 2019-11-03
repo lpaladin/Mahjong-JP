@@ -160,6 +160,19 @@ class Tile extends THREE.Mesh implements Tickable {
         }
     }
 
+    private updateColor() {
+        if (this.highlighted) {
+            (this.material as THREE.MeshLambertMaterial).emissive = new THREE.Color(Colors.Highlight);
+            (this.material as THREE.MeshLambertMaterial).color = new THREE.Color(Colors.White);
+        } else if (this.disabled) {
+            (this.material as THREE.MeshLambertMaterial).emissive = new THREE.Color(0);
+            (this.material as THREE.MeshLambertMaterial).color = new THREE.Color(Colors.LightGray);
+        } else {
+            (this.material as THREE.MeshLambertMaterial).emissive = new THREE.Color(0);
+            (this.material as THREE.MeshLambertMaterial).color = new THREE.Color(Colors.White);
+        }
+    }
+
     private _disabled = false;
     public get disabled() {
         return this._disabled;
@@ -168,8 +181,8 @@ class Tile extends THREE.Mesh implements Tickable {
         if (this._disabled === to) {
             return;
         }
-        (this.material as THREE.MeshLambertMaterial).color = new THREE.Color(to ? Colors.LightGray : Colors.White);
         this._disabled = to;
+        this.updateColor();
     }
 
     private _highlighted = false;
@@ -180,8 +193,8 @@ class Tile extends THREE.Mesh implements Tickable {
         if (this._highlighted === to) {
             return;
         }
-        (this.material as THREE.MeshLambertMaterial).emissive = new THREE.Color(to ? Colors.Highlight : 0);
         this._highlighted = to;
+        this.updateColor();
     }
 
     private _close = false;

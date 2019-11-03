@@ -188,13 +188,14 @@ class River extends THREE.Group {
         };
     }
 
-    public addTile(tile: Tile) {
+    public addTile(tile: Tile, isPlayingDrawnTile: boolean) {
         const tl = new TimelineMax();
         Util.Assert`牌来自手牌：${tile.parent instanceof Deck}`;
         tl.add((tile.parent as Deck).removeTile(tile), 0);
         const newTile = new Tile(tile.tileID, this.riverTiles.length);
         this.add(newTile);
         newTile.open = true;
+        newTile.disabled = isPlayingDrawnTile;
         this.riverTiles.push(newTile);
         const targetPos = this.getLatestTileTargetPos();
         tl.add(Util.MeshOpacityFromTo(newTile, 0.2, 0, 1));

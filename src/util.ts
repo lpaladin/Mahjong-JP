@@ -145,26 +145,31 @@ namespace Util {
         tl.to(newChild, 0.1, { height: 0, onComplete: () => UI.logs.removeChild(newChild) }, 2);
     }
 
-    export function PrimaryLog(parts: TemplateStringsArray, ...args: Array<number | string | Player | Array<Player>>) {
-        const newChild = document.createElement("div");
-        newChild.className = "primary";
-        newChild.innerHTML = logComposeHTML(parts, args);
-        const oldLogs = UI.logs.querySelectorAll(".primary");
-        for (let i = 0; i < oldLogs.length; i++) {
-            const c = oldLogs[i];
-            TweenMax.to(c, 0.1, {
-                height: 0,
-                onComplete: () => {
-                    try {
-                        UI.logs.removeChild(c);
-                    } catch {}
-                },
-                delay: i === oldLogs.length - 1 ? 1 : 0
-            });
-        }
-        UI.logs.appendChild(newChild);
-        TweenMax.from(newChild, 0.1, { opacity: 0 });
+    function CreatePrimaryLogger(channel: string) {
+        return (parts: TemplateStringsArray, ...args: Array<number | string | Player | Array<Player>>) => {
+            const newChild = document.createElement("div");
+            newChild.className = "primary " + channel;
+            newChild.innerHTML = logComposeHTML(parts, args);
+            const oldLogs = UI.logs.querySelectorAll(".primary." + channel);
+            for (let i = 0; i < oldLogs.length; i++) {
+                const c = oldLogs[i];
+                TweenMax.to(c, 0.1, {
+                    height: 0,
+                    onComplete: () => {
+                        try {
+                            UI.logs.removeChild(c);
+                        } catch {}
+                    },
+                    delay: i === oldLogs.length - 1 ? 1 : 0
+                });
+            }
+            UI.logs.appendChild(newChild);
+            TweenMax.from(newChild, 0.1, { opacity: 0 });
+        };
     }
+
+    export const PlayerTurnLog = CreatePrimaryLogger("turn");
+    export const PlayerActionLog = CreatePrimaryLogger("action");
 
     export function Assert(parts: TemplateStringsArray, ...args: Array<boolean>) {
         if (args.some(v => !v)) {

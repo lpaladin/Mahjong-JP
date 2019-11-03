@@ -53,8 +53,12 @@ body.landscape {
     vertical-align: top;
 }
 
-#logs > .primary {
+#logs > .primary.action {
     background-image: linear-gradient(to right, rgb(235, 135, 135), transparent 50%);
+}
+
+#logs > .primary.turn {
+    background-image: linear-gradient(to right, rgb(68, 189, 83), transparent 50%);
 }
 
 #logs > .error {

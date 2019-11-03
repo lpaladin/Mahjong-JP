@@ -185,7 +185,7 @@ class Player implements Tickable {
             for (const t of action.existing) {
                 t.disabled = true;
             }
-            Util.PrimaryLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
+            Util.PlayerActionLog`${"你"}的回合，请选择在${Mahjong.actionInfo[action.type].chnName}后要打出的牌`;
         } else {
             this.interactable = false;
             switch (action.type) {
@@ -208,12 +208,12 @@ class Player implements Tickable {
                     break;
                 case "PLAY":
                     infoProvider.notifyPlayerMove("PLAY " + action.tile.tileID);
-                    Util.PrimaryLog`你已经自动摸切了${Mahjong.tileInfo[action.tile.tileID].chnName}，请等待其他玩家或裁判回应……`;
+                    Util.PlayerActionLog`你已经自动摸切了${Mahjong.tileInfo[action.tile.tileID].chnName}，请等待其他玩家或裁判回应……`;
                     return;
                 default:
                     Util.Assert`无法提交操作${false}`;
             }
-            Util.PrimaryLog`你已经选择${Mahjong.actionInfo[action.type].chnName}，请等待其他玩家或裁判回应……`;
+            Util.PlayerActionLog`你已经选择${Mahjong.actionInfo[action.type].chnName}，请等待其他玩家或裁判回应……`;
         }
     }
 
@@ -231,11 +231,11 @@ class Player implements Tickable {
                         playedTile
                     ].join(" ")
                 );
-                Util.PrimaryLog`你已经选择${Mahjong.actionInfo[this.partialSpecialAction.type].chnName}并打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
+                Util.PlayerActionLog`你已经选择${Mahjong.actionInfo[this.partialSpecialAction.type].chnName}并打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
                 this.partialSpecialAction = null;
             } else {
                 infoProvider.notifyPlayerMove("PLAY " + playedTile);
-                Util.PrimaryLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
+                Util.PlayerActionLog`你已经选择打出一张${Mahjong.tileInfo[playedTile].chnName}，请等待其他玩家或裁判回应……`;
             }
         }
     }

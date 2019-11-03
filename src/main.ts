@@ -257,6 +257,7 @@ class Game implements Tickable {
         //new THREE['OrbitControls'](this.camera, UI.mainCanvas);
 
         infoProvider.v2.setGameOverCallback(() => {
+            Util.PlayerActionLog`实时对局结束`;
             this.spectatorControl.visible = true;
             return null;
         });
@@ -285,10 +286,10 @@ class Game implements Tickable {
                     );
                     if (!mustPlay) {
                         validActions.push({ type: "PASS" });
-                        Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
+                        Util.PlayerActionLog`请选择${"你"}要做出的动作或者${"过"}`;
                     } else {
                         validActions.push(playDrawnTileAction);
-                        Util.PrimaryLog`请选择${"你"}要做出的动作或者${"打出刚刚摸到的牌"}`;
+                        Util.PlayerActionLog`请选择${"你"}要做出的动作或者${"打出刚刚摸到的牌"}`;
                     }
                     this.playerMe.ui.setActionButtons(validActions);
                 } else {
@@ -312,10 +313,10 @@ class Game implements Tickable {
                 );
                 if (!mustPlay) {
                     validActions.push({ type: "PASS" });
-                    Util.PrimaryLog`请选择${"你"}要做出的动作或者${"过"}`;
+                    Util.PlayerActionLog`请选择${"你"}要做出的动作或者${"过"}`;
                 } else {
                     this.activePlayerId = infoProvider.getPlayerID();
-                    Util.PrimaryLog`${"你"}的回合，请选择要做出的动作或要打出的牌`;
+                    Util.PlayerActionLog`${"你"}的回合，请选择要做出的动作或要打出的牌`;
                 }
                 this.playerMe.ui.setActionButtons(validActions);
             } else {
@@ -324,7 +325,7 @@ class Game implements Tickable {
                     infoProvider.notifyPlayerMove("PASS");
                 } else {
                     this.activePlayerId = infoProvider.getPlayerID();
-                    Util.PrimaryLog`${"你"}的回合，请选择要打出的牌`;
+                    Util.PlayerActionLog`${"你"}的回合，请选择要打出的牌`;
                 }
             }
         } else {
@@ -648,13 +649,13 @@ class Game implements Tickable {
     public gameFinish(results: GameResult[]) {
         const tl = new TimelineMax();
         if (results.every(r => r.type === "DRAW")) {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，流局`);
+            tl.call(() => Util.PlayerTurnLog`本局游戏结束，流局`);
         } else if (results.every(r => r.type === "LIUMAN")) {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}流局满贯`);
+            tl.call(() => Util.PlayerTurnLog`本局游戏结束，${results.map(r => r.player)}流局满贯`);
         } else if (results.every(r => r.type === "HU" || r.type === "ZIMO")) {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}胡了`);
+            tl.call(() => Util.PlayerTurnLog`本局游戏结束，${results.map(r => r.player)}胡了`);
         } else {
-            tl.call(() => Util.PrimaryLog`本局游戏结束，${results.map(r => r.player)}出错`);
+            tl.call(() => Util.PlayerTurnLog`本局游戏结束，${results.map(r => r.player)}出错`);
         }
         tl.add(game.gameResultView.setResult(results));
         return tl;

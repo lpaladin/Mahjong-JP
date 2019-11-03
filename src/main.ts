@@ -213,7 +213,7 @@ class Game implements Tickable {
             }
         });
         UI.mainCanvas.addEventListener("click", e => {
-            if (infoProvider.getPlayerID() !== -1) {
+            if (!this.topView && infoProvider.getPlayerID() !== -1) {
                 this.playerMe.onClick(e);
             }
         });
